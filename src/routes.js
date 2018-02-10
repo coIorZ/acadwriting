@@ -1,7 +1,7 @@
 import React from 'react';
 import { BrowserRouter, Route, Switch } from 'react-router-dom';
 
-import app from './modules/app/routes';
+import app from './modules/home/routes';
 
 const routes = [
   ...app,

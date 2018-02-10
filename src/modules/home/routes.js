@@ -1,5 +1,5 @@
-import App from './containers/app';
+import Home from './containers/home';
 
 export default [
-  { path: '/', exact: false, component: App },
+  { path: '/', exact: false, component: Home },
 ];
