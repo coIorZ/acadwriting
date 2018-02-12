@@ -9,10 +9,11 @@ module.exports = {
     app: [
       './src/index.js',
       'normalize.css',
-      'babel-polyfill',
+      //'babel-polyfill',
     ],
     vendor: [
       'react', 'react-dom', 'redux', 'react-redux', 'lodash', 'react-router-dom',
+      'redux-actions', 'reduce-reducers', 'styled-components', 'reselect', 'axios',
     ],
   },
   output: {

@@ -1,3 +1,7 @@
-import { combineReducers } from 'redux';
+import reduceReducers from 'reduce-reducers';
 
-export default combineReducers({});
+import homeReducer from './modules/home/ducks/reducers';
+
+export default reduceReducers(
+  homeReducer,
+);

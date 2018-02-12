@@ -13,6 +13,7 @@
   "author": "",
   "license": "ISC",
   "dependencies": {
+    "axios": "^0.17.1",
     "body-parser": "^1.18.2",
     "compression": "^1.7.1",
     "ejs": "^2.5.7",
@@ -22,8 +23,11 @@
     "react-dom": "^16.2.0",
     "react-redux": "^5.0.6",
     "react-router-dom": "^4.2.2",
+    "reduce-reducers": "^0.1.2",
     "redux": "^3.7.2",
     "redux-actions": "^2.2.1",
+    "redux-thunk": "^2.2.0",
+    "reselect": "^3.0.1",
     "styled-components": "^3.1.6"
   },
   "devDependencies": {
