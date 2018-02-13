@@ -1,27 +1,30 @@
 import React, { Component } from 'react';
 import styled from 'styled-components';
 
-import { Flex } from './index';
-
 const Header = styled.div`
   display: grid;
-  grid-template-columns: 12.5rem auto 12.5rem;
+  grid-template-columns: 12.4rem auto 12.4rem;
   position: fixed;
   top: 0;
   width: 100vw;
-  height: 5rem;
+  height: 4rem;
   color: #ffffff;
-  background-color: #4abd92;
 `;
 
-const Logo = styled(Flex)`
+const Logo = styled.div`
+  display: flex;
+  justify-content: center;
+  align-items: center;
   & > img {
-    height: 5rem;
+    height: 4rem;
   }
 `;
 
-const Title = styled(Flex)`
-  font-size: 1.5rem;
+const Title = styled.div`
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  font-size: 1.4rem;
 `;
 
 const User = styled.div`
@@ -30,10 +33,10 @@ const User = styled.div`
 
 const StyledHeader = () => (
   <Header>
-    <Logo align>
+    <Logo>
       <img src={require('../images/NTU-logo-full-colour.png')}/>
     </Logo>
-    <Title align>
+    <Title>
       Evidence Based Academic Writing Assistant
     </Title>
     <User>
@@ -42,7 +45,7 @@ const StyledHeader = () => (
 );
 
 const Placeholder = styled.div`
-  height: 5rem;
+  height: 4rem;
 `;
 
 export default class WithHeader extends Component {

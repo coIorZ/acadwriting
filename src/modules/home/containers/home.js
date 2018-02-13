@@ -1,17 +1,22 @@
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
+import styled from 'styled-components';
 
-import { 
-  fetchWritingModels, fetchSubjectAreas,
-} from '../ducks/actions';
+import actions from '../ducks/actions';
 
 import {
   getWritingModels, getSubjectAreas,
+  getDocument,
 } from '../ducks/selectors';
 
-import { Grid } from '../../../components';
-import ModelSubjectSelect from '../components/model-subject-select';
-import Document from '../components/document';
+import WritingPanel from '../components/writing-panel';
+import FunctionPanel from '../components/function-panel';
+
+const Container = styled.div`
+  display: flex;
+  flex: 1;
+  height: calc(100vh - 4rem);
+`;
 
 class Home extends Component {
   componentDidMount() {
@@ -21,14 +26,10 @@ class Home extends Component {
 
   render() {
     return (
-      <Grid col='50% 50%'>
-        <section>
-          <ModelSubjectSelect {...this.props}/>
-          <Document {...this.props}/>
-        </section>
-        <section>
-        </section>
-      </Grid>
+      <Container>
+        <WritingPanel {...this.props}/>
+        <FunctionPanel {...this.props}/>
+      </Container>
     );
   }
 }
@@ -37,8 +38,7 @@ export default connect(
   state => ({
     writingModels : getWritingModels(state),
     subjectAreas  : getSubjectAreas(state),
+    document      : getDocument(state),
   }),
-  {
-    fetchWritingModels, fetchSubjectAreas,
-  },
+  actions,
 )(Home);

@@ -4,6 +4,8 @@ import styled from 'styled-components';
 import { Flex } from '../../../components';
 
 const Container = styled(Flex)`
+  margin: 1rem 0 1.5rem;
+  justify-content: space-between;
   font-size: 0.8rem;
 `;
 
