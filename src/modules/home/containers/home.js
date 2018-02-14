@@ -7,6 +7,7 @@ import actions from '../ducks/actions';
 import {
   getWritingModels, getSubjectAreas,
   getDocument,
+  getFunctionPanelActive,
 } from '../ducks/selectors';
 
 import WritingPanel from '../components/writing-panel';
@@ -36,9 +37,10 @@ class Home extends Component {
 
 export default connect(
   state => ({
-    writingModels : getWritingModels(state),
-    subjectAreas  : getSubjectAreas(state),
-    document      : getDocument(state),
+    writingModels       : getWritingModels(state),
+    subjectAreas        : getSubjectAreas(state),
+    document            : getDocument(state),
+    functionPanelActive : getFunctionPanelActive(state),
   }),
   actions,
 )(Home);

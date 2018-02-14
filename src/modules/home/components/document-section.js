@@ -16,11 +16,11 @@ const Container = styled.div`
 
   & p {
     margin: 0;
-    padding: 0;
+    padding: 0 0 1rem;
   }
 `;
 
-const P = styled(ContentEditable)`
+const CE = styled(ContentEditable)`
   position: relative;
   min-height: 200px;
   outline: none;
@@ -37,7 +37,7 @@ const Placeholder = styled.div`
 
 export default class Section extends Component {
   render() {
-    const { 
+    const {
       placeHolder = '',
       document = {},
     } = this.props;
@@ -48,25 +48,30 @@ export default class Section extends Component {
 
     return (
       <Container>
-        <P 
+        <CE
           html={input}
-          onChange={this.emitChange}
-        />
-        { 
-          input ? null
-            : <Placeholder>{placeHolder}</Placeholder>
-        }
+          onChange={this.inputText}
+        >
+          <p>{introduction}</p>
+        </CE>
+        { !input && <Placeholder>{placeHolder}</Placeholder> }
       </Container>
     );
   }
 
-  emitChange = e => {
-    const section = this.props.document.section;
+  inputText = e => {
+    const {
+      document,
+      inputDocumentIntro,
+      inputDocumentLitreview,
+    } = this.props;
+
+    const section = document.section;
 
     if(section === 1) {
-      this.props.inputDocumentIntro(e.target.value);
+      inputDocumentIntro(e.target.value);
     } else if(section === 2) {
-      this.props.inputDocumentLitreview(e.target.value);
+      inputDocumentLitreview(e.target.value);
     }
   }
 }

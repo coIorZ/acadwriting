@@ -42,12 +42,10 @@ const HideBtn = ({ active, onClick }) => (
 );
 
 export default class FunctionPanel extends Component {
-  state = {
-    active: false,
-  }
-
   render() {
-    const { active } = this.state;
+    const { 
+      functionPanelActive: active,
+    } = this.props;
 
     return (
       <Container active={active}>
@@ -58,8 +56,6 @@ export default class FunctionPanel extends Component {
   }
 
   togglePanel = () => {
-    this.setState(prev => ({
-      active: !prev.active,
-    }));
+    this.props.setFunctionPanelActive(!this.props.functionPanelActive);
   }
 }

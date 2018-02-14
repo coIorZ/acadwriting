@@ -4,20 +4,22 @@ export default class ContentEditable extends React.Component {
   constructor() {
     super();
     this.emitChange = this.emitChange.bind(this);
+    this.emitPaste = this.emitPaste.bind(this);
   }
 
   render() {
-    var { tagName, html, ...props } = this.props;
+    var { tagName, ...props } = this.props;
 
     return React.createElement(
-      tagName || 'p',
+      tagName || 'div',
       {
         ...props,
-        ref                     : (e) => this.htmlEl = e,
-        onInput                 : this.emitChange,
-        onBlur                  : this.props.onBlur || this.emitChange,
-        contentEditable         : !this.props.disabled,
-        dangerouslySetInnerHTML : { __html: html },
+        ref             : (e) => this.htmlEl = e,
+        onInput         : this.emitChange,
+        onPaste         : this.emitPaste,
+        onBlur          : this.props.onBlur || this.emitChange,
+        contentEditable : !this.props.disabled,
+        //dangerouslySetInnerHTML : { __html: html },
       },
       this.props.children);
   }
@@ -55,6 +57,18 @@ export default class ContentEditable extends React.Component {
   emitChange(evt) {
     if (!this.htmlEl) return;
     var html = this.htmlEl.innerHTML;
+    if (this.props.onChange && html !== this.lastHtml) {
+      evt.target = { value: html };
+      this.props.onChange(evt);
+    }
+    this.lastHtml = html;
+  }
+
+  emitPaste(evt) {
+    evt.preventDefault();
+    if (!this.htmlEl) return;
+    var html = evt.clipboardData.getData('text');
+    html = html.split('\n').map(s => `<p>${s}</p>`).join('');
     if (this.props.onChange && html !== this.lastHtml) {
       evt.target = { value: html };
       this.props.onChange(evt);
