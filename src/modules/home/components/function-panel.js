@@ -5,17 +5,16 @@ import Button, { LinkButton } from '../../../components/button';
 
 const Container = styled.div`
   position: relative;
-  width: ${p => p.active ? '80%' : 0};
+  width: ${p => p.active ? '90%' : 0};
   height: 100%;
   transition: width .5s;
 `;
 
 const ShowBtnContainer = styled.div`
   position: absolute;
-  top: 0;
+  top: 1rem;
   right: 1.5rem;
-  opacity: ${p => p.active ? 1 : 0};
-  transition: opacity .3s;
+  display: ${p => p.active ? 'block' : 'none'};
 `;
 
 const ShowBtn = ({ active, onClick }) => (
@@ -26,10 +25,9 @@ const ShowBtn = ({ active, onClick }) => (
 
 const HideBtnContainer = styled.div`
   position: absolute;
-  top: 0;
+  top: 1rem;
   left: 1.5rem;
-  opacity: ${p => p.active ? 1 : 0};
-  transition: opacity .3s, transform .2s;
+  display: ${p => p.active ? 'block' : 'none'};
   &:hover {
     transform: scale(1.05);
   }

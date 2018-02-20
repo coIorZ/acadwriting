@@ -1,15 +1,13 @@
 import React from 'react';
 import styled from 'styled-components';
 
-import { Flex } from '../../../components';
-
-const Container = styled(Flex)`
+const Container = styled.div`
+  display: flex;
   margin: 1rem 0 1.5rem;
-  justify-content: space-between;
   font-size: 0.8rem;
 `;
 
-const Selection = ({ label, options = {}, onSelect = null }) => (
+const Selection = ({ label, options = {} }) => (
   <div>
     <label>{label}:</label>
     <select>

@@ -20,12 +20,12 @@ const Logo = styled.div`
   }
 `;
 
-const Title = styled.div`
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  font-size: 1.4rem;
-`;
+//const Title = styled.div`
+  //display: flex;
+  //justify-content: center;
+  //align-items: center;
+  //font-size: 1.4rem;
+//`;
 
 const User = styled.div`
 
@@ -36,24 +36,16 @@ const StyledHeader = () => (
     <Logo>
       <img src={require('../images/NTU-logo-full-colour.png')}/>
     </Logo>
-    <Title>
-      Evidence Based Academic Writing Assistant
-    </Title>
     <User>
     </User>
   </Header>
 );
-
-const Placeholder = styled.div`
-  height: 4rem;
-`;
 
 export default class WithHeader extends Component {
   render() {
     return (
       <div>
         <StyledHeader/>
-        <Placeholder/>
         {this.props.children}
       </div>
     );

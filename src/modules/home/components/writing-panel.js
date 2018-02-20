@@ -5,12 +5,13 @@ import DocumentSection from './document-section';
 import SectionSwitcher from './section-switcher';
 
 const Container = styled.div`
-  display: flex;
-  justify-content: center;
   position: relative;
-  margin: 0 auto;
   width: 100%;
   height: 100%;
+`;
+
+const Placeholder = styled.div`
+  height: 4rem;
 `;
 
 const DocumentWrapper = styled.div`
@@ -18,6 +19,8 @@ const DocumentWrapper = styled.div`
   padding: 0 3.5rem 40vh;
   max-width: 40rem;
   width: 100%;
+  height: calc(100vh - 4rem);
+  overflow: auto;
 `;
 
 const Title = styled.input`
@@ -47,6 +50,7 @@ export default class WritingPanel extends Component {
 
     return (
       <Container>
+        <Placeholder/>
         <SectionSwitcher {...this.props}/>
         <DocumentWrapper>
           <Title
@@ -60,7 +64,7 @@ export default class WritingPanel extends Component {
                 placeHolder='Type or paste your Introduction here.'
                 {...this.props}
               />
-              : <DocumentSection 
+              : <DocumentSection litreview
                 placeHolder='Type or paste your Literature Review here.'
                 {...this.props}
               />

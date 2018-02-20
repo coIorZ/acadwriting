@@ -39,7 +39,7 @@ const documentReducer = combineReducers({
   section      : sectionReducer,
 });
 
-const functionPanelActiveReducer = handleAction(SET_FUNCTIONPANEL_ACTIVE, (state, { payload }) => payload, false);
+const functionPanelActiveReducer = handleAction(SET_FUNCTIONPANEL_ACTIVE, (state, { payload }) => payload, true);
 
 export default combineReducers({
   writingModels       : writingModelsReducer,
