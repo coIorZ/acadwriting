@@ -41,14 +41,19 @@ const Title = styled.input`
 `;
 
 export default class WritingPanel extends Component {
+  componentDidMount() {
+    this.props.fetchSections();
+  }
+
   render() {
     const {
       document = {},
+      section = null,
     } = this.props;
 
-    const { section = 1, title = '' } = document;
+    const { title = '' } = document;
 
-    return (
+    return section && (
       <Container>
         <Placeholder/>
         <SectionSwitcher {...this.props}/>
@@ -58,17 +63,10 @@ export default class WritingPanel extends Component {
             placeholder='Type your title'
             onInput={this.inputTitle}
           />
-          {
-            section === 1 ?
-              <DocumentSection intro
-                placeHolder='Type or paste your Introduction here.'
-                {...this.props}
-              />
-              : <DocumentSection litreview
-                placeHolder='Type or paste your Literature Review here.'
-                {...this.props}
-              />
-          }
+          <DocumentSection
+            placeHolder={`Type or paste your ${section.text} here.`}
+            {...this.props}
+          />
         </DocumentWrapper>
       </Container>
     );

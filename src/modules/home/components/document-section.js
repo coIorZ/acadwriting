@@ -40,38 +40,32 @@ export default class Section extends Component {
     const {
       placeHolder = '',
       document = {},
+      section = null,
     } = this.props;
 
-    const { introduction, litreview, section } = document;
+    const { body } = document;
 
-    const input = section === 1 ? introduction : litreview;
-
-    return (
+    return section && (
       <Container>
         <CE
-          html={input}
+          html={body[section.text] || ''}
           onChange={this.inputText}
         >
-          <p>{introduction}</p>
         </CE>
-        { !input && <Placeholder>{placeHolder}</Placeholder> }
+        { !body[section.text] && <Placeholder>{placeHolder}</Placeholder> }
       </Container>
     );
   }
 
   inputText = e => {
     const {
-      document,
-      inputDocumentIntro,
-      inputDocumentLitreview,
+      section = null,
+      inputDocumentBody,
     } = this.props;
 
-    const section = document.section;
-
-    if(section === 1) {
-      inputDocumentIntro(e.target.value);
-    } else if(section === 2) {
-      inputDocumentLitreview(e.target.value);
-    }
+    section && inputDocumentBody({
+      section : section.text, 
+      value   : e.target.value,
+    });
   }
 }

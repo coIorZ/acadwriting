@@ -4,14 +4,17 @@ import styled, { css } from 'styled-components';
 const Container = styled.div`
   display: flex;
   flex-direction: column;
+  justify-content: center;
   position: absolute;
   left: 0;
-  top: 30%;
+  top: 0;
+  height: 100%;
 `;
 
 const Switch = styled.div`
   writing-mode: vertical-lr;
   padding: 1rem 0.3rem 1rem .1rem;
+  width: 1.7rem;
   border: 1px solid #888;
   border-left: none;
   border-top-right-radius: 1rem;
@@ -27,27 +30,32 @@ const Switch = styled.div`
 
 export default class SectionSwitcher extends Component {
   render() {
-    const section = this.props.document.section;
+    const {
+      sections = {},
+      document = {},
+    } = this.props;
+
+    const { sectionId } = document;
 
     return (
       <Container>
-        <Switch 
-          active={section === 1}
-          onClick={this.setSection.bind(this, 1)}
-        >
-          Introduction
-        </Switch>
-        <Switch 
-          active={section === 2}
-          onClick={this.setSection.bind(this, 2)}
-        >
-          Leterature Review
-        </Switch>
+        {Object.keys(sections).map(key => {
+          const { id, text } = sections[key];
+          return (
+            <Switch
+              key={id}
+              active={sectionId === id}
+              onClick={this.setSection.bind(this, id)}
+            >
+              {text}
+            </Switch>
+          );
+        })}
       </Container>
     );
   }
 
   setSection = val => {
-    this.props.setDocumentSection(val);
+    this.props.setDocumentSectionId(val);
   }
 }

@@ -2,6 +2,9 @@ import React, { Component } from 'react';
 import styled from 'styled-components';
 
 import Button, { LinkButton } from '../../../components/button';
+import ModelSubjectSelect from './model-subject-select';
+import RhetoricalArea from './rhetorical-area';
+import ArgumentationArea from './argumentation-area';
 
 const Container = styled.div`
   position: relative;
@@ -39,16 +42,25 @@ const HideBtn = ({ active, onClick }) => (
   </HideBtnContainer>
 );
 
+const Placeholder = styled.div`
+  height: 2rem;
+`;
+
 export default class FunctionPanel extends Component {
   render() {
     const { 
       functionPanelActive: active,
+      writingModelId,
     } = this.props;
 
     return (
       <Container active={active}>
         <ShowBtn active={!active} onClick={this.togglePanel}/>
         <HideBtn active={active} onClick={this.togglePanel}/>
+        <Placeholder/>
+        <ModelSubjectSelect {...this.props}/>
+        {writingModelId == 1 && <RhetoricalArea/>}
+        {writingModelId == 2 && <ArgumentationArea/>}
       </Container>
     );
   }

@@ -5,9 +5,10 @@ import styled from 'styled-components';
 import actions from '../ducks/actions';
 
 import {
-  getWritingModels, getSubjectAreas,
-  getDocument,
+  getWritingModels, getSubjectAreas, getSections,
+  getDocument, getSection,
   getFunctionPanelActive,
+  getWritingModelId, getSubjectAreaId,
 } from '../ducks/selectors';
 
 import WritingPanel from '../components/writing-panel';
@@ -39,8 +40,12 @@ export default connect(
   state => ({
     writingModels       : getWritingModels(state),
     subjectAreas        : getSubjectAreas(state),
+    sections            : getSections(state),
+    section             : getSection(state),
     document            : getDocument(state),
     functionPanelActive : getFunctionPanelActive(state),
+    writingModelId      : getWritingModelId(state),
+    subjectAreaId       : getSubjectAreaId(state),
   }),
   actions,
 )(Home);

@@ -20,6 +20,13 @@ router.get('/subjectAreas', asyncWrap(async (req, res) => {
   });
 }));
 
+router.get('/sections', asyncWrap(async (req, res) => {
+  res.status(200).json({
+    '1' : { id: 1, text: 'introduction' },
+    '2' : { id: 2, text: 'literature review' },
+  });
+}));
+
 router.use((err, req, res, next) => {
   if(!err.__api__) return next(err);
   const { code, status, msg } = err;
