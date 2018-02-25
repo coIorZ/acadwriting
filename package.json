@@ -19,15 +19,18 @@
     "ejs": "^2.5.7",
     "express": "^4.16.2",
     "lodash": "^4.17.4",
+    "mysql2": "^1.5.2",
     "react": "^16.2.0",
     "react-dom": "^16.2.0",
     "react-redux": "^5.0.6",
     "react-router-dom": "^4.2.2",
+    "react-string-replace": "^0.4.1",
     "reduce-reducers": "^0.1.2",
     "redux": "^3.7.2",
     "redux-actions": "^2.2.1",
     "redux-thunk": "^2.2.0",
     "reselect": "^3.0.1",
+    "sequelize": "^4.33.4",
     "styled-components": "^3.1.6"
   },
   "devDependencies": {

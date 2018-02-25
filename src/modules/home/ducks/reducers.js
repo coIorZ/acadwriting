@@ -6,8 +6,9 @@ import {
   FETCH_SUBJECTAREAS_SUCCESS, FETCH_SUBJECTAREAS_FAIL,
   FETCH_SECTIONS_SUCCESS, FETCH_SECTIONS_FAIL,
   INPUT_DOCUMENT_TITLE, INPUT_DOCUMENT_BODY, SET_DOCUMENT_SECTION_ID,
-  SET_FUNCTIONPANEL_ACTIVE,
+  SET_FUNCTIONPANEL_ACTIVE, SET_FUNCTIONPANEL_FLAG,
   SET_WRITINGMODEL_ID, SET_SUBJECTAREA_ID,
+  START_ANALYSIS,
 } from './types';
 
 const writingModelsReducer = handleActions({
@@ -15,6 +16,7 @@ const writingModelsReducer = handleActions({
     return payload;
   },
   [FETCH_WRITINGMODELS_FAIL]: (state, { payload }) => {
+    console.error(payload);
     return state;
   },
 }, {});
@@ -24,6 +26,7 @@ const subjectAreasReducer = handleActions({
     return payload;
   },
   [FETCH_SUBJECTAREAS_FAIL]: (state, { payload }) => {
+    console.error(payload);
     return state;
   },
 }, {});
@@ -33,26 +36,54 @@ const sectionsReducer = handleActions({
     return payload;
   },
   [FETCH_SECTIONS_FAIL]: (state, { payload }) => {
+    console.error(payload);
     return state;
   },
 }, {});
 
-const titleReducer = handleAction(INPUT_DOCUMENT_TITLE, (state, { payload }) => payload, '');
-const bodyReducer = handleAction(INPUT_DOCUMENT_BODY, (state, { payload }) => {
-  const { section, value } = payload;
-  return {
-    ...state,
-    [section]: value,
-  };
-}, {});
-const sectionIdReducer = handleAction(SET_DOCUMENT_SECTION_ID, (state, { payload }) => payload, 1);
-const documentReducer = combineReducers({
-  title     : titleReducer,
-  body      : bodyReducer,
-  sectionId : sectionIdReducer,
+const documentReducer = handleActions({
+  [INPUT_DOCUMENT_TITLE]: (state, { payload }) => {
+    return {
+      ...state,
+      title: payload,
+    };
+  },
+  [INPUT_DOCUMENT_BODY]: (state, { payload }) => {
+    return {
+      ...state,
+      body: {
+        ...state.body,
+        [state.sectionId]: payload,
+      },
+    };
+  },
+  [SET_DOCUMENT_SECTION_ID]: (state, { payload }) => {
+    return {
+      ...state,
+      sectionId: payload,
+    };
+  },
+  [START_ANALYSIS]: (state) => {
+    return {
+      ...state,
+      body: Object.keys(state.body).reduce((m, k) => {
+        m[k] = state.body[k] + ' ';
+        return m;
+      }, {}),
+    };
+  },
+}, {
+  title     : '',
+  body      : {},
+  sectionId : -1,
 });
 
-const functionPanelActiveReducer = handleAction(SET_FUNCTIONPANEL_ACTIVE, (state, { payload }) => payload, true);
+const functionPanelActiveReducer = handleAction(SET_FUNCTIONPANEL_ACTIVE, (state, { payload }) => payload, false);
+const functionPanelFlagReducer = handleAction(SET_FUNCTIONPANEL_FLAG, (state, { payload }) => payload, -1);
+const functionPanelStatusReducer = combineReducers({
+  active : functionPanelActiveReducer,
+  flag   : functionPanelFlagReducer,
+});
 
 const writingModelIdReducer = handleAction(SET_WRITINGMODEL_ID, (state, { payload }) => payload, -1);
 const subjectAreaIdReducer = handleAction(SET_SUBJECTAREA_ID, (state, { payload }) => payload, -1);
@@ -62,7 +93,7 @@ export default combineReducers({
   subjectAreas        : subjectAreasReducer,
   sections            : sectionsReducer,
   document            : documentReducer,
-  functionPanelActive : functionPanelActiveReducer,
+  functionPanelStatus : functionPanelStatusReducer,
   writingModelId      : writingModelIdReducer,
   subjectAreaId       : subjectAreaIdReducer,
 });

@@ -24,7 +24,7 @@ app.get('*', (req, res) => {
 /*eslint-disable no-unused-vars*/
 app.use((err, req, res, next) => {
 /*eslint-enable no-unused-vars*/
-  req.log.error(`[Unhandled Error] ${req.originalUrl}`, err);
+  //req.log.error(`[Unhandled Error] ${req.originalUrl}`, err);
   res.status(500).json({
     msg: err.message,
   });

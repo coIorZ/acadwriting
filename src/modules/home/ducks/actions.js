@@ -6,8 +6,9 @@ import {
   FETCH_SUBJECTAREAS_PENDING, FETCH_SUBJECTAREAS_SUCCESS, FETCH_SUBJECTAREAS_FAIL,
   FETCH_SECTIONS_PENDING, FETCH_SECTIONS_SUCCESS, FETCH_SECTIONS_FAIL,
   INPUT_DOCUMENT_TITLE, INPUT_DOCUMENT_BODY, SET_DOCUMENT_SECTION_ID,
-  SET_FUNCTIONPANEL_ACTIVE,
+  SET_FUNCTIONPANEL_ACTIVE, SET_FUNCTIONPANEL_FLAG,
   SET_WRITINGMODEL_ID, SET_SUBJECTAREA_ID,
+  START_ANALYSIS,
 } from './types';
 
 export const fetchWritingModelsPending = createAction(FETCH_WRITINGMODELS_PENDING);
@@ -60,13 +61,17 @@ export const inputDocumentBody = createAction(INPUT_DOCUMENT_BODY);
 export const setDocumentSectionId = createAction(SET_DOCUMENT_SECTION_ID);
 
 export const setFunctionPanelActive = createAction(SET_FUNCTIONPANEL_ACTIVE);
+export const setFunctionPanelFlag = createAction(SET_FUNCTIONPANEL_FLAG);
 
 export const setWritingModelId = createAction(SET_WRITINGMODEL_ID);
 export const setSubjecAreaId = createAction(SET_SUBJECTAREA_ID);
 
+export const startAnalysis = createAction(START_ANALYSIS);
+
 export default {
   fetchWritingModels, fetchSubjectAreas, fetchSections,
   inputDocumentTitle, inputDocumentBody, setDocumentSectionId,
-  setFunctionPanelActive,
+  setFunctionPanelActive, setFunctionPanelFlag,
   setWritingModelId, setSubjecAreaId,
+  startAnalysis,
 };

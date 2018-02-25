@@ -7,14 +7,20 @@ import actions from '../ducks/actions';
 import {
   getWritingModels, getSubjectAreas, getSections,
   getDocument, getSection,
-  getFunctionPanelActive,
+  getFunctionPanelStatus,
   getWritingModelId, getSubjectAreaId,
 } from '../ducks/selectors';
 
 import WritingPanel from '../components/writing-panel';
 import FunctionPanel from '../components/function-panel';
+import Sidebar from '../components/side-bar';
 
 const Container = styled.div`
+  display: grid;
+  grid-template-columns: auto 10rem;
+`;
+
+const Main = styled.div`
   display: flex;
   flex: 1;
   height: 100vh;
@@ -29,8 +35,11 @@ class Home extends Component {
   render() {
     return (
       <Container>
-        <WritingPanel {...this.props}/>
-        <FunctionPanel {...this.props}/>
+        <Main>
+          <WritingPanel {...this.props}/>
+          <FunctionPanel {...this.props}/>
+        </Main>
+        <Sidebar {...this.props}/>
       </Container>
     );
   }
@@ -43,7 +52,7 @@ export default connect(
     sections            : getSections(state),
     section             : getSection(state),
     document            : getDocument(state),
-    functionPanelActive : getFunctionPanelActive(state),
+    functionPanelStatus : getFunctionPanelStatus(state),
     writingModelId      : getWritingModelId(state),
     subjectAreaId       : getSubjectAreaId(state),
   }),

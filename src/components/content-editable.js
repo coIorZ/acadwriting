@@ -8,7 +8,9 @@ export default class ContentEditable extends React.Component {
   }
 
   render() {
-    var { tagName, ...props } = this.props;
+    /*eslint-disable no-unused-vars*/
+    var { tagName, html, ...props } = this.props;
+    /*eslint-enable no-unused-vars*/
 
     return React.createElement(
       tagName || 'div',
@@ -50,14 +52,14 @@ export default class ContentEditable extends React.Component {
     if ( this.htmlEl && this.props.html !== this.htmlEl.innerHTML ) {
       // Perhaps React (whose VDOM gets outdated because we often prevent
       // rerendering) did not update the DOM. So we update it manually now.
-      this.htmlEl.innerHTML = this.props.html;
+      //this.htmlEl.innerHTML = this.props.html;
     }
   }
 
   emitChange(evt) {
     if (!this.htmlEl) return;
     var html = this.htmlEl.innerHTML;
-    if (this.props.onChange && html !== this.lastHtml) {
+    if (this.props.onChange) {
       evt.target = { value: html };
       this.props.onChange(evt);
     }
@@ -68,9 +70,14 @@ export default class ContentEditable extends React.Component {
     evt.preventDefault();
     if (!this.htmlEl) return;
     var html = evt.clipboardData.getData('text');
-    html = html.split('\n').map(s => `<p>${s}</p>`).join('');
-    if (this.props.onChange && html !== this.lastHtml) {
-      evt.target = { value: html };
+    var sel = window.getSelection();
+    var range = sel.getRangeAt(0);
+    range.deleteContents();
+    range.insertNode(document.createTextNode(html));
+    sel.empty();
+    //html = html.split('\n').map(s => `<p>${s}</p>`).join('');
+    if (this.props.onChange) {
+      evt.target = { value: this.htmlEl.innerHTML };
       this.props.onChange(evt);
     }
     this.lastHtml = html;

@@ -1,5 +1,6 @@
 import React, { Component } from 'react';
 import styled from 'styled-components';
+import rsr from 'react-string-replace';
 
 import ContentEditable from '../../../components/content-editable';
 
@@ -20,7 +21,7 @@ const Container = styled.div`
   }
 `;
 
-const CE = styled(ContentEditable)`
+const Editor = styled(ContentEditable)`
   position: relative;
   min-height: 200px;
   outline: none;
@@ -35,37 +36,41 @@ const Placeholder = styled.div`
   user-select: none;
 `;
 
-export default class Section extends Component {
+const Keyword = styled.span`
+  border-bottom: 1px solid red;
+`;
+
+const Formatted = ({ input }) => (
+  rsr(input, /(to)/g, (match, i) => (
+    <Keyword key={i}>{match}</Keyword>
+  ))
+);
+
+export default class DocumentEditor extends Component {
   render() {
     const {
       placeHolder = '',
       document = {},
-      section = null,
+      section = {},
     } = this.props;
 
     const { body } = document;
+    const input = body[section.id] || '';
 
-    return section && (
+    return (
       <Container>
-        <CE
-          html={body[section.text] || ''}
+        <Editor
+          html={input}
           onChange={this.inputText}
         >
-        </CE>
-        { !body[section.text] && <Placeholder>{placeHolder}</Placeholder> }
+          {input && <Formatted input={input}/>}
+        </Editor>
+        { !input && <Placeholder>{placeHolder}</Placeholder> }
       </Container>
     );
   }
 
   inputText = e => {
-    const {
-      section = null,
-      inputDocumentBody,
-    } = this.props;
-
-    section && inputDocumentBody({
-      section : section.text, 
-      value   : e.target.value,
-    });
+    this.props.inputDocumentBody(e.target.value);
   }
 }

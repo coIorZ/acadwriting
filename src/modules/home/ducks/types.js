@@ -15,6 +15,11 @@ export const INPUT_DOCUMENT_BODY = 'INPUT_DOCUMENT_BODY';
 export const SET_DOCUMENT_SECTION_ID = 'SET_DOCUMENT_SECTION_ID'; // 1-Introduction  2-Literature Review
 
 export const SET_FUNCTIONPANEL_ACTIVE = 'SET_FUNCTIONPANEL_ACTIVE'; // show or hide function panel
+// content to display inside function panel
+// 1-writing models selection  2-subjec areas selection
+export const SET_FUNCTIONPANEL_FLAG = 'SET_FUNCTIONPANEL_FLAG';
 
 export const SET_WRITINGMODEL_ID = 'SET_WRITINGMODEL_ID';
 export const SET_SUBJECTAREA_ID = 'SET_SUBJECTAREA_ID';
+
+export const START_ANALYSIS = 'START_ANALYSIS';

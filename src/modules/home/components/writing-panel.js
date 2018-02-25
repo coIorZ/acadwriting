@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
 import styled from 'styled-components';
 
-import DocumentSection from './document-section';
+import DocumentEditor from './document-editor';
 import SectionSwitcher from './section-switcher';
 
 const Container = styled.div`
@@ -10,8 +10,17 @@ const Container = styled.div`
   height: 100%;
 `;
 
-const Placeholder = styled.div`
-  height: 4rem;
+const Header = styled.div`
+  display: flex;
+`;
+
+const Logo = styled.div`
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  & > img {
+    height: 4rem;
+  }
 `;
 
 const DocumentWrapper = styled.div`
@@ -53,9 +62,13 @@ export default class WritingPanel extends Component {
 
     const { title = '' } = document;
 
-    return section && (
+    return (
       <Container>
-        <Placeholder/>
+        <Header>
+          <Logo>
+            <img src={require('../../../images/NTU-logo-full-colour.png')}/>
+          </Logo>
+        </Header>
         <SectionSwitcher {...this.props}/>
         <DocumentWrapper>
           <Title
@@ -63,10 +76,12 @@ export default class WritingPanel extends Component {
             placeholder='Type your title'
             onInput={this.inputTitle}
           />
-          <DocumentSection
-            placeHolder={`Type or paste your ${section.text} here.`}
-            {...this.props}
-          />
+          {section && (
+            <DocumentEditor
+              placeHolder={`Type or paste your ${section.text} here.`}
+              {...this.props}
+            />
+          )}
         </DocumentWrapper>
       </Container>
     );

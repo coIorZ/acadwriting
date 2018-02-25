@@ -1,43 +1,34 @@
 import React, { Component } from 'react';
-import styled from 'styled-components';
+import styled, { css } from 'styled-components';
 
-import Button, { LinkButton } from '../../../components/button';
+import { LinkButton } from '../../../components/button';
 import ModelSubjectSelect from './model-subject-select';
 import RhetoricalArea from './rhetorical-area';
 import ArgumentationArea from './argumentation-area';
 
 const Container = styled.div`
   position: relative;
-  width: ${p => p.active ? '90%' : 0};
+  width: 100%;
   height: 100%;
-  transition: width .5s;
+  opacity: ${p => p.active ? 1 : 0};
+  width: ${p => p.active ? '60%' : 0};
+  ${p => !p.active && css`
+    pointer-events: none; 
+  `}
+  transition: width .5s, opacity .5s;
 `;
-
-const ShowBtnContainer = styled.div`
-  position: absolute;
-  top: 1rem;
-  right: 1.5rem;
-  display: ${p => p.active ? 'block' : 'none'};
-`;
-
-const ShowBtn = ({ active, onClick }) => (
-  <ShowBtnContainer active={active}>
-    <Button label='assistant' onClick={onClick}/>
-  </ShowBtnContainer>
-);
 
 const HideBtnContainer = styled.div`
   position: absolute;
   top: 1rem;
-  left: 1.5rem;
-  display: ${p => p.active ? 'block' : 'none'};
+  transition: transform .3s;
   &:hover {
     transform: scale(1.05);
   }
 `;
 
-const HideBtn = ({ active, onClick }) => (
-  <HideBtnContainer active={active}>
+const HideBtn = ({ onClick }) => (
+  <HideBtnContainer>
     <LinkButton label='hide assistant' onClick={onClick}/>
   </HideBtnContainer>
 );
@@ -48,24 +39,32 @@ const Placeholder = styled.div`
 
 export default class FunctionPanel extends Component {
   render() {
-    const { 
-      functionPanelActive: active,
-      writingModelId,
-    } = this.props;
+    const active = this.props.functionPanelStatus.active;
 
     return (
       <Container active={active}>
-        <ShowBtn active={!active} onClick={this.togglePanel}/>
-        <HideBtn active={active} onClick={this.togglePanel}/>
+        <HideBtn onClick={this.hidePanel}/>
         <Placeholder/>
-        <ModelSubjectSelect {...this.props}/>
-        {writingModelId == 1 && <RhetoricalArea/>}
-        {writingModelId == 2 && <ArgumentationArea/>}
+        {this.renderContent()}
       </Container>
     );
   }
 
-  togglePanel = () => {
-    this.props.setFunctionPanelActive(!this.props.functionPanelActive);
+  renderContent = () => {
+    const {
+      writingModelId,
+      functionPanelStatus = {},
+    } = this.props;
+
+    const { flag } = functionPanelStatus;
+
+    // flag > 0 when Models or Subjects Tabs in sidebar are clicked, show selection
+    if(flag > 0) return <ModelSubjectSelect {...this.props}/>;
+    if(writingModelId == 1) return <RhetoricalArea {...this.props}/>;
+    if(writingModelId == 2) return <ArgumentationArea {...this.props}/>;
+  }
+
+  hidePanel = () => {
+    this.props.setFunctionPanelActive(false);
   }
 }
