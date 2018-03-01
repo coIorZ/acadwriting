@@ -66,10 +66,6 @@ const documentReducer = handleActions({
   [START_ANALYSIS]: (state) => {
     return {
       ...state,
-      body: Object.keys(state.body).reduce((m, k) => {
-        m[k] = state.body[k] + ' ';
-        return m;
-      }, {}),
     };
   },
 }, {

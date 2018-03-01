@@ -1,6 +1,8 @@
 import { createAction } from 'redux-actions';
 import axios from 'axios';
 
+import editor from '../../../lib/editor';
+
 import {
   FETCH_WRITINGMODELS_PENDING, FETCH_WRITINGMODELS_SUCCESS, FETCH_WRITINGMODELS_FAIL,
   FETCH_SUBJECTAREAS_PENDING, FETCH_SUBJECTAREAS_SUCCESS, FETCH_SUBJECTAREAS_FAIL,
@@ -9,6 +11,7 @@ import {
   SET_FUNCTIONPANEL_ACTIVE, SET_FUNCTIONPANEL_FLAG,
   SET_WRITINGMODEL_ID, SET_SUBJECTAREA_ID,
   START_ANALYSIS,
+  CLICK_EDITOR,
 } from './types';
 
 export const fetchWritingModelsPending = createAction(FETCH_WRITINGMODELS_PENDING);
@@ -57,8 +60,18 @@ export const fetchSections = () => dispatch => {
 };
 
 export const inputDocumentTitle = createAction(INPUT_DOCUMENT_TITLE);
-export const inputDocumentBody = createAction(INPUT_DOCUMENT_BODY);
-export const setDocumentSectionId = createAction(SET_DOCUMENT_SECTION_ID);
+export const inputDocumentBody = () => ({
+  type    : INPUT_DOCUMENT_BODY,
+  payload : editor().html(),
+});
+export const setDocumentSectionId = payload => (dispatch, getState) => {
+  const { document } = getState();
+  editor().html(document.body[payload] || '');
+  dispatch({
+    type: SET_DOCUMENT_SECTION_ID,
+    payload,
+  });
+}; 
 
 export const setFunctionPanelActive = createAction(SET_FUNCTIONPANEL_ACTIVE);
 export const setFunctionPanelFlag = createAction(SET_FUNCTIONPANEL_FLAG);
@@ -66,7 +79,15 @@ export const setFunctionPanelFlag = createAction(SET_FUNCTIONPANEL_FLAG);
 export const setWritingModelId = createAction(SET_WRITINGMODEL_ID);
 export const setSubjecAreaId = createAction(SET_SUBJECTAREA_ID);
 
-export const startAnalysis = createAction(START_ANALYSIS);
+//export const startAnalysis = createAction(START_ANALYSIS);
+export const startAnalysis = () => dispatch => {
+  editor().analyze();
+  dispatch(inputDocumentBody());
+};
+
+export const clickEditor = payload => dispatch => {
+  editor().click(payload);
+};
 
 export default {
   fetchWritingModels, fetchSubjectAreas, fetchSections,
@@ -74,4 +95,5 @@ export default {
   setFunctionPanelActive, setFunctionPanelFlag,
   setWritingModelId, setSubjecAreaId,
   startAnalysis,
+  clickEditor,
 };

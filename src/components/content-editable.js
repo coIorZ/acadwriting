@@ -9,7 +9,7 @@ export default class ContentEditable extends React.Component {
 
   render() {
     /*eslint-disable no-unused-vars*/
-    var { tagName, html, ...props } = this.props;
+    const { tagName, html, ...props } = this.props;
     /*eslint-enable no-unused-vars*/
 
     return React.createElement(
@@ -27,7 +27,7 @@ export default class ContentEditable extends React.Component {
   }
 
   shouldComponentUpdate(nextProps) {
-    let { props, htmlEl } = this;
+    const { props, htmlEl } = this;
 
     // We need not rerender if the change of props simply reflects the user's edits.
     // Rerendering in this case would make the cursor/caret jump
@@ -37,12 +37,17 @@ export default class ContentEditable extends React.Component {
       return true;
     }
 
+    // Rerender if it is empty
+    if (!nextProps.html) {
+      return true;
+    }
+
     // ...or if html really changed... (programmatically, not by user edit)
     if (nextProps.html !== htmlEl.innerHTML && nextProps.html !== props.html) {
       return true;
     }
 
-    let optional = ['style', 'className', 'disable', 'tagName'];
+    const optional = ['style', 'className', 'disable', 'tagName'];
 
     // Handle additional properties
     return optional.some(name => props[name] !== nextProps[name]);
@@ -50,16 +55,16 @@ export default class ContentEditable extends React.Component {
 
   componentDidUpdate() {
     if ( this.htmlEl && this.props.html !== this.htmlEl.innerHTML ) {
-      // Perhaps React (whose VDOM gets outdated because we often prevent
-      // rerendering) did not update the DOM. So we update it manually now.
+      //Perhaps React (whose VDOM gets outdated because we often prevent
+      //rerendering) did not update the DOM. So we update it manually now.
       //this.htmlEl.innerHTML = this.props.html;
     }
   }
 
   emitChange(evt) {
     if (!this.htmlEl) return;
-    var html = this.htmlEl.innerHTML;
-    if (this.props.onChange) {
+    const html = this.htmlEl.innerHTML;
+    if (this.props.onChange && html !== this.lastHtml) {
       evt.target = { value: html };
       this.props.onChange(evt);
     }
@@ -67,19 +72,30 @@ export default class ContentEditable extends React.Component {
   }
 
   emitPaste(evt) {
-    evt.preventDefault();
+    evt.preventDefault(); // Do not paste
     if (!this.htmlEl) return;
-    var html = evt.clipboardData.getData('text');
-    var sel = window.getSelection();
-    var range = sel.getRangeAt(0);
+    const text = evt.clipboardData.getData('text');
+    if(!text) return;
+    const textArr = text.split('\n').filter(Boolean);
+    const sel = window.getSelection();
+    const range = sel.getRangeAt(0);
     range.deleteContents();
-    range.insertNode(document.createTextNode(html));
+    textArr.forEach((t, i) => {
+      let node;
+      if(i === 0) {
+        node = document.createTextNode(t);
+      } else {
+        node = document.createElement('p');
+        node.appendChild(document.createTextNode(t));
+      }
+      range.insertNode(node);
+      range.setStartAfter(node.parentNode);
+    });
     sel.empty();
-    //html = html.split('\n').map(s => `<p>${s}</p>`).join('');
     if (this.props.onChange) {
       evt.target = { value: this.htmlEl.innerHTML };
       this.props.onChange(evt);
     }
-    this.lastHtml = html;
+    this.lastHtml = this.htmlEl.innerHTML;
   }
 }

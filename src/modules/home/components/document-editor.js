@@ -1,8 +1,5 @@
 import React, { Component } from 'react';
 import styled from 'styled-components';
-import rsr from 'react-string-replace';
-
-import ContentEditable from '../../../components/content-editable';
 
 const Container = styled.div`
   position: relative;
@@ -21,7 +18,7 @@ const Container = styled.div`
   }
 `;
 
-const Editor = styled(ContentEditable)`
+const Editor = styled.div`
   position: relative;
   min-height: 200px;
   outline: none;
@@ -36,16 +33,6 @@ const Placeholder = styled.div`
   user-select: none;
 `;
 
-const Keyword = styled.span`
-  border-bottom: 1px solid red;
-`;
-
-const Formatted = ({ input }) => (
-  rsr(input, /(to)/g, (match, i) => (
-    <Keyword key={i}>{match}</Keyword>
-  ))
-);
-
 export default class DocumentEditor extends Component {
   render() {
     const {
@@ -59,18 +46,50 @@ export default class DocumentEditor extends Component {
 
     return (
       <Container>
-        <Editor
-          html={input}
-          onChange={this.inputText}
+        <Editor 
+          id='editor' 
+          className='editor'
+          contentEditable={true}
+          spellCheck={false}
+          onInput={this.inputText}
+          onPaste={this.pasteText}
+          onClick={this.clickEditor}
         >
-          {input && <Formatted input={input}/>}
+          <p><br/></p>
         </Editor>
-        { !input && <Placeholder>{placeHolder}</Placeholder> }
+        {!input && <Placeholder>{placeHolder}</Placeholder>}
       </Container>
     );
   }
 
-  inputText = e => {
-    this.props.inputDocumentBody(e.target.value);
+  inputText = () => {
+    this.props.inputDocumentBody();
+  }
+
+  pasteText = e => {
+    e.preventDefault();
+    const text = e.clipboardData.getData('text');
+    if(!text) return;
+    const textArr = text.split('\n').filter(Boolean);
+    const sel = window.getSelection();
+    const range = sel.getRangeAt(0);
+    range.deleteContents();
+    textArr.forEach((t, i) => {
+      let node;
+      if(i === 0) {
+        node = document.createTextNode(t);
+      } else {
+        node = document.createElement('p');
+        node.appendChild(document.createTextNode(t));
+      }
+      range.insertNode(node);
+      range.setStartAfter(node.parentNode);
+    });
+    sel.empty();
+    this.props.inputDocumentBody();
+  }
+
+  clickEditor = e => {
+    this.props.clickEditor(e);
   }
 }
