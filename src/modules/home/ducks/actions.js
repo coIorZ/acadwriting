@@ -37,7 +37,7 @@ export const fetchSubjectAreas = () => dispatch => {
   axios.get('/api/subjectAreas')
     .then(({ data }) => {
       dispatch(fetchSubjectAreasSuccess(data));
-      dispatch(setSubjecAreaId(Number(Object.keys(data)[0])));
+      dispatch(setSubjectAreaId(Number(Object.keys(data)[0])));
     })
     .catch(err => {
       dispatch(fetchSubjectAreasFail(err));
@@ -77,7 +77,7 @@ export const setFunctionPanelActive = createAction(SET_FUNCTIONPANEL_ACTIVE);
 export const setFunctionPanelFlag = createAction(SET_FUNCTIONPANEL_FLAG);
 
 export const setWritingModelId = createAction(SET_WRITINGMODEL_ID);
-export const setSubjecAreaId = createAction(SET_SUBJECTAREA_ID);
+export const setSubjectAreaId = createAction(SET_SUBJECTAREA_ID);
 
 //export const startAnalysis = createAction(START_ANALYSIS);
 export const startAnalysis = () => dispatch => {
@@ -93,7 +93,7 @@ export default {
   fetchWritingModels, fetchSubjectAreas, fetchSections,
   inputDocumentTitle, inputDocumentBody, setDocumentSectionId,
   setFunctionPanelActive, setFunctionPanelFlag,
-  setWritingModelId, setSubjecAreaId,
+  setWritingModelId, setSubjectAreaId,
   startAnalysis,
   clickEditor,
 };

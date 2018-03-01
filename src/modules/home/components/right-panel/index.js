@@ -1,17 +1,14 @@
 import React, { Component } from 'react';
 import styled, { css } from 'styled-components';
 
-import { LinkButton } from '../../../components/button';
-import ModelSubjectSelect from './model-subject-select';
-import RhetoricalArea from './rhetorical-area';
-import ArgumentationArea from './argumentation-area';
+import { LinkButton } from '../../../../components/button';
 
 const Container = styled.div`
   position: relative;
-  width: 100%;
+  width: 0;
   height: 100%;
   opacity: ${p => p.active ? 1 : 0};
-  width: ${p => p.active ? '60%' : 0};
+  width: ${p => p.active ? '90%' : 0};
   ${p => !p.active && css`
     pointer-events: none; 
   `}
@@ -45,7 +42,6 @@ export default class FunctionPanel extends Component {
       <Container active={active}>
         <HideBtn onClick={this.hidePanel}/>
         <Placeholder/>
-        {this.renderContent()}
       </Container>
     );
   }
@@ -58,10 +54,9 @@ export default class FunctionPanel extends Component {
 
     const { flag } = functionPanelStatus;
 
+    return <div></div>;
     // flag > 0 when Models or Subjects Tabs in sidebar are clicked, show selection
-    if(flag > 0) return <ModelSubjectSelect {...this.props}/>;
-    if(writingModelId == 1) return <RhetoricalArea {...this.props}/>;
-    if(writingModelId == 2) return <ArgumentationArea {...this.props}/>;
+    //if(flag > 0) return <ModelSubjectSelect {...this.props}/>;
   }
 
   hidePanel = () => {

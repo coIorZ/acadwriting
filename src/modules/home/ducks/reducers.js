@@ -74,7 +74,7 @@ const documentReducer = handleActions({
   sectionId : -1,
 });
 
-const functionPanelActiveReducer = handleAction(SET_FUNCTIONPANEL_ACTIVE, (state, { payload }) => payload, false);
+const functionPanelActiveReducer = handleAction(SET_FUNCTIONPANEL_ACTIVE, (state, { payload }) => payload, true);
 const functionPanelFlagReducer = handleAction(SET_FUNCTIONPANEL_FLAG, (state, { payload }) => payload, -1);
 const functionPanelStatusReducer = combineReducers({
   active : functionPanelActiveReducer,

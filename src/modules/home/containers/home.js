@@ -11,16 +11,10 @@ import {
   getWritingModelId, getSubjectAreaId,
 } from '../ducks/selectors';
 
-import WritingPanel from '../components/writing-panel';
-import FunctionPanel from '../components/function-panel';
-import Sidebar from '../components/side-bar';
+import LeftPanel from '../components/left-panel';
+import RightPanel from '../components/right-panel';
 
 const Container = styled.div`
-  display: grid;
-  grid-template-columns: auto 10rem;
-`;
-
-const Main = styled.div`
   display: flex;
   flex: 1;
   height: 100vh;
@@ -35,11 +29,8 @@ class Home extends Component {
   render() {
     return (
       <Container>
-        <Main>
-          <WritingPanel {...this.props}/>
-          <FunctionPanel {...this.props}/>
-        </Main>
-        <Sidebar {...this.props}/>
+        <LeftPanel {...this.props}/>
+        <RightPanel {...this.props}/>
       </Container>
     );
   }
