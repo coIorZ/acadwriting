@@ -40,8 +40,6 @@ export default class FunctionPanel extends Component {
 
     return (
       <Container active={active}>
-        <HideBtn onClick={this.hidePanel}/>
-        <Placeholder/>
       </Container>
     );
   }

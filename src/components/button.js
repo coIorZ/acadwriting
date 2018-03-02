@@ -21,9 +21,7 @@ const StyledButton = styled.div`
   }
 `;
 
-export default ({ label, onClick }) => (
-  <StyledButton onClick={onClick}>{label}</StyledButton>
-);
+export default StyledButton;
 
 const StyledLinkButton = styled.div`
   display: inline-block;

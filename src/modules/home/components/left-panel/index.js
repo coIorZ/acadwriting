@@ -1,6 +1,7 @@
 import React, { Component } from 'react';
 import styled from 'styled-components';
 
+import Button from '../../../../components/button';
 import ModelSubjectFilter from './model-subject-filter';
 import DocumentEditor from './document-editor';
 import SectionSwitcher from './section-switcher';
@@ -26,11 +27,18 @@ const Logo = styled.div`
 
 const DocumentWrapper = styled.div`
   margin: auto auto 0;
-  padding: 2rem 3rem 40vh;
+  padding: 2rem 3rem 1rem;
   max-width: 45rem;
   width: 100%;
-  height: calc(100vh - 4rem);
+  height: calc(100vh - 11rem);
   overflow: auto;
+`;
+
+const BtnContainer = styled.div`
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  height: 3rem;
 `;
 
 export default class WritingPanel extends Component {
@@ -60,11 +68,18 @@ export default class WritingPanel extends Component {
             />
           )}
         </DocumentWrapper>
+        <BtnContainer>
+          <Button onClick={this.startAnalysis}>Analyze</Button>
+        </BtnContainer>
       </Container>
     );
   }
 
   inputTitle = e => {
     this.props.inputDocumentTitle(e.target.value);
+  }
+
+  startAnalysis = () => {
+    this.props.startAnalysis();
   }
 }

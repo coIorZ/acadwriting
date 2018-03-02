@@ -7,7 +7,7 @@ import {
   FETCH_WRITINGMODELS_PENDING, FETCH_WRITINGMODELS_SUCCESS, FETCH_WRITINGMODELS_FAIL,
   FETCH_SUBJECTAREAS_PENDING, FETCH_SUBJECTAREAS_SUCCESS, FETCH_SUBJECTAREAS_FAIL,
   FETCH_SECTIONS_PENDING, FETCH_SECTIONS_SUCCESS, FETCH_SECTIONS_FAIL,
-  INPUT_DOCUMENT_TITLE, INPUT_DOCUMENT_BODY, SET_DOCUMENT_SECTION_ID,
+  INPUT_DOCUMENT_TITLE, INPUT_DOCUMENT_BODY, PASTE_DOCUMENT_BODY, SET_DOCUMENT_SECTION_ID,
   SET_FUNCTIONPANEL_ACTIVE, SET_FUNCTIONPANEL_FLAG,
   SET_WRITINGMODEL_ID, SET_SUBJECTAREA_ID,
   START_ANALYSIS,
@@ -64,6 +64,13 @@ export const inputDocumentBody = () => ({
   type    : INPUT_DOCUMENT_BODY,
   payload : editor().html(),
 });
+export const pasteDocumentBody = payload => dispatch => {
+  editor().paste(payload);
+  dispatch({
+    type    : INPUT_DOCUMENT_BODY,
+    payload : editor().html(),
+  });
+};
 export const setDocumentSectionId = payload => (dispatch, getState) => {
   const { document } = getState();
   editor().html(document.body[payload] || '');
@@ -91,7 +98,7 @@ export const clickEditor = payload => dispatch => {
 
 export default {
   fetchWritingModels, fetchSubjectAreas, fetchSections,
-  inputDocumentTitle, inputDocumentBody, setDocumentSectionId,
+  inputDocumentTitle, inputDocumentBody, pasteDocumentBody, setDocumentSectionId,
   setFunctionPanelActive, setFunctionPanelFlag,
   setWritingModelId, setSubjectAreaId,
   startAnalysis,

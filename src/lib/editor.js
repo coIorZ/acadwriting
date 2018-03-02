@@ -20,6 +20,24 @@ Editor.prototype.html = function(val) {
   return this;
 };
 
+Editor.prototype.paste = function(e) {
+  if(!this._el) return;
+  e.preventDefault();
+  const text = e.clipboardData.getData('text');
+  if(!text) return;
+  const textArr = text.split('\n').filter(Boolean);
+  const sel = window.getSelection();
+  const range = sel.getRangeAt(0);
+  range.deleteContents();
+  range.insertNode(document.createTextNode(textArr.pop()));
+  textArr.forEach(t => {
+    const node = document.createElement('p');
+    node.appendChild(document.createTextNode(t));
+    this._el.appendChild(node);
+  });
+  sel.empty();
+};
+
 Editor.prototype.analyze = function() {
   if(!this._el) return;
   this.data = [];
@@ -48,6 +66,15 @@ Editor.prototype.clearAnalysis = function() {
 
 Editor.prototype.click = function(e) {
   if(!this._el) return;
-  const { target } = e;
-  console.log(e);
+  let node = e.target;
+  if(node.classList.contains('marker')) {
+    node = node.parentNode;
+  }
+  if(!node.classList.contains('sentence')) return;
+  Array.from(this._el.children).forEach(pNode => {
+    Array.from(pNode.children).forEach(sNode => {
+      sNode.classList.remove('active');
+    });
+  });
+  node.classList.add('active');
 };

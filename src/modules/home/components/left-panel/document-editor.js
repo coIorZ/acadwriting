@@ -67,26 +67,7 @@ export default class DocumentEditor extends Component {
   }
 
   pasteText = e => {
-    e.preventDefault();
-    const text = e.clipboardData.getData('text');
-    if(!text) return;
-    const textArr = text.split('\n').filter(Boolean);
-    const sel = window.getSelection();
-    const range = sel.getRangeAt(0);
-    range.deleteContents();
-    textArr.forEach((t, i) => {
-      let node;
-      if(i === 0) {
-        node = document.createTextNode(t);
-      } else {
-        node = document.createElement('p');
-        node.appendChild(document.createTextNode(t));
-      }
-      range.insertNode(node);
-      range.setStartAfter(node.parentNode);
-    });
-    sel.empty();
-    this.props.inputDocumentBody();
+    this.props.pasteDocumentBody(e);
   }
 
   clickEditor = e => {
