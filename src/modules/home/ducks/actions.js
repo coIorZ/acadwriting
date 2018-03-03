@@ -12,6 +12,8 @@ import {
   SET_WRITINGMODEL_ID, SET_SUBJECTAREA_ID,
   START_ANALYSIS,
   CLICK_EDITOR,
+  SET_POPUP_ACTIVE,
+  SET_INFOFLAG,
 } from './types';
 
 export const fetchWritingModelsPending = createAction(FETCH_WRITINGMODELS_PENDING);
@@ -53,6 +55,7 @@ export const fetchSections = () => dispatch => {
     .then(({ data }) => {
       dispatch(fetchSectionsSuccess(data));
       dispatch(setDocumentSectionId(Number(Object.keys(data)[0])));
+      dispatch(setInfoFlag(Object.keys(data)[0]));
     })
     .catch(err => {
       dispatch(fetchSectionsFail(err));
@@ -96,6 +99,10 @@ export const clickEditor = payload => dispatch => {
   editor().click(payload);
 };
 
+export const setPopUpActive = createAction(SET_POPUP_ACTIVE);
+
+export const setInfoFlag = createAction(SET_INFOFLAG);
+
 export default {
   fetchWritingModels, fetchSubjectAreas, fetchSections,
   inputDocumentTitle, inputDocumentBody, pasteDocumentBody, setDocumentSectionId,
@@ -103,4 +110,6 @@ export default {
   setWritingModelId, setSubjectAreaId,
   startAnalysis,
   clickEditor,
+  setPopUpActive,
+  setInfoFlag,
 };

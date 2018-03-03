@@ -9,6 +9,8 @@ import {
   SET_FUNCTIONPANEL_ACTIVE, SET_FUNCTIONPANEL_FLAG,
   SET_WRITINGMODEL_ID, SET_SUBJECTAREA_ID,
   START_ANALYSIS,
+  SET_POPUP_ACTIVE,
+  SET_INFOFLAG,
 } from './types';
 
 const writingModelsReducer = handleActions({
@@ -84,6 +86,10 @@ const functionPanelStatusReducer = combineReducers({
 const writingModelIdReducer = handleAction(SET_WRITINGMODEL_ID, (state, { payload }) => payload, -1);
 const subjectAreaIdReducer = handleAction(SET_SUBJECTAREA_ID, (state, { payload }) => payload, -1);
 
+const popUpActiveReducer = handleAction(SET_POPUP_ACTIVE, (state, { payload }) => payload, false);
+
+const infoFlagReducer = handleAction(SET_INFOFLAG, (state, { payload }) => payload, -1);
+
 export default combineReducers({
   writingModels       : writingModelsReducer,
   subjectAreas        : subjectAreasReducer,
@@ -92,4 +98,6 @@ export default combineReducers({
   functionPanelStatus : functionPanelStatusReducer,
   writingModelId      : writingModelIdReducer,
   subjectAreaId       : subjectAreaIdReducer,
+  popUpActive         : popUpActiveReducer,
+  infoFlag            : infoFlagReducer,
 });
