@@ -3,9 +3,11 @@ import styled from 'styled-components';
 
 const Container = styled.div`
   position: relative;
+  height: 100%;
   min-height: 5rem;
   outline: none;
   border: none;
+  overflow: auto;
   font-size: 1.125rem;
   color: #312b38;
   line-height: 2rem;

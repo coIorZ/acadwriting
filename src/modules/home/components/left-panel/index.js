@@ -27,11 +27,10 @@ const Logo = styled.div`
 
 const DocumentWrapper = styled.div`
   margin: auto auto 0;
-  padding: 2rem 3rem 1rem;
+  padding: 2rem 3rem .2rem;
   max-width: 45rem;
   width: 100%;
   height: calc(100vh - 11rem);
-  overflow: auto;
 `;
 
 const BtnContainer = styled.div`

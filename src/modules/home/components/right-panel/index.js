@@ -9,10 +9,11 @@ const Container = styled.div`
   height: 100%;
   opacity: ${p => p.active ? 1 : 0};
   width: ${p => p.active ? '90%' : 0};
+  box-shadow: -25px 0 56px 0 rgba(241, 242, 250, .4);
+  transition: width .5s, opacity .5s;
   ${p => !p.active && css`
     pointer-events: none; 
   `}
-  transition: width .5s, opacity .5s;
 `;
 
 const HideBtnContainer = styled.div`

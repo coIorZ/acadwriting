@@ -14,14 +14,14 @@ function Editor(el) {
 }
 
 Editor.prototype.html = function(val) {
-  if(!this._el) return;
+  if(!this._el) return this;
   if(val == null) return this._el.innerHTML;
   this._el.innerHTML = val;
   return this;
 };
 
 Editor.prototype.paste = function(e) {
-  if(!this._el) return;
+  if(!this._el) return this;
   e.preventDefault();
   const text = e.clipboardData.getData('text');
   if(!text) return;
@@ -36,10 +36,11 @@ Editor.prototype.paste = function(e) {
     this._el.appendChild(node);
   });
   sel.empty();
+  return this;
 };
 
 Editor.prototype.analyze = function() {
-  if(!this._el) return;
+  if(!this._el) return this;
   this.data = [];
   Array.from(this._el.children).forEach(node => {
     let para = node.textContent;
@@ -55,17 +56,19 @@ Editor.prototype.analyze = function() {
     this.data.push(sentences);
     node.innerHTML = sentences.map(t => t.html).join('');
   });
+  return this;
 };
 
 Editor.prototype.clearAnalysis = function() {
-  if(!this._el) return;
+  if(!this._el) return this;
   Array.from(this._el.children).forEach(node => {
     node.innerHTML = node.textContent;
   });
+  return this;
 };
 
 Editor.prototype.click = function(e) {
-  if(!this._el) return;
+  if(!this._el) return this;
   let node = e.target;
   if(node.classList.contains('marker')) {
     node = node.parentNode;
@@ -77,4 +80,5 @@ Editor.prototype.click = function(e) {
     });
   });
   node.classList.add('active');
+  return this;
 };
