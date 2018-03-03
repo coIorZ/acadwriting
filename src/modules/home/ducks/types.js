@@ -26,3 +26,7 @@ export const SET_SUBJECTAREA_ID = 'SET_SUBJECTAREA_ID';
 export const START_ANALYSIS = 'START_ANALYSIS';
 
 export const CLICK_EDITOR = 'CLICK_EDITOR';
+
+export const SET_POPUP_ACTIVE = 'SET_POPUP_ACTIVE';
+
+export const SET_INFOFLAG = 'SET_INFOFLAG'; 

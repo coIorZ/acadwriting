@@ -51,11 +51,16 @@ export default class SectionSwitcher extends Component {
             </Switch>
           );
         })}
+        <div onClick={this.showPopUp}>?</div>
       </Container>
     );
   }
 
   setSection = val => {
     this.props.setDocumentSectionId(val);
+  }
+
+  showPopUp = () => {
+    this.props.setPopUpActive(true);
   }
 }

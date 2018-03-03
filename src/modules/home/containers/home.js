@@ -9,10 +9,14 @@ import {
   getDocument, getSection,
   getFunctionPanelStatus,
   getWritingModelId, getSubjectAreaId,
+  getPopUpActive,
+  getInfoFlag,
 } from '../ducks/selectors';
 
 import LeftPanel from '../components/left-panel';
 import RightPanel from '../components/right-panel';
+import PopUp from '../../../components/pop-up';
+import Info from '../components/left-panel/info';
 
 const Container = styled.div`
   display: flex;
@@ -27,10 +31,17 @@ class Home extends Component {
   }
 
   render() {
+    const active = this.props.popUpActive;
+
     return (
       <Container>
         <LeftPanel {...this.props}/>
         <RightPanel {...this.props}/>
+        {active && (
+          <PopUp {...this.props}>
+            <Info {...this.props}/>
+          </PopUp>
+        )}
       </Container>
     );
   }
@@ -46,6 +57,8 @@ export default connect(
     functionPanelStatus : getFunctionPanelStatus(state),
     writingModelId      : getWritingModelId(state),
     subjectAreaId       : getSubjectAreaId(state),
+    popUpActive         : getPopUpActive(state),
+    infoFlag            : getInfoFlag(state),
   }),
   actions,
 )(Home);
