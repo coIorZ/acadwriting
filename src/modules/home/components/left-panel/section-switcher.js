@@ -40,14 +40,14 @@ export default class SectionSwitcher extends Component {
     return (
       <Container>
         {Object.keys(sections).map(key => {
-          const { id, text } = sections[key];
+          const { id, label } = sections[key];
           return (
             <Switch
               key={id}
               active={sectionId === id}
               onClick={this.setSection.bind(this, id)}
             >
-              {text}
+              {label}
             </Switch>
           );
         })}
