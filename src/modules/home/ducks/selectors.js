@@ -8,7 +8,6 @@ export const getFunctionPanelStatus = state => state.functionPanelStatus;
 export const getWritingModelId = state => state.writingModelId;
 export const getSubjectAreaId = state => state.subjectAreaId;
 export const getPopUpActive = state => state.popUpActive;
-export const getInfoFlag = state => state.infoFlag;
 
 export const getSection = createSelector(
   getSections, 

@@ -3,11 +3,7 @@ import { Router } from 'express';
 import asyncWrap from './lib/async-wrap';
 import { normalize } from './lib/utils';
 
-import Models from './models/models';
-import Subjects from './models/subjects';
-import ReportSections from './models/report-sections';
-import Moves from './models/moves';
-import Steps from './models/steps';
+import { Moves, Steps, Models, Subjects, ReportSections, Markers } from './models';
 
 const router = Router();
 
@@ -32,11 +28,68 @@ router.get('/sections', asyncWrap(async (req, res) => {
 router.get('/moves', asyncWrap(async (req, res) => {
   let result = await Moves.findAll({
     include: [{
-      model : Steps,
-      as    : 'steps',
+      model   : Steps,
+      as      : 'steps',
+      include : [{
+        model      : Markers,
+        as         : 'markers',
+        attributes : ['id'],
+        through    : {
+          attributes: [],
+        },
+      }],
     }],
   });
-  result = normalize()(result);
+  result = result.reduce((acc, move) => {
+    const { id, sectionId, label, steps } = move;
+    acc[id] = {
+      id,
+      sectionId,
+      label,
+      steps: steps.reduce((m, step) => {
+        const { id: stepId, label: stepLabel, moveId, important, rfCode, rfCodePrefix, rfCodeText, rfDescription, markers } = step;
+        m[stepId] = {
+          id      : stepId,
+          label   : stepLabel,
+          moveId,
+          important,
+          //rfCode,
+          //rfCodePrefix,
+          //rfCodeText,
+          rfDescription,
+          markers : normalize()(markers),
+        };
+        return m;
+      }, {}),
+    };
+    return acc;
+  }, {});
+  res.status(200).json(result);
+}));
+
+router.get('/markers', asyncWrap(async (req, res) => {
+  let result = await Markers.findAll({
+    include: [{
+      model      : Steps,
+      as         : 'steps',
+      attributes : ['id'],
+      through    : {
+        attributes: [],
+      },
+    }],
+  });
+  result = result.reduce((acc, m) => {
+    const { id, label, marker, fullMarker, confidence, steps } = m;
+    acc[id] = {
+      id,
+      label,
+      marker,
+      fullMarker,
+      confidence,
+      steps: normalize()(steps),
+    };
+    return acc;
+  }, {});
   res.status(200).json(result);
 }));
 

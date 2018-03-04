@@ -15,13 +15,12 @@ const Content = styled.div`
 
 export default class Info extends Component {
   render() {
-    const { sections, infoFlag } = this.props;
-    const section = sections[infoFlag] || {};
+    const { label, description } = this.props.section;
 
     return (
       <Container>
-        <Title>{section.label}</Title>
-        <Content>{section.description}</Content>
+        <Title>{label}</Title>
+        <Content>{description}</Content>
       </Container>
     );
   } 

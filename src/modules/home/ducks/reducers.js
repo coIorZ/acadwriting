@@ -6,11 +6,9 @@ import {
   FETCH_SUBJECTAREAS_SUCCESS, FETCH_SUBJECTAREAS_FAIL,
   FETCH_SECTIONS_SUCCESS, FETCH_SECTIONS_FAIL,
   INPUT_DOCUMENT_TITLE, INPUT_DOCUMENT_BODY, SET_DOCUMENT_SECTION_ID,
-  SET_FUNCTIONPANEL_ACTIVE, SET_FUNCTIONPANEL_FLAG,
   SET_WRITINGMODEL_ID, SET_SUBJECTAREA_ID,
   START_ANALYSIS,
   SET_POPUP_ACTIVE,
-  SET_INFOFLAG,
 } from './types';
 
 const writingModelsReducer = handleActions({
@@ -76,28 +74,17 @@ const documentReducer = handleActions({
   sectionId : -1,
 });
 
-const functionPanelActiveReducer = handleAction(SET_FUNCTIONPANEL_ACTIVE, (state, { payload }) => payload, true);
-const functionPanelFlagReducer = handleAction(SET_FUNCTIONPANEL_FLAG, (state, { payload }) => payload, -1);
-const functionPanelStatusReducer = combineReducers({
-  active : functionPanelActiveReducer,
-  flag   : functionPanelFlagReducer,
-});
-
 const writingModelIdReducer = handleAction(SET_WRITINGMODEL_ID, (state, { payload }) => payload, -1);
 const subjectAreaIdReducer = handleAction(SET_SUBJECTAREA_ID, (state, { payload }) => payload, -1);
 
 const popUpActiveReducer = handleAction(SET_POPUP_ACTIVE, (state, { payload }) => payload, false);
 
-const infoFlagReducer = handleAction(SET_INFOFLAG, (state, { payload }) => payload, -1);
-
 export default combineReducers({
-  writingModels       : writingModelsReducer,
-  subjectAreas        : subjectAreasReducer,
-  sections            : sectionsReducer,
-  document            : documentReducer,
-  functionPanelStatus : functionPanelStatusReducer,
-  writingModelId      : writingModelIdReducer,
-  subjectAreaId       : subjectAreaIdReducer,
-  popUpActive         : popUpActiveReducer,
-  infoFlag            : infoFlagReducer,
+  writingModels  : writingModelsReducer,
+  subjectAreas   : subjectAreasReducer,
+  sections       : sectionsReducer,
+  document       : documentReducer,
+  writingModelId : writingModelIdReducer,
+  subjectAreaId  : subjectAreaIdReducer,
+  popUpActive    : popUpActiveReducer,
 });

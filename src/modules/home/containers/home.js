@@ -10,7 +10,6 @@ import {
   getFunctionPanelStatus,
   getWritingModelId, getSubjectAreaId,
   getPopUpActive,
-  getInfoFlag,
 } from '../ducks/selectors';
 
 import LeftPanel from '../components/left-panel';
@@ -19,8 +18,8 @@ import PopUp from '../../../components/pop-up';
 import Info from '../components/left-panel/info';
 
 const Container = styled.div`
-  display: flex;
-  flex: 1;
+  display: grid;
+  grid-template-columns: 55% 45%;
   height: 100vh;
 `;
 
@@ -58,7 +57,6 @@ export default connect(
     writingModelId      : getWritingModelId(state),
     subjectAreaId       : getSubjectAreaId(state),
     popUpActive         : getPopUpActive(state),
-    infoFlag            : getInfoFlag(state),
   }),
   actions,
 )(Home);
