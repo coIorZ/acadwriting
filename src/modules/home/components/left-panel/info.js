@@ -20,7 +20,9 @@ export default class Info extends Component {
     return (
       <Container>
         <Title>{label}</Title>
-        <Content>{description}</Content>
+        <Content>{description.split('$$n$$').map(t => (
+          <p>{t}</p>
+        ))}</Content>
       </Container>
     );
   } 

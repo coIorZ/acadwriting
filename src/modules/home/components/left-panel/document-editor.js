@@ -23,6 +23,7 @@ const Container = styled.div`
 const Editor = styled.div`
   position: relative;
   min-height: 200px;
+  padding-bottom: 20vh;
   outline: none;
   border: none;
 `;

@@ -27,6 +27,8 @@ class Home extends Component {
   componentDidMount() {
     this.props.fetchWritingModels();
     this.props.fetchSubjectAreas();
+    this.props.fetchMoves();
+    this.props.fetchMarkers();
   }
 
   render() {

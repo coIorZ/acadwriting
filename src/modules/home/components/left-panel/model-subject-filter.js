@@ -5,6 +5,7 @@ const Container = styled.div`
   font-size: .9rem;
   padding: .5rem 0 .5rem 2rem;
   height: 4rem;
+  user-select: none;
 `;
 
 const StyledFilter = styled.div`

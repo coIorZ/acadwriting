@@ -28,6 +28,7 @@ const Pop = styled.div`
   z-index: 1;
   border-radius: 3px;
   box-shadow: 0 0 20px 0 rgba(76,85,101,.16);
+  overflow: auto;
 }
 `;
 

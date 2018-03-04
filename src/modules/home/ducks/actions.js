@@ -11,8 +11,6 @@ import {
   FETCH_MOVES_PENDING, FETCH_MOVES_SUCCESS, FETCH_MOVES_FAIL,
   INPUT_DOCUMENT_TITLE, INPUT_DOCUMENT_BODY, SET_DOCUMENT_SECTION_ID,
   SET_WRITINGMODEL_ID, SET_SUBJECTAREA_ID,
-  START_ANALYSIS,
-  CLICK_EDITOR,
   SET_POPUP_ACTIVE,
 } from './types';
 
@@ -75,6 +73,20 @@ export const fetchMoves = () => dispatch => {
     });
 };
 
+export const fetchMarkersPending = createAction(FETCH_MARKERS_PENDING);
+export const fetchMarkersSuccess = createAction(FETCH_MARKERS_SUCCESS);
+export const fetchMarkersFail = createAction(FETCH_MARKERS_FAIL);
+export const fetchMarkers = () => dispatch => {
+  dispatch(fetchMarkersPending());
+  axios.get('/api/markers')
+    .then(({ data }) => {
+      dispatch(fetchMarkersSuccess(data));
+    })
+    .catch(err => {
+      dispatch(fetchMarkersFail(err));
+    });
+};
+
 export const inputDocumentTitle = createAction(INPUT_DOCUMENT_TITLE);
 export const inputDocumentBody = () => ({
   type    : INPUT_DOCUMENT_BODY,
@@ -99,9 +111,9 @@ export const setDocumentSectionId = payload => (dispatch, getState) => {
 export const setWritingModelId = createAction(SET_WRITINGMODEL_ID);
 export const setSubjectAreaId = createAction(SET_SUBJECTAREA_ID);
 
-//export const startAnalysis = createAction(START_ANALYSIS);
-export const startAnalysis = () => dispatch => {
-  editor().analyze();
+export const startAnalysis = () => (dispatch, getState) => {
+  const { markers } = getState();
+  editor().analyze(markers);
   dispatch(inputDocumentBody());
 };
 
@@ -112,7 +124,7 @@ export const clickEditor = payload => dispatch => {
 export const setPopUpActive = createAction(SET_POPUP_ACTIVE);
 
 export default {
-  fetchWritingModels, fetchSubjectAreas, fetchSections,
+  fetchWritingModels, fetchSubjectAreas, fetchSections, fetchMoves, fetchMarkers,
   inputDocumentTitle, inputDocumentBody, pasteDocumentBody, setDocumentSectionId,
   setWritingModelId, setSubjectAreaId,
   startAnalysis,
