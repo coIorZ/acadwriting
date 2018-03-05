@@ -1,6 +1,9 @@
 import React, { Component } from 'react';
 import styled, { css } from 'styled-components';
 
+import Switcher from './switcher';
+import Analysis from './analysis';
+
 const Container = styled.div`
   position: relative;
   height: 100%;
@@ -9,8 +12,15 @@ const Container = styled.div`
 
 export default class FunctionPanel extends Component {
   render() {
+    const { 
+      rightPanelFlag: flag,
+      writingModelId,
+    } = this.props;
+
     return (
       <Container>
+        <Switcher {...this.props}/>
+        {flag == 3 && <Analysis {...this.props}/>}
       </Container>
     );
   }

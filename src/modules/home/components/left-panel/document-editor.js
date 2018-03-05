@@ -44,8 +44,7 @@ export default class DocumentEditor extends Component {
       section = {},
     } = this.props;
 
-    const { body } = document;
-    const input = body[section.id] || '';
+    const input = document.body[section.id];
 
     return (
       <Container>
@@ -60,7 +59,7 @@ export default class DocumentEditor extends Component {
         >
           <p><br/></p>
         </Editor>
-        {!input && <Placeholder>{placeHolder}</Placeholder>}
+        {(!input || input === '<p><br></p>') && <Placeholder>{placeHolder}</Placeholder>}
       </Container>
     );
   }

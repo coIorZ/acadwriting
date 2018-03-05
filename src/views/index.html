@@ -29,16 +29,20 @@
   background-color: #f5f6ff;
 }
 
-.editor .sentence:hover .marker {
-  border-bottom: 2px solid rgba(242, 153, 168, 1);
-}
-
 .editor .sentence.active {
   background-color: #f5f6ff;
 }
 
-.editor .marker {
+.editor .sentence .marker {
   border-bottom: 2px solid rgba(242, 153, 168, .5);
+}
+
+.editor .sentence:hover .marker {
+  border-bottom: 2px solid rgba(242, 153, 168, 1);
+}
+
+.editor .sentence.active .marker {
+  border-bottom: 2px solid rgba(242, 153, 168, 1);
 }
 
     </style>

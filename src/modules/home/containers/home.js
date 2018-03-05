@@ -5,11 +5,13 @@ import styled from 'styled-components';
 import actions from '../ducks/actions';
 
 import {
-  getWritingModels, getSubjectAreas, getSections,
+  getWritingModels, getSubjectAreas, getSections, getMoves, getMarkers,
   getDocument, getSection,
   getFunctionPanelStatus,
   getWritingModelId, getSubjectAreaId,
   getPopUpActive,
+  getRightPanelFlag,
+  getAnalysis,
 } from '../ducks/selectors';
 
 import LeftPanel from '../components/left-panel';
@@ -53,12 +55,16 @@ export default connect(
     writingModels       : getWritingModels(state),
     subjectAreas        : getSubjectAreas(state),
     sections            : getSections(state),
+    moves               : getMoves(state),
+    markers             : getMarkers(state),
     section             : getSection(state),
     document            : getDocument(state),
     functionPanelStatus : getFunctionPanelStatus(state),
     writingModelId      : getWritingModelId(state),
     subjectAreaId       : getSubjectAreaId(state),
     popUpActive         : getPopUpActive(state),
+    rightPanelFlag      : getRightPanelFlag(state),
+    analysis            : getAnalysis(state),
   }),
   actions,
 )(Home);

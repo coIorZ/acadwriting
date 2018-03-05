@@ -81,6 +81,8 @@ function replace_Crazy_Word_With_NonSplitWord(inputSentence) {
 function splitToSentences(str) {
   var finalSentencesArray = [];
 
+  if(!str) return finalSentencesArray;
+
   str = replace_NonSplitWords_With_Crazy_Words(str);                  
 
   str = replace_NonSplitRegexWords_With_Crazy_Words(str);

@@ -9,9 +9,11 @@ import {
   FETCH_SECTIONS_PENDING, FETCH_SECTIONS_SUCCESS, FETCH_SECTIONS_FAIL,
   FETCH_MARKERS_PENDING, FETCH_MARKERS_SUCCESS, FETCH_MARKERS_FAIL,
   FETCH_MOVES_PENDING, FETCH_MOVES_SUCCESS, FETCH_MOVES_FAIL,
-  INPUT_DOCUMENT_TITLE, INPUT_DOCUMENT_BODY, SET_DOCUMENT_SECTION_ID,
+  INPUT_DOCUMENT_TITLE, INPUT_DOCUMENT_BODY, SET_DOCUMENT_BODY, SET_DOCUMENT_SECTION_ID,
   SET_WRITINGMODEL_ID, SET_SUBJECTAREA_ID,
   SET_POPUP_ACTIVE,
+  SET_ANALYSIS,
+  SET_RIGHTPANEL_FLAG,
 } from './types';
 
 export const fetchWritingModelsPending = createAction(FETCH_WRITINGMODELS_PENDING);
@@ -88,10 +90,14 @@ export const fetchMarkers = () => dispatch => {
 };
 
 export const inputDocumentTitle = createAction(INPUT_DOCUMENT_TITLE);
-export const inputDocumentBody = () => ({
-  type    : INPUT_DOCUMENT_BODY,
-  payload : editor().html(),
-});
+export const inputDocumentBody = () => {
+  editor().input();
+  return {
+    type    : INPUT_DOCUMENT_BODY,
+    payload : editor().html(),
+  };
+};
+export const setDocumentBody = createAction(SET_DOCUMENT_BODY);
 export const pasteDocumentBody = payload => dispatch => {
   editor().paste(payload);
   dispatch({
@@ -112,16 +118,22 @@ export const setWritingModelId = createAction(SET_WRITINGMODEL_ID);
 export const setSubjectAreaId = createAction(SET_SUBJECTAREA_ID);
 
 export const startAnalysis = () => (dispatch, getState) => {
-  const { markers } = getState();
-  editor().analyze(markers);
-  dispatch(inputDocumentBody());
+  if(!editor().text()) return;
+  const { markers, moves, document } = getState();
+  const { analysis, body } = editor().analyze({ markers, moves, document });
+  dispatch(setDocumentBody(body));
+  dispatch(setAnalysis(analysis));
+  dispatch(setRightPanelFlag(3));
 };
+export const setAnalysis = createAction(SET_ANALYSIS);
 
 export const clickEditor = payload => dispatch => {
   editor().click(payload);
 };
 
 export const setPopUpActive = createAction(SET_POPUP_ACTIVE);
+
+export const setRightPanelFlag = createAction(SET_RIGHTPANEL_FLAG);
 
 export default {
   fetchWritingModels, fetchSubjectAreas, fetchSections, fetchMoves, fetchMarkers,
@@ -130,4 +142,5 @@ export default {
   startAnalysis,
   clickEditor,
   setPopUpActive,
+  setRightPanelFlag,
 };
