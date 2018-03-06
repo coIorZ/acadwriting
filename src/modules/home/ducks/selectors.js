@@ -13,3 +13,4 @@ export const getSectionId = state => state.sectionId;
 export const getPopUpActive = state => state.popUpActive;
 export const getAnalysis = state => state.analysis;
 export const getAnalysisSentenceId = state => state.analysisSentenceId;
+export const getRightPanelTab = state => state.rightPanelTab;
