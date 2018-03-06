@@ -23,7 +23,7 @@ const Container = styled.div`
 const Editor = styled.div`
   position: relative;
   min-height: 200px;
-  padding-bottom: 20vh;
+  padding-bottom: 10rem;
   outline: none;
   border: none;
 `;
@@ -41,10 +41,10 @@ export default class DocumentEditor extends Component {
     const {
       placeHolder = '',
       document = {},
-      section = {},
+      sectionId,
     } = this.props;
 
-    const input = document.body[section.id];
+    const input = document.body[sectionId];
 
     return (
       <Container>

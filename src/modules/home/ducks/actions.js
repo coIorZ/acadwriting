@@ -9,8 +9,8 @@ import {
   FETCH_SECTIONS_PENDING, FETCH_SECTIONS_SUCCESS, FETCH_SECTIONS_FAIL,
   FETCH_MARKERS_PENDING, FETCH_MARKERS_SUCCESS, FETCH_MARKERS_FAIL,
   FETCH_MOVES_PENDING, FETCH_MOVES_SUCCESS, FETCH_MOVES_FAIL,
-  INPUT_DOCUMENT_TITLE, INPUT_DOCUMENT_BODY, SET_DOCUMENT_BODY, SET_DOCUMENT_SECTION_ID,
-  SET_WRITINGMODEL_ID, SET_SUBJECTAREA_ID,
+  INPUT_DOCUMENT_TITLE, SET_DOCUMENT_BODY_BY_SECTIONID, SET_DOCUMENT_BODY,
+  SET_WRITINGMODEL_ID, SET_SUBJECTAREA_ID, SET_SECTION_ID,
   SET_POPUP_ACTIVE,
   SET_ANALYSIS,
   SET_RIGHTPANEL_FLAG,
@@ -54,7 +54,7 @@ export const fetchSections = () => dispatch => {
   axios.get('/api/sections')
     .then(({ data }) => {
       dispatch(fetchSectionsSuccess(data));
-      dispatch(setDocumentSectionId(Number(Object.keys(data)[0])));
+      dispatch(setSectionId(Number(Object.keys(data)[0])));
     })
     .catch(err => {
       dispatch(fetchSectionsFail(err));
@@ -90,37 +90,42 @@ export const fetchMarkers = () => dispatch => {
 };
 
 export const inputDocumentTitle = createAction(INPUT_DOCUMENT_TITLE);
-export const inputDocumentBody = () => {
-  editor().input();
+export const setDocumentBodyBySectionId = sectionId => {
+  editor().safe();
   return {
-    type    : INPUT_DOCUMENT_BODY,
-    payload : editor().html(),
+    type    : SET_DOCUMENT_BODY_BY_SECTIONID,
+    payload : {
+      input: editor().html(),
+      sectionId,
+    },
   };
 };
-export const setDocumentBody = createAction(SET_DOCUMENT_BODY);
-export const pasteDocumentBody = payload => dispatch => {
-  editor().paste(payload);
-  dispatch({
-    type    : INPUT_DOCUMENT_BODY,
-    payload : editor().html(),
-  });
+export const inputDocumentBody = () => (dispatch, getState) => {
+  const { sectionId } = getState();
+  dispatch(setDocumentBodyBySectionId(sectionId));
 };
-export const setDocumentSectionId = payload => (dispatch, getState) => {
+export const setDocumentBody = createAction(SET_DOCUMENT_BODY);
+export const pasteDocumentBody = payload => (dispatch, getState) => {
+  const { sectionId } = getState();
+  editor().paste(payload);
+  dispatch(setDocumentBodyBySectionId(sectionId));
+};
+
+export const setWritingModelId = createAction(SET_WRITINGMODEL_ID);
+export const setSubjectAreaId = createAction(SET_SUBJECTAREA_ID);
+export const setSectionId = payload => (dispatch, getState) => {
   const { document } = getState();
   editor().html(document.body[payload] || '');
   dispatch({
-    type: SET_DOCUMENT_SECTION_ID,
+    type: SET_SECTION_ID,
     payload,
   });
 }; 
 
-export const setWritingModelId = createAction(SET_WRITINGMODEL_ID);
-export const setSubjectAreaId = createAction(SET_SUBJECTAREA_ID);
-
 export const startAnalysis = () => (dispatch, getState) => {
   if(!editor().text()) return;
-  const { markers, moves, document } = getState();
-  const { analysis, body } = editor().analyze({ markers, moves, document });
+  const { markers, moves, document, sectionId } = getState();
+  const { analysis, body } = editor().analyze({ markers, moves, document, sectionId });
   dispatch(setDocumentBody(body));
   dispatch(setAnalysis(analysis));
   dispatch(setRightPanelFlag(3));
@@ -137,8 +142,8 @@ export const setRightPanelFlag = createAction(SET_RIGHTPANEL_FLAG);
 
 export default {
   fetchWritingModels, fetchSubjectAreas, fetchSections, fetchMoves, fetchMarkers,
-  inputDocumentTitle, inputDocumentBody, pasteDocumentBody, setDocumentSectionId,
-  setWritingModelId, setSubjectAreaId,
+  inputDocumentTitle, inputDocumentBody, pasteDocumentBody,
+  setWritingModelId, setSubjectAreaId, setSectionId,
   startAnalysis,
   clickEditor,
   setPopUpActive,

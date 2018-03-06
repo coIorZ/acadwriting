@@ -6,9 +6,8 @@ import actions from '../ducks/actions';
 
 import {
   getWritingModels, getSubjectAreas, getSections, getMoves, getMarkers,
-  getDocument, getSection,
-  getFunctionPanelStatus,
-  getWritingModelId, getSubjectAreaId,
+  getDocument,
+  getWritingModelId, getSubjectAreaId, getSectionId,
   getPopUpActive,
   getRightPanelFlag,
   getAnalysis,
@@ -52,19 +51,18 @@ class Home extends Component {
 
 export default connect(
   state => ({
-    writingModels       : getWritingModels(state),
-    subjectAreas        : getSubjectAreas(state),
-    sections            : getSections(state),
-    moves               : getMoves(state),
-    markers             : getMarkers(state),
-    section             : getSection(state),
-    document            : getDocument(state),
-    functionPanelStatus : getFunctionPanelStatus(state),
-    writingModelId      : getWritingModelId(state),
-    subjectAreaId       : getSubjectAreaId(state),
-    popUpActive         : getPopUpActive(state),
-    rightPanelFlag      : getRightPanelFlag(state),
-    analysis            : getAnalysis(state),
+    writingModels  : getWritingModels(state),
+    subjectAreas   : getSubjectAreas(state),
+    sections       : getSections(state),
+    moves          : getMoves(state),
+    markers        : getMarkers(state),
+    document       : getDocument(state),
+    writingModelId : getWritingModelId(state),
+    subjectAreaId  : getSubjectAreaId(state),
+    sectionId      : getSectionId(state),
+    popUpActive    : getPopUpActive(state),
+    rightPanelFlag : getRightPanelFlag(state),
+    analysis       : getAnalysis(state),
   }),
   actions,
 )(Home);

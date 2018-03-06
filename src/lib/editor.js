@@ -10,14 +10,13 @@ export default (id = 'editor') => {
 
 function Editor(el) {
   this._el = el;
-  this.data = [];
   this.selectedSentence = null;
 }
 
 Editor.prototype.html = function(val) {
   if(!this._el) return this;
   if(val == null) return this._el.innerHTML;
-  this._el.innerHTML = val;
+  this._el.innerHTML = val || '<p><br></p>';
   return this;
 };
 
@@ -27,7 +26,7 @@ Editor.prototype.text = function() {
 };
 
 // if text is empty, add <p><br></p> to contenteditable
-Editor.prototype.input = function() {
+Editor.prototype.safe = function() {
   if(!this._el) return this;
   if(!this.text()) {
     this.html('<p><br></p>');
@@ -43,7 +42,7 @@ Editor.prototype.paste = function(e) {
   const sel = window.getSelection();
   const range = sel.getRangeAt(0);
   range.deleteContents();
-  range.insertNode(document.createTextNode(textArr.pop()));
+  range.insertNode(document.createTextNode(textArr.shift()));
   textArr.forEach(t => {
     const node = document.createElement('p');
     node.appendChild(document.createTextNode(t));
@@ -53,10 +52,10 @@ Editor.prototype.paste = function(e) {
   return this;
 };
 
-Editor.prototype.analyze = function({ markers, moves, document }) {
+Editor.prototype.analyze = function({ markers, moves, document, sectionId }) {
   if(!this._el) return this;
   let resBody = {}, resAnalysis = {};
-  const { sectionId, body } = document;
+  const { body } = document;
   const range = new window.Range();
   Object.keys(body).forEach(key => {
     const node = range.createContextualFragment(body[key]);

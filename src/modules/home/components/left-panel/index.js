@@ -47,8 +47,11 @@ export default class WritingPanel extends Component {
 
   render() {
     const {
-      section = null,
+      sections = {},
+      sectionId,
     } = this.props;
+
+    const section = sections[sectionId];
 
     return (
       <Container>

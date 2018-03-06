@@ -7,8 +7,8 @@ import {
   FETCH_SECTIONS_SUCCESS, FETCH_SECTIONS_FAIL,
   FETCH_MOVES_SUCCESS, FETCH_MOVES_FAIL,
   FETCH_MARKERS_SUCCESS, FETCH_MARKERS_FAIL,
-  INPUT_DOCUMENT_TITLE, INPUT_DOCUMENT_BODY, SET_DOCUMENT_BODY, SET_DOCUMENT_SECTION_ID,
-  SET_WRITINGMODEL_ID, SET_SUBJECTAREA_ID,
+  INPUT_DOCUMENT_TITLE, SET_DOCUMENT_BODY_BY_SECTIONID, SET_DOCUMENT_BODY,
+  SET_WRITINGMODEL_ID, SET_SUBJECTAREA_ID, SET_SECTION_ID,
   SET_POPUP_ACTIVE,
   SET_ANALYSIS,
   SET_RIGHTPANEL_FLAG,
@@ -71,12 +71,12 @@ const documentReducer = handleActions({
       title: payload,
     };
   },
-  [INPUT_DOCUMENT_BODY]: (state, { payload }) => {
+  [SET_DOCUMENT_BODY_BY_SECTIONID]: (state, { payload }) => {
     return {
       ...state,
       body: {
         ...state.body,
-        [state.sectionId]: payload,
+        [payload.sectionId]: payload.input,
       },
     };
   },
@@ -86,20 +86,14 @@ const documentReducer = handleActions({
       body: payload,
     };
   },
-  [SET_DOCUMENT_SECTION_ID]: (state, { payload }) => {
-    return {
-      ...state,
-      sectionId: payload,
-    };
-  },
 }, {
-  title     : '',
-  body      : {},
-  sectionId : -1,
+  title : '',
+  body  : {},
 });
 
 const writingModelIdReducer = handleAction(SET_WRITINGMODEL_ID, (state, { payload }) => payload, -1);
 const subjectAreaIdReducer = handleAction(SET_SUBJECTAREA_ID, (state, { payload }) => payload, -1);
+const sectionIdReducer = handleAction(SET_SECTION_ID, (state, { payload }) => payload, -1);
 
 const popUpActiveReducer = handleAction(SET_POPUP_ACTIVE, (state, { payload }) => payload, false);
 
@@ -116,6 +110,7 @@ export default combineReducers({
   document       : documentReducer,
   writingModelId : writingModelIdReducer,
   subjectAreaId  : subjectAreaIdReducer,
+  sectionId      : sectionIdReducer,
   popUpActive    : popUpActiveReducer,
   analysis       : analysisReducer,
   rightPanelFlag : rightPanelFlagReducer,

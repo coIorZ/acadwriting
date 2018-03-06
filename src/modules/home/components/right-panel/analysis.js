@@ -12,6 +12,7 @@ const StyledMove = styled.div`
 `;
 
 const MoveLabel = styled.div`
+  cursor: pointer;
   ${p => p.matched && css`
     color: #f299a8;
   `}
@@ -23,6 +24,7 @@ const StepGroup = styled.div`
 `;
 
 const StyledStep = styled.div`
+  cursor: pointer;
   ${p => p.matched && css`
     color: #f299a8;
   `}
@@ -32,45 +34,59 @@ const Step = ({ step, analysis }) => {
   const matches = analysis.steps[step.id];
   const len = matches && matches.length;
   return (
-    <StyledStep matched={len}>{`${step.label}${len ? `(${len})` : ''}`}</StyledStep>
+    <StyledStep matched={len}>{`${step.label}${step.important ? '' : '(optional)'}${len ? `(${len})` : ''}`}</StyledStep>
   );
 };
 
-const Move = ({ analysis, move, active, onClick }) => {
-  const matches = analysis.moves[move.id];
-  const len = matches && matches.length;
-  return (
-    <StyledMove>
-      <MoveLabel matched={len} onClick={onClick}>{`${move.label}${len ? `(${len})` : ''}`}</MoveLabel>
-      {active && (
-        <StepGroup>
-          {Object.keys(move.steps).map(stepId => (
-            <Step analysis={analysis} step={move.steps[stepId]}/>
-          ))}
-        </StepGroup>
-      )}
-    </StyledMove>
-  );
-};
-
-export default class Analysis extends Component {
+class Move extends Component {
   state = {
-    activeMoveId : -1,
-    activeStepId : -1,
+    active: false,
   }
 
   render() {
     const {
-      moves = {},
       analysis = {},
-      document = {},
+      move = {},
     } = this.props;
 
-    const {
-      activeMoveId,
-    } = this.state;
+    const { active } = this.state;
 
-    const sectionId = document.sectionId;
+    const matches = analysis.moves[move.id];
+    const len = matches && matches.length;
+
+    return (
+      <StyledMove>
+        <MoveLabel matched={len} onClick={this.toggleMove}>{`${move.label}${len ? `(${len})` : ''}`}</MoveLabel>
+        {active && (
+          <StepGroup>
+            {Object.keys(move.steps).map(stepId => (
+              <Step 
+                key={stepId}
+                analysis={analysis} 
+                step={move.steps[stepId]}
+              />
+            ))}
+          </StepGroup>
+        )}
+      </StyledMove>
+    );
+  }
+
+  toggleMove = () => {
+    this.setState(prev => ({
+      active: !prev.active,
+    }));
+  }
+}
+
+export default class Analysis extends Component {
+  render() {
+    const {
+      moves = {},
+      analysis = {},
+      sectionId,
+    } = this.props;
+
     const sectionAnalysis = analysis[sectionId];
 
     return !sectionAnalysis ? (
@@ -79,10 +95,9 @@ export default class Analysis extends Component {
       <Container>
         {Object.keys(moves).filter(moveId => moves[moveId].sectionId === sectionId).map(moveId => (
           <Move 
+            key={moveId}
             analysis={sectionAnalysis}
             move={moves[moveId]}
-            active={moveId === activeMoveId}
-            onClick={this.toggleMove.bind(this, moveId)}
           />
         ))}
       </Container>

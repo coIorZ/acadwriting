@@ -15,12 +15,13 @@ const Content = styled.div`
 
 export default class Info extends Component {
   render() {
-    const { label, description } = this.props.section;
+    const { sections, sectionId } = this.props;
+    const section = sections[sectionId];
 
-    return (
+    return !section ? null : (
       <Container>
-        <Title>{label}</Title>
-        <Content>{description.split('$$n$$').map(t => (
+        <Title>{section.label}</Title>
+        <Content>{section.description.split('$$n$$').map(t => (
           <p>{t}</p>
         ))}</Content>
       </Container>

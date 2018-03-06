@@ -32,10 +32,8 @@ export default class SectionSwitcher extends Component {
   render() {
     const {
       sections = {},
-      document = {},
+      sectionId,
     } = this.props;
-
-    const { sectionId } = document;
 
     return (
       <Container>
@@ -57,7 +55,7 @@ export default class SectionSwitcher extends Component {
   }
 
   setSection = val => {
-    this.props.setDocumentSectionId(val);
+    this.props.setSectionId(val);
   }
 
   showPopUp = () => {
