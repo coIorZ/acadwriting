@@ -9,7 +9,7 @@ import {
   getDocument,
   getWritingModelId, getSubjectAreaId, getSectionId,
   getPopUpActive,
-  getRightPanelFlag,
+  getRightPanelFlag, getRightPanelTab,
   getAnalysis, getAnalysisSentenceId,
 } from '../ducks/selectors';
 
@@ -64,6 +64,7 @@ export default connect(
     rightPanelFlag     : getRightPanelFlag(state),
     analysis           : getAnalysis(state),
     analysisSentenceId : getAnalysisSentenceId(state),
+    rightPanelTab      : getRightPanelTab(state),
   }),
   actions,
 )(Home);

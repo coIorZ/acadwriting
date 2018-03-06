@@ -13,7 +13,7 @@ import {
   SET_WRITINGMODEL_ID, SET_SUBJECTAREA_ID, SET_SECTION_ID,
   SET_POPUP_ACTIVE,
   SET_ANALYSIS, SET_ANALYSIS_SENTENCE_ID,
-  SET_RIGHTPANEL_FLAG,
+  SET_RIGHTPANEL_FLAG, SET_RIGHTPANEL_TAB,
 } from './types';
 
 export const fetchWritingModelsPending = createAction(FETCH_WRITINGMODELS_PENDING);
@@ -142,6 +142,7 @@ export const clickEditor = payload => dispatch => {
 export const setPopUpActive = createAction(SET_POPUP_ACTIVE);
 
 export const setRightPanelFlag = createAction(SET_RIGHTPANEL_FLAG);
+export const setRightPanelTab = createAction(SET_RIGHTPANEL_TAB);
 
 export default {
   fetchWritingModels, fetchSubjectAreas, fetchSections, fetchMoves, fetchMarkers,
@@ -150,5 +151,5 @@ export default {
   startAnalysis,
   clickEditor,
   setPopUpActive,
-  setRightPanelFlag,
+  setRightPanelFlag, setRightPanelTab,
 };
