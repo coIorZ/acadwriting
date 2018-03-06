@@ -10,7 +10,7 @@ import {
   getWritingModelId, getSubjectAreaId, getSectionId,
   getPopUpActive,
   getRightPanelFlag,
-  getAnalysis,
+  getAnalysis, getAnalysisSentenceId,
 } from '../ducks/selectors';
 
 import LeftPanel from '../components/left-panel';
@@ -51,18 +51,19 @@ class Home extends Component {
 
 export default connect(
   state => ({
-    writingModels  : getWritingModels(state),
-    subjectAreas   : getSubjectAreas(state),
-    sections       : getSections(state),
-    moves          : getMoves(state),
-    markers        : getMarkers(state),
-    document       : getDocument(state),
-    writingModelId : getWritingModelId(state),
-    subjectAreaId  : getSubjectAreaId(state),
-    sectionId      : getSectionId(state),
-    popUpActive    : getPopUpActive(state),
-    rightPanelFlag : getRightPanelFlag(state),
-    analysis       : getAnalysis(state),
+    writingModels      : getWritingModels(state),
+    subjectAreas       : getSubjectAreas(state),
+    sections           : getSections(state),
+    moves              : getMoves(state),
+    markers            : getMarkers(state),
+    document           : getDocument(state),
+    writingModelId     : getWritingModelId(state),
+    subjectAreaId      : getSubjectAreaId(state),
+    sectionId          : getSectionId(state),
+    popUpActive        : getPopUpActive(state),
+    rightPanelFlag     : getRightPanelFlag(state),
+    analysis           : getAnalysis(state),
+    analysisSentenceId : getAnalysisSentenceId(state),
   }),
   actions,
 )(Home);

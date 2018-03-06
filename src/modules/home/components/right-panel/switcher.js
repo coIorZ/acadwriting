@@ -27,7 +27,7 @@ export default class Switcher extends Component {
     return (
       <Container>
         <Switch label='guide' onClick={this.showPanel.bind(this, 1)}/>
-        <Switch label='analysis' onClick={this.showPanel.bind(this, 3)}/>
+        <Switch label='analysis' onClick={this.showPanel.bind(this, 2)}/>
       </Container>
     );
   }

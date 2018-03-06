@@ -12,7 +12,7 @@ import {
   INPUT_DOCUMENT_TITLE, SET_DOCUMENT_BODY_BY_SECTIONID, SET_DOCUMENT_BODY,
   SET_WRITINGMODEL_ID, SET_SUBJECTAREA_ID, SET_SECTION_ID,
   SET_POPUP_ACTIVE,
-  SET_ANALYSIS,
+  SET_ANALYSIS, SET_ANALYSIS_SENTENCE_ID,
   SET_RIGHTPANEL_FLAG,
 } from './types';
 
@@ -128,12 +128,15 @@ export const startAnalysis = () => (dispatch, getState) => {
   const { analysis, body } = editor().analyze({ markers, moves, document, sectionId });
   dispatch(setDocumentBody(body));
   dispatch(setAnalysis(analysis));
-  dispatch(setRightPanelFlag(3));
+  dispatch(setRightPanelFlag(2));
 };
 export const setAnalysis = createAction(SET_ANALYSIS);
+export const setAnalysisSentenceId = createAction(SET_ANALYSIS_SENTENCE_ID);
 
 export const clickEditor = payload => dispatch => {
-  editor().click(payload);
+  const sentenceId = editor().click(payload).selectedSentenceId();
+  dispatch(setAnalysisSentenceId(sentenceId));
+  dispatch(setRightPanelFlag(21));
 };
 
 export const setPopUpActive = createAction(SET_POPUP_ACTIVE);

@@ -10,7 +10,7 @@ import {
   INPUT_DOCUMENT_TITLE, SET_DOCUMENT_BODY_BY_SECTIONID, SET_DOCUMENT_BODY,
   SET_WRITINGMODEL_ID, SET_SUBJECTAREA_ID, SET_SECTION_ID,
   SET_POPUP_ACTIVE,
-  SET_ANALYSIS,
+  SET_ANALYSIS, SET_ANALYSIS_SENTENCE_ID,
   SET_RIGHTPANEL_FLAG,
 } from './types';
 
@@ -98,20 +98,22 @@ const sectionIdReducer = handleAction(SET_SECTION_ID, (state, { payload }) => pa
 const popUpActiveReducer = handleAction(SET_POPUP_ACTIVE, (state, { payload }) => payload, false);
 
 const analysisReducer = handleAction(SET_ANALYSIS, (state, { payload }) => payload, {});
+const analysisSentenceIdReducer = handleAction(SET_ANALYSIS_SENTENCE_ID, (state, { payload }) => payload, null);
 
 const rightPanelFlagReducer = handleAction(SET_RIGHTPANEL_FLAG, (state, { payload }) => payload, 1);
 
 export default combineReducers({
-  writingModels  : writingModelsReducer,
-  subjectAreas   : subjectAreasReducer,
-  sections       : sectionsReducer,
-  moves          : movesReducer,
-  markers        : markersReducer,
-  document       : documentReducer,
-  writingModelId : writingModelIdReducer,
-  subjectAreaId  : subjectAreaIdReducer,
-  sectionId      : sectionIdReducer,
-  popUpActive    : popUpActiveReducer,
-  analysis       : analysisReducer,
-  rightPanelFlag : rightPanelFlagReducer,
+  writingModels      : writingModelsReducer,
+  subjectAreas       : subjectAreasReducer,
+  sections           : sectionsReducer,
+  moves              : movesReducer,
+  markers            : markersReducer,
+  document           : documentReducer,
+  writingModelId     : writingModelIdReducer,
+  subjectAreaId      : subjectAreaIdReducer,
+  sectionId          : sectionIdReducer,
+  popUpActive        : popUpActiveReducer,
+  analysis           : analysisReducer,
+  analysisSentenceId : analysisSentenceIdReducer,
+  rightPanelFlag     : rightPanelFlagReducer,
 });

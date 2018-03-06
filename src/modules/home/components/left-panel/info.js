@@ -21,8 +21,8 @@ export default class Info extends Component {
     return !section ? null : (
       <Container>
         <Title>{section.label}</Title>
-        <Content>{section.description.split('$$n$$').map(t => (
-          <p>{t}</p>
+        <Content>{section.description.split('$$n$$').map((t, i) => (
+          <p key={i}>{t}</p>
         ))}</Content>
       </Container>
     );

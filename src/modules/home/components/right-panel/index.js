@@ -3,6 +3,7 @@ import styled, { css } from 'styled-components';
 
 import Switcher from './switcher';
 import Analysis from './analysis';
+import SentenceAnalysis from './sentence-analysis';
 
 const Container = styled.div`
   position: relative;
@@ -20,7 +21,8 @@ export default class FunctionPanel extends Component {
     return (
       <Container>
         <Switcher {...this.props}/>
-        {flag == 3 && <Analysis {...this.props}/>}
+        {flag == 2 && <Analysis {...this.props}/>}
+        {flag == 21 && <SentenceAnalysis {...this.props}/>}
       </Container>
     );
   }

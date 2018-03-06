@@ -64,6 +64,7 @@ Editor.prototype.analyze = function({ markers, moves, document, sectionId }) {
     resAnalysis[key] = res.analysis;
   });
   this.html(resBody[sectionId]);
+  this.selectedSentence = null;
   return {
     analysis : resAnalysis,
     body     : resBody,
@@ -107,8 +108,8 @@ function _analyze({ node, markers, moves, sectionId }) {
       });
       matches.sort((a, b) => b.confidence - a.confidence);
       if(matches.length) {
-        const { id, fullMarker } = markers[matches[0].markerId];
-        htmlStr = `<span class='sentence' data-sentence-id='${sentenceId}' data-marker-id='${id}'>${text.replace(new RegExp(fullMarker, 'i'), match => `<span class='marker'>${match}</span>`)}</span>`;
+        const { fullMarker } = markers[matches[0].markerId];
+        htmlStr = `<span class='sentence' data-sentence-id='${sentenceId}'>${text.replace(new RegExp(fullMarker, 'i'), match => `<span class='sentence-match'>${match}</span>`)}</span>`;
         analysis.sentences[sentenceId] = matches;
       } else {
         htmlStr = `<span class='sentence' data-sentence-id='${sentenceId}'>${text}</span>`;
@@ -132,10 +133,10 @@ Editor.prototype.clearAnalysis = function() {
 Editor.prototype.click = function(e) {
   if(!this._el) return this;
   let node = e.target;
-  if(node.classList.contains('marker')) {
+  if(node.classList.contains('match')) {
     node = node.parentNode;
   }
-  if(!node.classList.contains('sentence')) return;
+  if(!node.classList.contains('sentence')) return this;
   Array.from(this._el.children).forEach(pNode => {
     Array.from(pNode.children).forEach(sNode => {
       sNode.classList.remove('active');
@@ -147,5 +148,5 @@ Editor.prototype.click = function(e) {
 };
 
 Editor.prototype.selectedSentenceId = function() {
-  return this.selectedSentence && this.selectedSentence;
+  return this.selectedSentence && this.selectedSentence.getAttribute('data-sentence-id');
 };

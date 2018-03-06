@@ -6,6 +6,10 @@ const Container = styled.div`
   overflow: auto;
 `;
 
+const MoveGroup = styled.div`
+  padding: 0 2rem;
+`;
+
 const StyledMove = styled.div`
   margin: .5rem 0;
   font-weight: 700;
@@ -24,6 +28,7 @@ const StepGroup = styled.div`
 `;
 
 const StyledStep = styled.div`
+  margin: .2rem 0;
   cursor: pointer;
   ${p => p.matched && css`
     color: #f299a8;
@@ -93,13 +98,15 @@ export default class Analysis extends Component {
       <div>Click ANALYZE button to start analyzing</div>
     ) : (
       <Container>
-        {Object.keys(moves).filter(moveId => moves[moveId].sectionId === sectionId).map(moveId => (
-          <Move 
-            key={moveId}
-            analysis={sectionAnalysis}
-            move={moves[moveId]}
-          />
-        ))}
+        <MoveGroup>
+          {Object.keys(moves).filter(moveId => moves[moveId].sectionId === sectionId).map(moveId => (
+            <Move 
+              key={moveId}
+              analysis={sectionAnalysis}
+              move={moves[moveId]}
+            />
+          ))}
+        </MoveGroup>
       </Container>
     );
   }
