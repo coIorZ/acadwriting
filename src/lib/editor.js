@@ -1,7 +1,25 @@
+/*
+ * This file manually manipulate DOM of contenteditable div '#editor'.
+ * The reason behind this is that everytime user types a word and React rerenders the contenteditable, the caret jumps to the start.
+ * One solution is to stop rerendering when user inputs, but only allows rerendering if the content changes programmatically.
+ * In other words, leave user input to DOM and stay out of the way.
+ * It works if all you need is simply typing words.
+ * However, our editor here is not just about typing words, but should be able to reformat and highlight text inside it.
+ * So the problem here is: how to make children of contenteditable React components while enabling normal user input.
+ * Unfortunately I could not find a way to achieve it. If you have any ideas, please let me know :).
+ *
+ * I wrote this file to encapsulate all the methods needed to manipulate editor DOM and put all the side-effects here,
+ * so that components do not have to know about this, they dispatch actions just like before.
+ * The rest of the website is still controlled by React.
+ *
+ */
 import { splitToSentences } from './utils';
 
+// collections of editors, if you somehow need multiple editors.
 let editors = {};
 
+// export the instance of editor
+// DOM may not be ready when called, check if the contenteditable actually exists
 export default (id = 'editor') => {
   if(editors[id] && editors[id]._el) return editors[id];
   editors[id] = new Editor(document.querySelector(`#${id}`));
@@ -10,7 +28,6 @@ export default (id = 'editor') => {
 
 function Editor(el) {
   this._el = el;
-  this.selectedSentence = null;
 }
 
 Editor.prototype.html = function(val) {
@@ -25,7 +42,10 @@ Editor.prototype.text = function() {
   return this._el.textContent;
 };
 
-// if text is empty, add <p><br></p> to contenteditable
+// If text is empty, add <p><br></p>
+// This is the most tricky part in contenteditable.
+// User input will be nicely formatted in <p> and you basically need to do nothing.
+// Otherwise, it will cost you quite some effort to do the formatting yourself.
 Editor.prototype.safe = function() {
   if(!this._el) return this;
   if(!this.text()) {
@@ -33,6 +53,9 @@ Editor.prototype.safe = function() {
   }
 };
 
+// when user pastes a blob of words with styles
+// the styles will also be pasted in contenteditable, which I definitely do not want
+// prevent this default DOM behaviour, then insert and format clipboard text manually
 Editor.prototype.paste = function(e) {
   if(!this._el) return this;
   e.preventDefault();
@@ -52,6 +75,10 @@ Editor.prototype.paste = function(e) {
   return this;
 };
 
+// will analyze all the sections of the document
+// output of analysis will be 
+// 1. id relations between matched sentences, markers, moves and steps, which will be stored in Redux.
+// 2. actual HTML strings to be displayed on page(underlined match, highlighted key words)
 Editor.prototype.analyze = function({ markers, moves, document, sectionId }) {
   if(!this._el) return this;
   let resBody = {}, resAnalysis = {};
@@ -64,7 +91,6 @@ Editor.prototype.analyze = function({ markers, moves, document, sectionId }) {
     resAnalysis[key] = res.analysis;
   });
   this.html(resBody[sectionId]);
-  this.selectedSentence = null;
   return {
     analysis : resAnalysis,
     body     : resBody,
@@ -108,8 +134,8 @@ function _analyze({ node, markers, moves, sectionId }) {
       });
       matches.sort((a, b) => b.confidence - a.confidence);
       if(matches.length) {
-        const { fullMarker } = markers[matches[0].markerId];
-        htmlStr = `<span class='sentence' data-sentence-id='${sentenceId}'>${text.replace(new RegExp(fullMarker, 'i'), match => `<span class='sentence-match'>${match}</span>`)}</span>`;
+        const { fullMarker, id } = markers[matches[0].markerId];
+        htmlStr = generateSentenceHtml(text, fullMarker, id, sentenceId);
         analysis.sentences[sentenceId] = matches;
       } else {
         htmlStr = `<span class='sentence' data-sentence-id='${sentenceId}'>${text}</span>`;
@@ -122,6 +148,18 @@ function _analyze({ node, markers, moves, sectionId }) {
   return { analysis, html };
 }
 
+function generateSentenceHtml(str, regStr, markerId, sentenceId) {
+  var match = str.match(new RegExp(regStr, 'i'));
+  var { index, input, ...captures } = match;
+  var matchLen = captures['0'].length;
+  var matchStr = str.substr(index, matchLen);
+  Object.keys(captures).forEach(k => {
+    if(k == 0) return;
+    matchStr = matchStr.replace(new RegExp(captures[k]), m => `<span class='marker' data-marker-id='${markerId}'>${m}</span>`);
+  });
+  return `<span class='sentence' data-sentence-id='${sentenceId}' data-marker-id='${markerId}'>${str.substr(0, index)}<span class='match'>${matchStr}</span>${str.substr(index + matchLen, str.length - index - matchLen)}</span>`;
+}
+
 Editor.prototype.clearAnalysis = function() {
   if(!this._el) return this;
   Array.from(this._el.children).forEach(node => {
@@ -132,21 +170,37 @@ Editor.prototype.clearAnalysis = function() {
 
 Editor.prototype.click = function(e) {
   if(!this._el) return this;
-  let node = e.target;
-  if(node.classList.contains('match')) {
-    node = node.parentNode;
-  }
-  if(!node.classList.contains('sentence')) return this;
+  const sentenceId = this.sentenceId(e);
+  if(!sentenceId) return this;
   Array.from(this._el.children).forEach(pNode => {
     Array.from(pNode.children).forEach(sNode => {
-      sNode.classList.remove('active');
+      const id = Number(sNode.getAttribute('data-sentence-id'));
+      if(sentenceId === id) {
+        sNode.classList.add('active');
+      } else {
+        sNode.classList.remove('active');
+      }
     });
   });
-  node.classList.add('active');
-  this.selectedSentence = node;
   return this;
 };
 
-Editor.prototype.selectedSentenceId = function() {
-  return this.selectedSentence && this.selectedSentence.getAttribute('data-sentence-id');
+Editor.prototype.sentenceId = function(e) {
+  const node = e.target;
+  if(node.classList.contains('sentence')) return Number(node.getAttribute('data-sentence-id'));
+  if(node.classList.contains('match')) return Number(node.parentNode.getAttribute('data-sentence-id'));
+  if(node.classList.contains('marker')) return Number(node.parentNode.parentNode.getAttribute('data-sentence-id'));
+};
+
+Editor.prototype.highlightSentences = function(ids) {
+  if(!this._el) return this;
+  Array.from(this._el.children).forEach(pNode => {
+    Array.from(pNode.children).forEach(sNode => {
+      if(ids.includes(Number(sNode.getAttribute('data-sentence-id')))) {
+        sNode.classList.add('active');
+      } else {
+        sNode.classList.remove('active');
+      }
+    });
+  });
 };
