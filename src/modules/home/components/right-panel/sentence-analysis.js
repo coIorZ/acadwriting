@@ -4,7 +4,7 @@ import styled, { css } from 'styled-components';
 import { LinkButton } from '../../../../components/button';
 
 const Container = styled.div`
-  height: 100vh;
+  height: calc(100vh - 3rem);
   overflow: auto;
   padding: 1rem;
 `;

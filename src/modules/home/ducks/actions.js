@@ -120,6 +120,7 @@ export const setSectionId = payload => (dispatch, getState) => {
     type: SET_SECTION_ID,
     payload,
   });
+  dispatch(setAnalysisFlag(1));
 }; 
 
 export const startAnalysis = () => (dispatch, getState) => {
@@ -149,9 +150,7 @@ export const setRightPanelTab = createAction(SET_RIGHTPANEL_TAB);
 export const clickStep = stepId => (dispatch, getState) => {
   const { analysis, sectionId } = getState();
   const sentences = analysis[sectionId].steps[stepId];
-  if(sentences) {
-    editor().highlightSentences(sentences);
-  }
+  editor().highlightSentences(sentences);
 };
 
 export default {

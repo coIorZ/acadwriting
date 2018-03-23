@@ -212,7 +212,7 @@ Editor.prototype.sentenceId = function(e) {
   if(node.classList.contains('marker')) return Number(node.parentNode.parentNode.getAttribute('data-sentence-id'));
 };
 
-Editor.prototype.highlightSentences = function(ids) {
+Editor.prototype.highlightSentences = function(ids = []) {
   if(!this._el) return this;
   Array.from(this._el.children).forEach(pNode => {
     Array.from(pNode.children).forEach(sNode => {
