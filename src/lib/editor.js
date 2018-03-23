@@ -15,6 +15,8 @@
  */
 import { splitToSentences } from './utils';
 
+const MAX_MARKER_LENGTH = 120;
+
 // collections of editors, if you somehow need multiple editors.
 let editors = {};
 
@@ -119,8 +121,7 @@ function _analyze({ node, markers, moves, sectionId }) {
           const step = move.steps[stepId];
           Object.keys(step.markers).forEach(markerId => {
             const { fullMarker, confidence } = markers[markerId];
-            const regex = new RegExp(fullMarker, 'i');
-            if(regex.test(text)) {
+            if(isMatch(text, fullMarker)) {
               matches.push({ markerId, stepId, moveId, confidence });
               analysis.markers[markerId] = analysis.markers[markerId] || [];
               !analysis.markers[markerId].includes(sentenceId) && analysis.markers[markerId].push(sentenceId);
@@ -148,6 +149,12 @@ function _analyze({ node, markers, moves, sectionId }) {
   return { analysis, html };
 }
 
+function isMatch(text, marker) {
+  const regex = new RegExp(marker, 'i');
+  const match = text.match(regex);
+  return match && match[0] && match[0].length <= MAX_MARKER_LENGTH;
+}
+
 function generateSentenceHtml(str, regStr, markerId, sentenceId) {
   var match = str.match(new RegExp(regStr, 'i'));
   var { index, input, ...captures } = match;
@@ -155,9 +162,22 @@ function generateSentenceHtml(str, regStr, markerId, sentenceId) {
   var matchStr = str.substr(index, matchLen);
   Object.keys(captures).forEach(k => {
     if(k == 0) return;
-    matchStr = matchStr.replace(new RegExp(captures[k]), m => `<span class='marker' data-marker-id='${markerId}'>${m}</span>`);
+    const keyword = captures[k];
+    if(!keyword) return;
+    if(k == 1) {
+      matchStr = matchStr.replace(keyword, m => `<span class='marker' data-marker-id='${markerId}'>${m}</span>`);
+    } else {
+      //matchStr = matchStr.replace(new RegExp(captures[k]), m => `<span class='marker' data-marker-id='${markerId}'>${m}</span>`);
+      matchStr = replaceKeyword(matchStr, keyword, markerId);
+    }
   });
   return `<span class='sentence' data-sentence-id='${sentenceId}' data-marker-id='${markerId}'>${str.substr(0, index)}<span class='match'>${matchStr}</span>${str.substr(index + matchLen, str.length - index - matchLen)}</span>`;
+}
+
+function replaceKeyword(str, keyword, markerId) {
+  const index = str.lastIndexOf(keyword);
+  const keywordLen = keyword.length;
+  return `${str.substr(0, index)}<span class='marker' data-marker-id='${markerId}'>${keyword}</span>${str.substr(index + keywordLen, str.length - index - keywordLen)}`;
 }
 
 Editor.prototype.clearAnalysis = function() {

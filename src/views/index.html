@@ -25,26 +25,25 @@
   box-sizing: border-box;
 }
 
-.editor .sentence:hover {
-  background-color: #f5f6ff;
-}
-
 .editor .sentence.active {
-  background-color: #f5f6ff;
+  background-color: #e8eaf7;
 }
 
 .editor .sentence .match {
   border-bottom: 2px solid rgba(242, 153, 168, .5);
 }
 
-.editor .sentence:hover .match {
-  border-bottom: 2px solid rgba(242, 153, 168, 1);
-}
-
 .editor .sentence.active .match {
   border-bottom: 2px solid rgba(242, 153, 168, 1);
 }
 
+.editor .sentence .marker {
+  color: rgba(242, 52, 82, .9);
+}
+
+.editor .sentence:active .marker {
+  color: rgba(242, 52, 82, 1);
+}
     </style>
   </head>
   <body>

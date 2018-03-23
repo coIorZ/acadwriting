@@ -14,7 +14,6 @@ module.exports = {
     vendor: [
       'react', 'react-dom', 'redux', 'react-redux', 'lodash', 'react-router-dom',
       'redux-actions', 'reduce-reducers', 'styled-components', 'reselect', 'axios',
-      'react-string-replace',
     ],
   },
   output: {

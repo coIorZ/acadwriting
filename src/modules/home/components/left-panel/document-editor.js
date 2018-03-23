@@ -46,6 +46,7 @@ export default class DocumentEditor extends Component {
 
     const input = document.body[sectionId];
 
+    // Here <Editor> is not managed by React, refer to lib/editor.js for details
     return (
       <Container>
         <Editor 

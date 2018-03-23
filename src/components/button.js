@@ -1,7 +1,6 @@
-import React from 'react';
 import styled from 'styled-components';
 
-const StyledButton = styled.div`
+export default styled.div`
   display: inline-block;
   color: #ffffff;
   border: 1px solid transparent;
@@ -21,9 +20,7 @@ const StyledButton = styled.div`
   }
 `;
 
-export default StyledButton;
-
-const StyledLinkButton = styled.div`
+export const LinkButton = styled.div`
   display: inline-block;
   color: #4c7af1;
   text-transform: uppercase;
@@ -32,7 +29,3 @@ const StyledLinkButton = styled.div`
   font-size: .6875rem;
   cursor: pointer;
 `;
-
-export const LinkButton = ({ label, onClick }) => (
-  <StyledLinkButton onClick={onClick}>{label}</StyledLinkButton>
-);

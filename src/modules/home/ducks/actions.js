@@ -12,8 +12,8 @@ import {
   INPUT_DOCUMENT_TITLE, SET_DOCUMENT_BODY_BY_SECTIONID, SET_DOCUMENT_BODY,
   SET_WRITINGMODEL_ID, SET_SUBJECTAREA_ID, SET_SECTION_ID,
   SET_POPUP_ACTIVE,
-  SET_ANALYSIS, SET_ANALYSIS_SENTENCE_ID,
-  SET_RIGHTPANEL_FLAG, SET_RIGHTPANEL_TAB,
+  SET_ANALYSIS, SET_ANALYSIS_SENTENCE_ID, SET_ANALYSIS_FLAG,
+  SET_RIGHTPANEL_TAB,
 } from './types';
 
 export const fetchWritingModelsPending = createAction(FETCH_WRITINGMODELS_PENDING);
@@ -128,28 +128,38 @@ export const startAnalysis = () => (dispatch, getState) => {
   const { analysis, body } = editor().analyze({ markers, moves, document, sectionId });
   dispatch(setDocumentBody(body));
   dispatch(setAnalysis(analysis));
-  dispatch(setRightPanelFlag(2));
+  dispatch(setRightPanelTab(2));
 };
 export const setAnalysis = createAction(SET_ANALYSIS);
 export const setAnalysisSentenceId = createAction(SET_ANALYSIS_SENTENCE_ID);
 
 export const clickEditor = payload => dispatch => {
-  const sentenceId = editor().click(payload).selectedSentenceId();
-  dispatch(setAnalysisSentenceId(sentenceId));
-  dispatch(setRightPanelFlag(21));
+  const sentenceId = editor().click(payload).sentenceId(payload);
+  if(sentenceId) {
+    dispatch(setAnalysisSentenceId(sentenceId));
+    dispatch(setAnalysisFlag(2));
+  }
 };
 
 export const setPopUpActive = createAction(SET_POPUP_ACTIVE);
 
-export const setRightPanelFlag = createAction(SET_RIGHTPANEL_FLAG);
+export const setAnalysisFlag = createAction(SET_ANALYSIS_FLAG);
 export const setRightPanelTab = createAction(SET_RIGHTPANEL_TAB);
+
+export const clickStep = stepId => (dispatch, getState) => {
+  const { analysis, sectionId } = getState();
+  const sentences = analysis[sectionId].steps[stepId];
+  if(sentences) {
+    editor().highlightSentences(sentences);
+  }
+};
 
 export default {
   fetchWritingModels, fetchSubjectAreas, fetchSections, fetchMoves, fetchMarkers,
   inputDocumentTitle, inputDocumentBody, pasteDocumentBody,
   setWritingModelId, setSubjectAreaId, setSectionId,
   startAnalysis,
-  clickEditor,
+  clickEditor, clickStep,
   setPopUpActive,
-  setRightPanelFlag, setRightPanelTab,
+  setAnalysisFlag, setRightPanelTab,
 };

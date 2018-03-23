@@ -5,10 +5,10 @@ const Container = styled.div`
   border-bottom:  1px solid #f4f5f7;
   display:  flex;
   flex-wrap: wrap;
+  align-items: flex-end;
   padding-left : 1rem; 
   font-size: 1rem;
   text-transform: capitalize;
-  margin-top: 1rem;
 `;
 
 const SwitchContainer = styled.div`
