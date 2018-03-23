@@ -5,6 +5,7 @@ import ReportSections from './report-sections';
 import Models from './models';
 import Subjects from './subjects';
 import Markers from './markers';
+import Sentences from './sentences';
 
 Moves.hasMany(Steps, {
   as         : 'steps',
@@ -28,6 +29,18 @@ Markers.belongsToMany(Steps, {
   foreignKey : 'marker_regex_id',
 });
 
+Markers.belongsToMany(Sentences, {
+  through    : 'Link_Marker_Regex_Example',
+  as         : 'sentences',
+  foreignKey : 'marker_regex_id',
+});
+
+Sentences.belongsToMany(Markers, {
+  through    : 'Link_Marker_Regex_Example',
+  as         : 'markers',
+  foreignKey : 'example_id',
+});
+
 sequelize.sync();
 
 export {
@@ -37,4 +50,5 @@ export {
   Models,
   Subjects,
   Markers,
+  Sentences,
 };
