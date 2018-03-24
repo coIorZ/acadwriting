@@ -5,7 +5,7 @@ import styled from 'styled-components';
 import actions from '../ducks/actions';
 
 import {
-  getWritingModels, getSubjectAreas, getSections, getMoves, getMarkers,
+  getWritingModels, getSubjectAreas, getSections, getMoves, getMarkers, getSteps,
   getDocument,
   getWritingModelId, getSubjectAreaId, getSectionId,
   getPopUpActive,
@@ -29,6 +29,7 @@ class Home extends Component {
     this.props.fetchWritingModels();
     this.props.fetchSubjectAreas();
     this.props.fetchMoves();
+    this.props.fetchSteps();
     this.props.fetchMarkers();
   }
 
@@ -55,6 +56,7 @@ export default connect(
     subjectAreas       : getSubjectAreas(state),
     sections           : getSections(state),
     moves              : getMoves(state),
+    steps              : getSteps(state),
     markers            : getMarkers(state),
     document           : getDocument(state),
     writingModelId     : getWritingModelId(state),

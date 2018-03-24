@@ -8,6 +8,7 @@ import {
   FETCH_SUBJECTAREAS_PENDING, FETCH_SUBJECTAREAS_SUCCESS, FETCH_SUBJECTAREAS_FAIL,
   FETCH_SECTIONS_PENDING, FETCH_SECTIONS_SUCCESS, FETCH_SECTIONS_FAIL,
   FETCH_MARKERS_PENDING, FETCH_MARKERS_SUCCESS, FETCH_MARKERS_FAIL,
+  FETCH_STEPS_PENDING, FETCH_STEPS_SUCCESS, FETCH_STEPS_FAIL,
   FETCH_MOVES_PENDING, FETCH_MOVES_SUCCESS, FETCH_MOVES_FAIL,
   INPUT_DOCUMENT_TITLE, SET_DOCUMENT_BODY_BY_SECTIONID, SET_DOCUMENT_BODY,
   SET_WRITINGMODEL_ID, SET_SUBJECTAREA_ID, SET_SECTION_ID,
@@ -75,6 +76,20 @@ export const fetchMoves = () => dispatch => {
     });
 };
 
+export const fetchStepsPending = createAction(FETCH_STEPS_PENDING);
+export const fetchStepsSuccess = createAction(FETCH_STEPS_SUCCESS);
+export const fetchStepsFail = createAction(FETCH_STEPS_FAIL);
+export const fetchSteps = () => dispatch => {
+  dispatch(fetchStepsPending());
+  axios.get('/api/steps')
+    .then(({ data }) => {
+      dispatch(fetchStepsSuccess(data));
+    })
+    .catch(err => {
+      dispatch(fetchStepsFail(err));
+    });
+};
+
 export const fetchMarkersPending = createAction(FETCH_MARKERS_PENDING);
 export const fetchMarkersSuccess = createAction(FETCH_MARKERS_SUCCESS);
 export const fetchMarkersFail = createAction(FETCH_MARKERS_FAIL);
@@ -120,12 +135,13 @@ export const setSectionId = payload => (dispatch, getState) => {
     type: SET_SECTION_ID,
     payload,
   });
+  dispatch(setAnalysisFlag(1));
 }; 
 
 export const startAnalysis = () => (dispatch, getState) => {
   if(!editor().text()) return;
-  const { markers, moves, document, sectionId } = getState();
-  const { analysis, body } = editor().analyze({ markers, moves, document, sectionId });
+  const { markers, moves, steps, document, sectionId } = getState();
+  const { analysis, body } = editor().analyze({ markers, moves, steps, document, sectionId });
   dispatch(setDocumentBody(body));
   dispatch(setAnalysis(analysis));
   dispatch(setRightPanelTab(2));
@@ -149,13 +165,11 @@ export const setRightPanelTab = createAction(SET_RIGHTPANEL_TAB);
 export const clickStep = stepId => (dispatch, getState) => {
   const { analysis, sectionId } = getState();
   const sentences = analysis[sectionId].steps[stepId];
-  if(sentences) {
-    editor().highlightSentences(sentences);
-  }
+  editor().highlightSentences(sentences);
 };
 
 export default {
-  fetchWritingModels, fetchSubjectAreas, fetchSections, fetchMoves, fetchMarkers,
+  fetchWritingModels, fetchSubjectAreas, fetchSections, fetchMoves, fetchMarkers, fetchSteps,
   inputDocumentTitle, inputDocumentBody, pasteDocumentBody,
   setWritingModelId, setSubjectAreaId, setSectionId,
   startAnalysis,

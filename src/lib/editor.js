@@ -81,14 +81,14 @@ Editor.prototype.paste = function(e) {
 // output of analysis will be 
 // 1. id relations between matched sentences, markers, moves and steps, which will be stored in Redux.
 // 2. actual HTML strings to be displayed on page(underlined match, highlighted key words)
-Editor.prototype.analyze = function({ markers, moves, document, sectionId }) {
+Editor.prototype.analyze = function({ markers, moves, steps, document, sectionId }) {
   if(!this._el) return this;
   let resBody = {}, resAnalysis = {};
   const { body } = document;
   const range = new window.Range();
   Object.keys(body).forEach(key => {
     const node = range.createContextualFragment(body[key]);
-    const res = _analyze({ node, markers, moves, sectionId: key });
+    const res = _analyze({ node, markers, moves, steps, sectionId: key });
     resBody[key] = res.html;
     resAnalysis[key] = res.analysis;
   });
@@ -99,7 +99,7 @@ Editor.prototype.analyze = function({ markers, moves, document, sectionId }) {
   };
 };
 
-function _analyze({ node, markers, moves, sectionId }) {
+function _analyze({ node, markers, moves, steps, sectionId }) {
   let analysis = {
     sentences : {},
     moves     : {},
@@ -118,7 +118,7 @@ function _analyze({ node, markers, moves, sectionId }) {
         const move = moves[moveId];
         if(move.sectionId != sectionId) return;
         Object.keys(move.steps).forEach(stepId => {
-          const step = move.steps[stepId];
+          const step = steps[stepId];
           Object.keys(step.markers).forEach(markerId => {
             const { fullMarker, confidence } = markers[markerId];
             if(isMatch(text, fullMarker)) {
@@ -167,7 +167,6 @@ function generateSentenceHtml(str, regStr, markerId, sentenceId) {
     if(k == 1) {
       matchStr = matchStr.replace(keyword, m => `<span class='marker' data-marker-id='${markerId}'>${m}</span>`);
     } else {
-      //matchStr = matchStr.replace(new RegExp(captures[k]), m => `<span class='marker' data-marker-id='${markerId}'>${m}</span>`);
       matchStr = replaceKeyword(matchStr, keyword, markerId);
     }
   });
@@ -212,7 +211,7 @@ Editor.prototype.sentenceId = function(e) {
   if(node.classList.contains('marker')) return Number(node.parentNode.parentNode.getAttribute('data-sentence-id'));
 };
 
-Editor.prototype.highlightSentences = function(ids) {
+Editor.prototype.highlightSentences = function(ids = []) {
   if(!this._el) return this;
   Array.from(this._el.children).forEach(pNode => {
     Array.from(pNode.children).forEach(sNode => {

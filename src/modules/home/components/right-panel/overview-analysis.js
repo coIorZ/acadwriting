@@ -53,6 +53,7 @@ class Move extends Component {
     const {
       analysis = {},
       move = {},
+      steps = {},
       onClickStep,
     } = this.props;
 
@@ -60,7 +61,7 @@ class Move extends Component {
 
     const mandotorySteps = [], optionalSteps = [];
     Object.keys(move.steps).forEach(stepId => {
-      const step = move.steps[stepId];
+      const step = steps[stepId];
       if(step.important) {
         mandotorySteps.push(step);
       } else {
@@ -109,6 +110,7 @@ export default class OverviewAnalysis extends Component {
   render() {
     const {
       moves = {},
+      steps = {},
       analysis = {},
       sectionId,
     } = this.props;
@@ -124,6 +126,7 @@ export default class OverviewAnalysis extends Component {
             <Move 
               key={moveId}
               analysis={sectionAnalysis}
+              steps={steps}
               move={moves[moveId]}
               onClickStep={this.clickStep}
             />
