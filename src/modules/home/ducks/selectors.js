@@ -4,6 +4,7 @@ export const getWritingModels = state => state.writingModels;
 export const getSubjectAreas = state => state.subjectAreas;
 export const getSections = state => state.sections;
 export const getMoves = state => state.moves;
+export const getSteps = state => state.steps;
 export const getMarkers = state => state.markers;
 export const getDocument = state => state.document;
 export const getWritingModelId = state => state.writingModelId;

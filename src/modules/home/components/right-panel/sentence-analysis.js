@@ -17,25 +17,16 @@ const StyledMatch = styled.div`
   margin: 1rem 0;
 `;
 
-class Match extends Component {
-  render() {
-    const {
-      matched,
-      moves,
-      markers,
-    } = this.props;
-
-    const { markerId, stepId, moveId } = matched;
-
-    return (
-      <StyledMatch>
-        <div>move: {moves[moveId].label}</div>
-        <div>step: {moves[moveId].steps[stepId].label}</div>
-        <div>pattern: {markers[markerId].label}</div>
-      </StyledMatch>
-    );
-  }
-}
+const Match = ({ matched, moves, steps, markers }) => {
+  const { markerId, stepId, moveId } = matched;
+  return (
+    <StyledMatch>
+      <div>move: {moves[moveId].label}</div>
+      <div>step: {steps[stepId].label}</div>
+      <div>pattern: {markers[markerId].label}</div>
+    </StyledMatch>
+  );
+};
 
 export default class SentenceAnalysis extends Component {
   render() {
@@ -43,6 +34,9 @@ export default class SentenceAnalysis extends Component {
       analysisSentenceId,
       analysis,
       sectionId,
+      moves,
+      steps,
+      markers,
     } = this.props;
 
     const matches = analysis[sectionId].sentences[analysisSentenceId];
@@ -57,7 +51,9 @@ export default class SentenceAnalysis extends Component {
                 <Match 
                   key={index}
                   matched={match} 
-                  {...this.props}
+                  moves={moves}
+                  steps={steps}
+                  markers={markers}
                 />
               ))}
             </MatchGroup>

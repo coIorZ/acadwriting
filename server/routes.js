@@ -28,16 +28,9 @@ router.get('/sections', asyncWrap(async (req, res) => {
 router.get('/moves', asyncWrap(async (req, res) => {
   let result = await Moves.findAll({
     include: [{
-      model   : Steps,
-      as      : 'steps',
-      include : [{
-        model      : Markers,
-        as         : 'markers',
-        attributes : ['id'],
-        through    : {
-          attributes: [],
-        },
-      }],
+      model      : Steps,
+      as         : 'steps',
+      attributes : ['id'],
     }],
   });
   result = result.reduce((acc, move) => {
@@ -46,18 +39,33 @@ router.get('/moves', asyncWrap(async (req, res) => {
       id,
       sectionId,
       label,
-      steps: steps.reduce((m, step) => {
-        const { id: stepId, label: stepLabel, moveId, important, rfDescription, markers } = step;
-        m[stepId] = {
-          id      : stepId,
-          label   : stepLabel,
-          moveId,
-          important,
-          rfDescription,
-          markers : normalize()(markers),
-        };
-        return m;
-      }, {}),
+      steps: normalize()(steps),
+    };
+    return acc;
+  }, {});
+  res.status(200).json(result);
+}));
+
+router.get('/steps', asyncWrap(async (req, res) => {
+  let result = await Steps.findAll({
+    include: [{
+      model      : Markers,
+      as         : 'markers',
+      attributes : ['id'],
+      through    : {
+        attributes: [],
+      },
+    }],
+  });
+  result = result.reduce((acc, step) => {
+    const { id, label, moveId, important, rfDescription, markers } = step;
+    acc[id] = {
+      id,
+      label,
+      moveId,
+      important,
+      rfDescription,
+      markers: normalize()(markers),
     };
     return acc;
   }, {});

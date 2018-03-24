@@ -6,6 +6,7 @@ import {
   FETCH_SUBJECTAREAS_SUCCESS, FETCH_SUBJECTAREAS_FAIL,
   FETCH_SECTIONS_SUCCESS, FETCH_SECTIONS_FAIL,
   FETCH_MOVES_SUCCESS, FETCH_MOVES_FAIL,
+  FETCH_STEPS_SUCCESS, FETCH_STEPS_FAIL,
   FETCH_MARKERS_SUCCESS, FETCH_MARKERS_FAIL,
   INPUT_DOCUMENT_TITLE, SET_DOCUMENT_BODY_BY_SECTIONID, SET_DOCUMENT_BODY,
   SET_WRITINGMODEL_ID, SET_SUBJECTAREA_ID, SET_SECTION_ID,
@@ -49,6 +50,16 @@ const movesReducer = handleActions({
     return payload;
   },
   [FETCH_MOVES_FAIL]: (state, { payload }) => {
+    console.error(payload);
+    return state;
+  },
+}, {});
+
+const stepsReducer = handleActions({
+  [FETCH_STEPS_SUCCESS]: (state, { payload }) => {
+    return payload;
+  },
+  [FETCH_STEPS_FAIL]: (state, { payload }) => {
     console.error(payload);
     return state;
   },
@@ -108,6 +119,7 @@ export default combineReducers({
   subjectAreas       : subjectAreasReducer,
   sections           : sectionsReducer,
   moves              : movesReducer,
+  steps              : stepsReducer,
   markers            : markersReducer,
   document           : documentReducer,
   writingModelId     : writingModelIdReducer,
