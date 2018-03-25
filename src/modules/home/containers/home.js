@@ -5,9 +5,9 @@ import styled from 'styled-components';
 import actions from '../ducks/actions';
 
 import {
-  getWritingModels, getSubjectAreas, getSections, getMoves, getMarkers, getSteps,
+  getWritingModels, getSubjectAreas, getSections, getMoves, getMarkers, getSteps, getSentences,
   getDocument,
-  getWritingModelId, getSubjectAreaId, getSectionId,
+  getWritingModelId, getSubjectAreaId, getSectionId, getMarkerId,
   getPopUpActive,
   getRightPanelTab,
   getAnalysis, getAnalysisSentenceId, getAnalysisFlag,
@@ -59,10 +59,12 @@ export default connect(
     moves              : getMoves(state),
     steps              : getSteps(state),
     markers            : getMarkers(state),
+    sentences          : getSentences(state),
     document           : getDocument(state),
     writingModelId     : getWritingModelId(state),
     subjectAreaId      : getSubjectAreaId(state),
     sectionId          : getSectionId(state),
+    markerId           : getMarkerId(state),
     popUpActive        : getPopUpActive(state),
     analysis           : getAnalysis(state),
     analysisSentenceId : getAnalysisSentenceId(state),

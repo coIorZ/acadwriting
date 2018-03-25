@@ -75,7 +75,10 @@ class Step extends Component {
 
   onClickMarker = id => {
     this.props.setGuideFlag(2);
-    this.props.fetchSentencesByMarkerId(id);
+    this.props.setMarkerId(id);
+    if(!this.props.sentences[id]) {
+      this.props.fetchSentencesByMarkerId(id);
+    }
   }
 }
 
