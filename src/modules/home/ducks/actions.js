@@ -10,10 +10,12 @@ import {
   FETCH_MARKERS_PENDING, FETCH_MARKERS_SUCCESS, FETCH_MARKERS_FAIL,
   FETCH_STEPS_PENDING, FETCH_STEPS_SUCCESS, FETCH_STEPS_FAIL,
   FETCH_MOVES_PENDING, FETCH_MOVES_SUCCESS, FETCH_MOVES_FAIL,
+  FETCH_SCENTENCE_BY_MARKERID_PENDING, FETCH_SCENTENCE_BY_MARKERID_SUCCESS, FETCH_SCENTENCE_BY_MARKERID_FAIL,
   INPUT_DOCUMENT_TITLE, SET_DOCUMENT_BODY_BY_SECTIONID, SET_DOCUMENT_BODY,
-  SET_WRITINGMODEL_ID, SET_SUBJECTAREA_ID, SET_SECTION_ID,
+  SET_WRITINGMODEL_ID, SET_SUBJECTAREA_ID, SET_SECTION_ID, 
   SET_POPUP_ACTIVE,
   SET_ANALYSIS, SET_ANALYSIS_SENTENCE_ID, SET_ANALYSIS_FLAG,
+  SET_GUIDE_FLAG,
   SET_RIGHTPANEL_TAB,
 } from './types';
 
@@ -104,6 +106,22 @@ export const fetchMarkers = () => dispatch => {
     });
 };
 
+export const fetchSentencesByMarkerIdPending = createAction(FETCH_SCENTENCE_BY_MARKERID_PENDING);
+export const fetchSentencesByMarkerIdSuccess = createAction(FETCH_SCENTENCE_BY_MARKERID_SUCCESS);
+export const fetchSentencesByMarkerIdFail = createAction(FETCH_SCENTENCE_BY_MARKERID_FAIL);
+export const fetchSentencesByMarkerId = id => dispatch => {
+  dispatch(fetchSentencesByMarkerIdPending());
+  axios.get('/api/sentencesByMarkerId', {
+    params: { id },
+  })
+    .then(({ data }) => {
+      dispatch(fetchSentencesByMarkerIdSuccess(data));
+    })
+    .catch(err => {
+      dispatch(fetchSentencesByMarkerIdFail(err));
+    });
+};
+
 export const inputDocumentTitle = createAction(INPUT_DOCUMENT_TITLE);
 export const setDocumentBodyBySectionId = sectionId => {
   editor().safe();
@@ -138,6 +156,7 @@ export const setSectionId = payload => (dispatch, getState) => {
   dispatch(setAnalysisFlag(1));
 }; 
 
+
 export const startAnalysis = () => (dispatch, getState) => {
   if(!editor().text()) return;
   const { markers, moves, steps, document, sectionId } = getState();
@@ -160,6 +179,7 @@ export const clickEditor = payload => dispatch => {
 export const setPopUpActive = createAction(SET_POPUP_ACTIVE);
 
 export const setAnalysisFlag = createAction(SET_ANALYSIS_FLAG);
+export const setGuideFlag = createAction(SET_GUIDE_FLAG);
 export const setRightPanelTab = createAction(SET_RIGHTPANEL_TAB);
 
 export const clickStep = stepId => (dispatch, getState) => {
@@ -175,5 +195,5 @@ export default {
   startAnalysis,
   clickEditor, clickStep,
   setPopUpActive,
-  setAnalysisFlag, setRightPanelTab,
+  setAnalysisFlag, setGuideFlag, setRightPanelTab,
 };

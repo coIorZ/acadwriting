@@ -12,6 +12,7 @@ import {
   SET_WRITINGMODEL_ID, SET_SUBJECTAREA_ID, SET_SECTION_ID,
   SET_POPUP_ACTIVE,
   SET_ANALYSIS, SET_ANALYSIS_SENTENCE_ID, SET_ANALYSIS_FLAG,
+  SET_GUIDE_FLAG,
   SET_RIGHTPANEL_TAB,
 } from './types';
 
@@ -112,6 +113,7 @@ const analysisReducer = handleAction(SET_ANALYSIS, (state, { payload }) => paylo
 const analysisSentenceIdReducer = handleAction(SET_ANALYSIS_SENTENCE_ID, (state, { payload }) => payload, null);
 
 const analysisFlagReducer = handleAction(SET_ANALYSIS_FLAG, (state, { payload }) => payload, 1);
+const guideFlagReducer = handleAction(SET_GUIDE_FLAG, (state, { payload }) => payload, 1);
 const rightPanelTabReducer = handleAction(SET_RIGHTPANEL_TAB, (state, { payload }) => payload, 1);
 
 export default combineReducers({
@@ -129,5 +131,6 @@ export default combineReducers({
   analysis           : analysisReducer,
   analysisSentenceId : analysisSentenceIdReducer,
   analysisFlag       : analysisFlagReducer,
+  guideFlag          : guideFlagReducer,
   rightPanelTab      : rightPanelTabReducer,
 });

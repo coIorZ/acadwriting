@@ -11,6 +11,7 @@ import {
   getPopUpActive,
   getRightPanelTab,
   getAnalysis, getAnalysisSentenceId, getAnalysisFlag,
+  getGuideFlag,
 } from '../ducks/selectors';
 
 import LeftPanel from '../components/left-panel';
@@ -67,6 +68,7 @@ export default connect(
     analysisSentenceId : getAnalysisSentenceId(state),
     rightPanelTab      : getRightPanelTab(state),
     analysisFlag       : getAnalysisFlag(state),
+    guideFlag          : getGuideFlag(state),
   }),
   actions,
 )(Home);
