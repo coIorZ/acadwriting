@@ -3,6 +3,7 @@ import styled, { css } from 'styled-components';
 
 import Switcher from './switcher';
 import Analysis from './analysis';
+import Guide from './guide';
 
 const Container = styled.div`
   display: grid;
@@ -19,6 +20,7 @@ export default class FunctionPanel extends Component {
     return (
       <Container>
         <Switcher {...this.props}/>
+        {tab === 1 && <Guide {...this.props}/>}
         {tab === 2 && <Analysis {...this.props}/>}
       </Container>
     );
