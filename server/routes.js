@@ -3,7 +3,10 @@ import { Router } from 'express';
 import asyncWrap from './lib/async-wrap';
 import { normalize } from './lib/utils';
 
-import { Moves, Steps, Models, Subjects, ReportSections, Markers, Sentences } from './models';
+import { 
+  Moves, Steps, Models, Subjects, ReportSections, Markers, Sentences,
+  MdCodes, MdSubCodes, MdMarkers,
+} from './models';
 
 const router = Router();
 
@@ -114,6 +117,46 @@ router.get('/sentencesByMarkerId', asyncWrap(async (req, res) => {
     }],
   });
   result = normalize()(result.sentences);
+  res.status(200).json(result);
+}));
+
+router.get('/mdCodes', asyncWrap(async (req, res) => {
+  let result = await MdCodes.findAll({
+    attributes : ['id', 'label', 'desc'],
+    include    : [{
+      model      : MdSubCodes,
+      as         : 'mdSubCodes',
+      attributes : ['id', 'label', 'mdCodeId', 'desc'],
+      include    : [{
+        model      : MdMarkers,
+        as         : 'mdMarkers',
+        attributes : ['id', 'marker'],
+        through    : {
+          attributes: [],
+        },
+      }],
+    }],
+  });
+  result = result.reduce((acc, code) => {
+    const { id, label, desc, mdSubCodes } = code;
+    acc[id] = {
+      id,
+      label,
+      desc,
+      mdSubCodes: mdSubCodes.reduce((a, sub) => {
+        const { id, label, mdCodeId, desc, mdMarkers } = sub;
+        a[id] = {
+          id,
+          label,
+          mdCodeId,
+          desc,
+          mdMarkers: normalize()(mdMarkers),
+        };
+        return a;
+      }, {}),
+    };
+    return acc;
+  }, {});
   res.status(200).json(result);
 }));
 
