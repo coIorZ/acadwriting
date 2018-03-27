@@ -11,6 +11,40 @@ const Sentence = styled.div`
   margin: 1rem 0;
 `;
 
+const BreadcrumbContainer = styled.div``;
+
+const BreadcrumbItem = styled.span`
+  display: inline-block;
+  text-overflow: ellipsis;
+  max-width: 25%;
+  white-space: nowrap;
+  overflow: hidden;
+`;
+
+class Breadcrumb extends Component {
+  render() {
+    const {
+      moves, currentMoveId,
+      steps, currentStepId,
+      markers, currentMarkerId,
+    } = this.props;
+
+    return (
+      <BreadcrumbContainer>
+        <BreadcrumbItem onClick={this.back}>{moves[currentMoveId].label}</BreadcrumbItem>
+        &gt;
+        <BreadcrumbItem onClick={this.back}>{steps[currentStepId].label}</BreadcrumbItem>
+        &gt;
+        <BreadcrumbItem>{markers[currentMarkerId].label}</BreadcrumbItem>
+      </BreadcrumbContainer>
+    );
+  }
+
+  back = () => {
+    this.props.setGuideFlag(1);
+  }
+}
+
 export default class Sentences extends Component {
   state = {
     currentIndex: 0,
@@ -19,10 +53,10 @@ export default class Sentences extends Component {
   render() {
     const {
       sentences,
-      markerId,
+      currentMarkerId,
     } = this.props;
 
-    const sentencesByMarkerId = sentences[markerId];
+    const sentencesByMarkerId = sentences[currentMarkerId];
 
     if(!sentencesByMarkerId) return <div>loading sentences...</div>;
     console.log(Object.keys(sentencesByMarkerId).length);
@@ -30,6 +64,7 @@ export default class Sentences extends Component {
 
     return (
       <Container>
+        <Breadcrumb {...this.props}/>
         {Object.keys(sentencesByMarkerId).slice(currentIndex * COUNT_PER_PAGE, (currentIndex + 1) * COUNT_PER_PAGE).map(sentenceId => {
           const sentence = sentencesByMarkerId[sentenceId];
           return <Sentence>{sentence.text}</Sentence>;

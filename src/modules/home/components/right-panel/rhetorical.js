@@ -31,15 +31,23 @@ const StyledMarker = styled.div`
   cursor: pointer;
 `;
 
-const Marker = ({ markers, markerId, onClick }) => {
+const Marker = ({ markers, stepId, markerId, onClick }) => {
   return markers[markerId] ? (
-    <StyledMarker onClick={onClick.bind(this, markerId)}>{markers[markerId].label}</StyledMarker>
+    <StyledMarker onClick={onClick.bind(this, stepId, markerId)}>{markers[markerId].label}</StyledMarker>
   ) : <div>loading marker...</div>;
 };
 
 class Step extends Component {
   state = {
     active: false,
+  }
+
+  componentDidMount() {
+    if(this.props.currentStepId == this.props.stepId) {
+      this.setState(() => ({
+        active: true,
+      }));
+    }
   }
 
   render() {
@@ -59,7 +67,7 @@ class Step extends Component {
         {active && (
           <MarkerGroup>
             {Object.keys(step.markers).map(markerId => (
-              <Marker markerId={markerId} markers={markers} onClick={this.onClickMarker}/>
+              <Marker stepId={stepId} markerId={markerId} markers={markers} onClick={this.onClickMarker}/>
             ))}
           </MarkerGroup>
         )}
@@ -73,11 +81,13 @@ class Step extends Component {
     }));
   }
 
-  onClickMarker = id => {
+  onClickMarker = (stepId, markerId) => {
     this.props.setGuideFlag(2);
-    this.props.setMarkerId(id);
-    if(!this.props.sentences[id]) {
-      this.props.fetchSentencesByMarkerId(id);
+    this.props.setCurrentMarkerId(markerId);
+    this.props.setCurrentMoveId(this.props.steps[stepId].moveId);
+    this.props.setCurrentStepId(stepId);
+    if(!this.props.sentences[markerId]) {
+      this.props.fetchSentencesByMarkerId(markerId);
     }
   }
 }
@@ -85,6 +95,14 @@ class Step extends Component {
 class Move extends Component {
   state = {
     active: false,
+  }
+
+  componentDidMount() {
+    if(this.props.currentMoveId == this.props.moveId) {
+      this.setState(() => ({
+        active: true,
+      }));
+    }
   }
 
   render() {
