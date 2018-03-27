@@ -10,7 +10,8 @@ import {
   FETCH_MARKERS_SUCCESS, FETCH_MARKERS_FAIL,
   FETCH_SCENTENCE_BY_MARKERID_SUCCESS, FETCH_SCENTENCE_BY_MARKERID_FAIL,
   INPUT_DOCUMENT_TITLE, SET_DOCUMENT_BODY_BY_SECTIONID, SET_DOCUMENT_BODY,
-  SET_WRITINGMODEL_ID, SET_SUBJECTAREA_ID, SET_SECTION_ID, SET_MARKER_ID,
+  SET_WRITINGMODEL_ID, SET_SUBJECTAREA_ID, SET_SECTION_ID, 
+  SET_CURRENT_MOVE_ID, SET_CURRENT_STEP_ID, SET_CURRENT_MARKER_ID,
   SET_POPUP_ACTIVE,
   SET_ANALYSIS, SET_ANALYSIS_SENTENCE_ID, SET_ANALYSIS_FLAG,
   SET_GUIDE_FLAG,
@@ -120,7 +121,9 @@ const documentReducer = handleActions({
 const writingModelIdReducer = handleAction(SET_WRITINGMODEL_ID, (state, { payload }) => payload, -1);
 const subjectAreaIdReducer = handleAction(SET_SUBJECTAREA_ID, (state, { payload }) => payload, -1);
 const sectionIdReducer = handleAction(SET_SECTION_ID, (state, { payload }) => payload, -1);
-const markerIdReducer = handleAction(SET_MARKER_ID, (state, { payload }) => payload, -1);
+const currentMoveIdReducer = handleAction(SET_CURRENT_MOVE_ID, (state, { payload }) => payload, -1);
+const currentStepIdReducer = handleAction(SET_CURRENT_STEP_ID, (state, { payload }) => payload, -1);
+const currentMarkerIdReducer = handleAction(SET_CURRENT_MARKER_ID, (state, { payload }) => payload, -1);
 
 const popUpActiveReducer = handleAction(SET_POPUP_ACTIVE, (state, { payload }) => payload, false);
 
@@ -143,7 +146,9 @@ export default combineReducers({
   writingModelId     : writingModelIdReducer,
   subjectAreaId      : subjectAreaIdReducer,
   sectionId          : sectionIdReducer,
-  markerId           : markerIdReducer,
+  currentMoveId      : currentMoveIdReducer,
+  currentStepId      : currentStepIdReducer,
+  currentMarkerId    : currentMarkerIdReducer,
   popUpActive        : popUpActiveReducer,
   analysis           : analysisReducer,
   analysisSentenceId : analysisSentenceIdReducer,
