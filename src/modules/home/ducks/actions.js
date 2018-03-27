@@ -12,7 +12,8 @@ import {
   FETCH_MOVES_PENDING, FETCH_MOVES_SUCCESS, FETCH_MOVES_FAIL,
   FETCH_SCENTENCE_BY_MARKERID_PENDING, FETCH_SCENTENCE_BY_MARKERID_SUCCESS, FETCH_SCENTENCE_BY_MARKERID_FAIL,
   INPUT_DOCUMENT_TITLE, SET_DOCUMENT_BODY_BY_SECTIONID, SET_DOCUMENT_BODY,
-  SET_WRITINGMODEL_ID, SET_SUBJECTAREA_ID, SET_SECTION_ID, SET_MARKER_ID,
+  SET_WRITINGMODEL_ID, SET_SUBJECTAREA_ID, SET_SECTION_ID,
+  SET_CURRENT_MOVE_ID, SET_CURRENT_STEP_ID, SET_CURRENT_MARKER_ID,
   SET_POPUP_ACTIVE,
   SET_ANALYSIS, SET_ANALYSIS_SENTENCE_ID, SET_ANALYSIS_FLAG,
   SET_GUIDE_FLAG,
@@ -146,7 +147,7 @@ export const pasteDocumentBody = payload => (dispatch, getState) => {
 
 export const setWritingModelId = createAction(SET_WRITINGMODEL_ID);
 export const setSubjectAreaId = createAction(SET_SUBJECTAREA_ID);
-export const setMarkerId = createAction(SET_MARKER_ID);
+
 export const setSectionId = payload => (dispatch, getState) => {
   const { document } = getState();
   editor().html(document.body[payload] || '');
@@ -157,6 +158,9 @@ export const setSectionId = payload => (dispatch, getState) => {
   dispatch(setAnalysisFlag(1));
 }; 
 
+export const setCurrentMoveId = createAction(SET_CURRENT_MOVE_ID);
+export const setCurrentStepId = createAction(SET_CURRENT_STEP_ID);
+export const setCurrentMarkerId = createAction(SET_CURRENT_MARKER_ID);
 
 export const startAnalysis = () => (dispatch, getState) => {
   if(!editor().text()) return;
@@ -192,7 +196,8 @@ export const clickStep = stepId => (dispatch, getState) => {
 export default {
   fetchWritingModels, fetchSubjectAreas, fetchSections, fetchMoves, fetchMarkers, fetchSteps, fetchSentencesByMarkerId,
   inputDocumentTitle, inputDocumentBody, pasteDocumentBody,
-  setWritingModelId, setSubjectAreaId, setSectionId, setMarkerId,
+  setWritingModelId, setSubjectAreaId, setSectionId, 
+  setCurrentMoveId, setCurrentStepId, setCurrentMarkerId,
   startAnalysis,
   clickEditor, clickStep,
   setPopUpActive,
