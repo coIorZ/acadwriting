@@ -6,6 +6,7 @@ import { normalize } from './lib/utils';
 import { 
   Moves, Steps, Models, Subjects, ReportSections, Markers, Sentences,
   MdCodes, MdSubCodes, MdMarkers,
+  RsTypes, RsSteps, RsMarkers,
 } from './models';
 
 const router = Router();
@@ -151,6 +152,42 @@ router.get('/mdCodes', asyncWrap(async (req, res) => {
           mdCodeId,
           desc,
           mdMarkers: normalize()(mdMarkers),
+        };
+        return a;
+      }, {}),
+    };
+    return acc;
+  }, {});
+  res.status(200).json(result);
+}));
+
+router.get('/rsTypes', asyncWrap(async (req, res) => {
+  let result = await RsTypes.findAll({
+    include: [{
+      model   : RsSteps,
+      as      : 'rsSteps',
+      include : [{
+        model   : RsMarkers,
+        as      : 'rsMarkers',
+        through : {
+          attributes: [],
+        },
+      }],
+    }],
+  });
+  result = result.reduce((acc, type) => {
+    const { id, label, sectionId, rsSteps } = type;
+    acc[id] = {
+      id,
+      label,
+      sectionId,
+      rsSteps: rsSteps.reduce((a, step) => {
+        const { id, label, rsTypeId, rsMarkers } = step;
+        a[id] = {
+          id,
+          label,
+          rsTypeId,
+          rsMarkers: normalize()(rsMarkers),
         };
         return a;
       }, {}),

@@ -9,6 +9,9 @@ import Sentences from './sentences';
 import MdCodes from './md-codes';
 import MdSubCodes from './md-sub-codes';
 import MdMarkers from './md-markers';
+import RsTypes from './rs-types';
+import RsSteps from './rs-steps';
+import RsMarkers from './rs-markers';
 
 Moves.hasMany(Steps, {
   as         : 'steps',
@@ -58,6 +61,24 @@ MdMarkers.belongsToMany(MdSubCodes, {
   foreignKey : 'metad_marker_id',
 });
 
+RsTypes.hasMany(RsSteps, {
+  as         : 'rsSteps',
+  foreignKey : 'research_type_id',
+  sourceKey  : 'research_type_id',
+});
+
+RsSteps.belongsToMany(RsMarkers, {
+  through    : 'Research_Strategy_Marker',
+  as         : 'rsMarkers',
+  foreignKey : 'strategy_id',
+});
+
+RsMarkers.belongsToMany(RsSteps, {
+  through    : 'Research_Strategy_Marker',
+  as         : 'rsSteps',
+  foreignKey : 'marker_id',
+});
+
 sequelize.sync();
 
 export {
@@ -71,4 +92,7 @@ export {
   MdCodes,
   MdSubCodes,
   MdMarkers,
+  RsTypes,
+  RsSteps,
+  RsMarkers,
 };
