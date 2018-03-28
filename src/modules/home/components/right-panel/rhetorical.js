@@ -1,30 +1,38 @@
 import React, { Component } from 'react';
 import styled, { css } from 'styled-components';
 
-const Container = styled.div``;
+const Container = styled.div`
+  height: calc(100vh - 3rem);
+  overflow: auto;
+`;
 
-const MoveGroup = styled.div``;
+const MoveGroup = styled.div`
+  padding: 0 2rem;
+`;
 
 const StyledMove = styled.div`
-  cursor: pointer;
+  padding: .5rem;
+  margin: .5rem 0;
 `;
 
 const MoveLabel = styled.span`
-`;
-
-const StepGroup = styled.div`
-  padding-left: 1rem;
-`;
-
-const StyledStep = styled.div`
   cursor: pointer;
 `;
 
+const StepGroup = styled.div`
+  padding-left: 2rem;
+`;
+
+const StyledStep = styled.div`
+  margin: .2rem 0;
+`;
+
 const StepLabel = styled.span`
+  cursor: pointer;
 `;
 
 const MarkerGroup = styled.div`
-  padding-left: 1rem;
+  padding-left: 2rem;
 `;
 
 const StyledMarker = styled.div`

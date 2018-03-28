@@ -57,7 +57,7 @@ export default class SentenceAnalysis extends Component {
                 />
               ))}
             </MatchGroup>
-            : <div>No matches</div>
+            : <MatchGroup>No matches</MatchGroup>
         }
       </Container>
     );

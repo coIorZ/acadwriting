@@ -13,7 +13,7 @@ const MoveGroup = styled.div`
 const StyledMove = styled.div`
   padding: .5rem;
   margin: .5rem 0;
-  font-weight: 700;
+  font-weight: 500;
 `;
 
 const MoveLabel = styled.div`
