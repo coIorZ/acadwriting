@@ -127,15 +127,7 @@ router.get('/mdCodes', asyncWrap(async (req, res) => {
     include    : [{
       model      : MdSubCodes,
       as         : 'mdSubCodes',
-      attributes : ['id', 'label', 'mdCodeId', 'desc'],
-      include    : [{
-        model      : MdMarkers,
-        as         : 'mdMarkers',
-        attributes : ['id', 'marker'],
-        through    : {
-          attributes: [],
-        },
-      }],
+      attributes : ['id'],
     }],
   });
   result = result.reduce((acc, code) => {
@@ -144,20 +136,42 @@ router.get('/mdCodes', asyncWrap(async (req, res) => {
       id,
       label,
       desc,
-      mdSubCodes: mdSubCodes.reduce((a, sub) => {
-        const { id, label, mdCodeId, desc, mdMarkers } = sub;
-        a[id] = {
-          id,
-          label,
-          mdCodeId,
-          desc,
-          mdMarkers: normalize()(mdMarkers),
-        };
-        return a;
-      }, {}),
+      mdSubCodes: normalize()(mdSubCodes),
     };
     return acc;
   }, {});
+  res.status(200).json(result);
+}));
+
+router.get('/mdSubCodes', asyncWrap(async (req, res) => {
+  let result = await MdSubCodes.findAll({
+    attributes : ['id', 'label', 'mdCodeId', 'desc'],
+    include    : [{
+      model      : MdMarkers,
+      as         : 'mdMarkers',
+      attributes : ['id'],
+      through    : {
+        attributes: [],
+      },
+    }],
+  });
+  result = result.reduce((acc, sub) => {
+    const { id, label, mdCodeId, desc, mdMarkers } = sub;
+    acc[id] = {
+      id,
+      label,
+      mdCodeId,
+      desc,
+      mdMarkers: normalize()(mdMarkers),
+    };
+    return acc;
+  }, {});
+  res.status(200).json(result);
+}));
+
+router.get('/mdMarkers', asyncWrap(async (req, res) => {
+  let result = await MdMarkers.findAll();
+  result = normalize()(result);
   res.status(200).json(result);
 }));
 
