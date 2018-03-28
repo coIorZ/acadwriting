@@ -6,21 +6,36 @@ import Pagination from '../../../../components/pagination';
 const COUNT_PER_PAGE = 10;
 
 const Container = styled.div`
-  height: calc(100vh - 3rem);
-  overflow: auto;
 `;
 
 const SentenceGroup = styled.div`
-  margin: 1rem;
+  height: calc(100vh - 9rem);
+  overflow: auto;
+  padding: 1rem;
 `;
 
-const Sentence = styled.div`
-  margin: 1rem 0;
+const StyledSentence = styled.div`
+  margin-bottom: 1rem;
+`;
+
+const NotMatch = styled.span``;
+
+const Match = styled.span`
+  color: #4c7af1;
+`;
+
+const PaginationContainer = styled.div`
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  height: 3rem;
 `;
 
 const BreadcrumbContainer = styled.div`
   display: flex;
-  margin: .5rem;
+  align-items: center;
+  height: 3rem;
+  padding: 0 .5rem;
 `;
 
 const BreadcrumbSeparator = () => (
@@ -62,6 +77,25 @@ class Breadcrumb extends Component {
   }
 }
 
+class Sentence extends Component {
+  render() {
+    const {
+      sentence,
+    } = this.props;
+
+    const length = sentence.match.length;
+    const index = sentence.text.indexOf(sentence.match);
+
+    return (
+      <StyledSentence>
+        <NotMatch>{sentence.text.substring(0, index)}</NotMatch>
+        <Match>{sentence.match}</Match>
+        <NotMatch>{sentence.text.substr(index + length)}</NotMatch>
+      </StyledSentence>
+    );
+  }
+}
+
 export default class Sentences extends Component {
   state = {
     currentIndex: 0,
@@ -85,10 +119,12 @@ export default class Sentences extends Component {
         <SentenceGroup>
           {Object.keys(sentencesByMarkerId).slice(currentIndex * COUNT_PER_PAGE, (currentIndex + 1) * COUNT_PER_PAGE).map(sentenceId => {
             const sentence = sentencesByMarkerId[sentenceId];
-            return <Sentence>{sentence.text}</Sentence>;
+            return <Sentence sentence={sentence}/>;
           })}
         </SentenceGroup>
-        {pageNum > 1 ? <Pagination length={pageNum} onClick={this.turnPage}/> : null}
+        <PaginationContainer>
+          <Pagination length={pageNum} onClick={this.turnPage}/>
+        </PaginationContainer>
       </Container>
     );
   }
