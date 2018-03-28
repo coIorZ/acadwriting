@@ -7,7 +7,7 @@ export default sequelize.define('Example', {
   subjectId : { type: Sequelize.INTEGER, field: 'subject_id' },
   sectionId : { type: Sequelize.INTEGER, field: 'report_section_id' },
   match     : { type: Sequelize.STRING, field: 'patternmatch' },
-  text      : { type: Sequelize.STRING, field: 'sentence_processed' },
+  text      : { type: Sequelize.STRING, field: 'sentence' },
 }, {
   freezeTableName: true,
 });
