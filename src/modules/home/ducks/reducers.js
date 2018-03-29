@@ -8,6 +8,9 @@ import {
   FETCH_MOVES_SUCCESS, FETCH_MOVES_FAIL,
   FETCH_STEPS_SUCCESS, FETCH_STEPS_FAIL,
   FETCH_MARKERS_SUCCESS, FETCH_MARKERS_FAIL,
+  FETCH_MDCODES_SUCESS, FETCH_MDCODES_FAIL,
+  FETCH_MDSUBCODES_SUCESS, FETCH_MDSUBCODES_FAIL,
+  FETCH_MDMARKERS_SUCESS, FETCH_MDMARKERS_FAIL,
   FETCH_SCENTENCE_BY_MARKERID_SUCCESS, FETCH_SCENTENCE_BY_MARKERID_FAIL,
   INPUT_DOCUMENT_TITLE, SET_DOCUMENT_BODY_BY_SECTIONID, SET_DOCUMENT_BODY,
   SET_WRITINGMODEL_ID, SET_SUBJECTAREA_ID, SET_SECTION_ID, 
@@ -78,6 +81,36 @@ const markersReducer = handleActions({
   },
 }, {});
 
+const mdCodesReducer = handleActions({
+  [FETCH_MDCODES_SUCESS]: (state, { payload }) => {
+    return payload;
+  },
+  [FETCH_MDCODES_FAIL]: (state, { payload }) => {
+    console.error(payload);
+    return state;
+  },
+}, {});
+
+const mdSubCodesReducer = handleActions({
+  [FETCH_MDSUBCODES_SUCESS]: (state, { payload }) => {
+    return payload;
+  },
+  [FETCH_MDSUBCODES_FAIL]: (state, { payload }) => {
+    console.error(payload);
+    return state;
+  },
+}, {});
+
+const mdMarkersReducer = handleActions({
+  [FETCH_MDMARKERS_SUCESS]: (state, { payload }) => {
+    return payload;
+  },
+  [FETCH_MDMARKERS_FAIL]: (state, { payload }) => {
+    console.error(payload);
+    return state;
+  },
+}, {});
+
 const sentencesReducer = handleActions({
   [FETCH_SCENTENCE_BY_MARKERID_SUCCESS]: (state, { payload }) => {
     return {
@@ -141,6 +174,9 @@ export default combineReducers({
   moves              : movesReducer,
   steps              : stepsReducer,
   markers            : markersReducer,
+  mdCodes            : mdCodesReducer,
+  mdSubCodes         : mdSubCodesReducer,
+  mdMarkers          : mdMarkersReducer,
   sentences          : sentencesReducer,
   document           : documentReducer,
   writingModelId     : writingModelIdReducer,

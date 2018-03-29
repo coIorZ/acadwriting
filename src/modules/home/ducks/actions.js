@@ -10,6 +10,9 @@ import {
   FETCH_MARKERS_PENDING, FETCH_MARKERS_SUCCESS, FETCH_MARKERS_FAIL,
   FETCH_STEPS_PENDING, FETCH_STEPS_SUCCESS, FETCH_STEPS_FAIL,
   FETCH_MOVES_PENDING, FETCH_MOVES_SUCCESS, FETCH_MOVES_FAIL,
+  FETCH_MDMARKERS_PENDING, FETCH_MDMARKERS_SUCESS, FETCH_MDMARKERS_FAIL,
+  FETCH_MDSUBCODES_PENDING, FETCH_MDSUBCODES_SUCESS, FETCH_MDSUBCODES_FAIL,
+  FETCH_MDCODES_PENDING, FETCH_MDCODES_SUCESS, FETCH_MDCODES_FAIL,
   FETCH_SCENTENCE_BY_MARKERID_PENDING, FETCH_SCENTENCE_BY_MARKERID_SUCCESS, FETCH_SCENTENCE_BY_MARKERID_FAIL,
   INPUT_DOCUMENT_TITLE, SET_DOCUMENT_BODY_BY_SECTIONID, SET_DOCUMENT_BODY,
   SET_WRITINGMODEL_ID, SET_SUBJECTAREA_ID, SET_SECTION_ID,
@@ -107,6 +110,48 @@ export const fetchMarkers = () => dispatch => {
     });
 };
 
+export const fetchMdCodesPending = createAction(FETCH_MDCODES_PENDING);
+export const fetchMdCodesSuccess = createAction(FETCH_MDCODES_SUCESS);
+export const fetchMdCodesFail = createAction(FETCH_MDCODES_FAIL);
+export const fetchMdCodes = () => dispatch => {
+  dispatch(fetchMdCodesPending());
+  axios.get('/api/mdCodes')
+    .then(({ data }) => {
+      dispatch(fetchMdCodesSuccess(data));
+    })
+    .catch(err => {
+      dispatch(fetchMdCodesFail(err));
+    });
+};
+
+export const fetchMdSubCodesPending = createAction(FETCH_MDSUBCODES_PENDING);
+export const fetchMdSubCodesSuccess = createAction(FETCH_MDSUBCODES_SUCESS);
+export const fetchMdSubCodesFail = createAction(FETCH_MDSUBCODES_FAIL);
+export const fetchMdSubCodes = () => dispatch => {
+  dispatch(fetchMdSubCodesPending());
+  axios.get('/api/mdSubCodes')
+    .then(({ data }) => {
+      dispatch(fetchMdSubCodesSuccess(data));
+    })
+    .catch(err => {
+      dispatch(fetchMdSubCodesFail(err));
+    });
+};
+
+export const fetchMdMarkersPending = createAction(FETCH_MDMARKERS_PENDING);
+export const fetchMdMarkersSuccess = createAction(FETCH_MDMARKERS_SUCESS);
+export const fetchMdMarkersFail = createAction(FETCH_MDMARKERS_FAIL);
+export const fetchMdMarkers = () => dispatch => {
+  dispatch(fetchMdMarkersPending());
+  axios.get('/api/mdMarkers')
+    .then(({ data }) => {
+      dispatch(fetchMdMarkersSuccess(data));
+    })
+    .catch(err => {
+      dispatch(fetchMdMarkersFail(err));
+    });
+};
+
 export const fetchSentencesByMarkerIdPending = createAction(FETCH_SCENTENCE_BY_MARKERID_PENDING);
 export const fetchSentencesByMarkerIdSuccess = createAction(FETCH_SCENTENCE_BY_MARKERID_SUCCESS);
 export const fetchSentencesByMarkerIdFail = createAction(FETCH_SCENTENCE_BY_MARKERID_FAIL);
@@ -194,7 +239,8 @@ export const clickStep = stepId => (dispatch, getState) => {
 };
 
 export default {
-  fetchWritingModels, fetchSubjectAreas, fetchSections, fetchMoves, fetchMarkers, fetchSteps, fetchSentencesByMarkerId,
+  fetchWritingModels, fetchSubjectAreas, fetchSections, fetchMoves, fetchMarkers, fetchSteps, 
+  fetchMdCodes, fetchMdSubCodes, fetchMdMarkers, fetchSentencesByMarkerId,
   inputDocumentTitle, inputDocumentBody, pasteDocumentBody,
   setWritingModelId, setSubjectAreaId, setSectionId, 
   setCurrentMoveId, setCurrentStepId, setCurrentMarkerId,
