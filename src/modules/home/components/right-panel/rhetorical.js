@@ -1,6 +1,8 @@
 import React, { Component } from 'react';
 import styled, { css } from 'styled-components';
 
+import shouldUpdate from '../../../../lib/shouldUpdate';
+
 const Container = styled.div`
   height: calc(100vh - 3rem);
   overflow: auto;
@@ -58,6 +60,13 @@ class Step extends Component {
     }
   }
 
+  shouldComponentUpdate(nextProps, nextState) {
+    return shouldUpdate([
+      'steps', 'markers', 'stepId',
+    ], this.props, nextProps)
+    || shouldUpdate('active', this.state, nextState);
+  }
+
   render() {
     const {
       steps = {},
@@ -111,6 +120,13 @@ class Move extends Component {
         active: true,
       }));
     }
+  }
+
+  shouldComponentUpdate(nextProps, nextState) {
+    return shouldUpdate([
+      'moves', 'steps', 'markers', 'moveId',
+    ], this.props, nextProps)
+    || shouldUpdate('active', this.state, nextState);
   }
 
   render() {

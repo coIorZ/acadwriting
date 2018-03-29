@@ -47,12 +47,16 @@ class Home extends Component {
         <LeftPanel {...this.props}/>
         <RightPanel {...this.props}/>
         {active && (
-          <PopUp {...this.props}>
+          <PopUp onClickMask={this.hidePopUp}>
             <Info {...this.props}/>
           </PopUp>
         )}
       </Container>
     );
+  }
+
+  hidePopUp = () => {
+    this.props.setPopUpActive(false);
   }
 }
 

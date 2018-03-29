@@ -1,6 +1,7 @@
 import React, { Component } from 'react';
 import styled, { css } from 'styled-components';
 
+import shouldUpdate from '../../../../lib/shouldUpdate';
 import Pagination from '../../../../components/pagination';
 
 const COUNT_PER_PAGE = 10;
@@ -54,6 +55,12 @@ const BreadcrumbItem = styled.div`
 `;
 
 class Breadcrumb extends Component {
+  shouldComponentUpdate(nextProps) {
+    return shouldUpdate([
+      'moves', 'currentMoveId', 'steps', 'currentStepId', 'markers', 'currentMarkerId',
+    ], this.props, nextProps);
+  }
+
   render() {
     const {
       moves, currentMoveId,
@@ -77,49 +84,56 @@ class Breadcrumb extends Component {
   }
 }
 
-class Sentence extends Component {
-  render() {
-    const {
-      sentence,
-    } = this.props;
-
-    const length = sentence.match.length;
-    const index = sentence.text.indexOf(sentence.match);
-
-    return (
-      <StyledSentence>
-        <NotMatch>{sentence.text.substring(0, index)}</NotMatch>
-        <Match>{sentence.match}</Match>
-        <NotMatch>{sentence.text.substr(index + length)}</NotMatch>
-      </StyledSentence>
-    );
-  }
-}
+const Sentence = ({ sentence }) => {
+  const length = sentence.match.length;
+  const index = sentence.text.indexOf(sentence.match);
+  return (
+    <StyledSentence>
+      <NotMatch>{sentence.text.substring(0, index)}</NotMatch>
+      <Match>{sentence.match}</Match>
+      <NotMatch>{sentence.text.substr(index + length)}</NotMatch>
+    </StyledSentence>
+  );
+};
 
 export default class Sentences extends Component {
   state = {
     currentIndex: 0,
   }
 
+  shouldComponentUpdate(nextProps, nextState) {
+    return shouldUpdate([
+      'moves', 'currentMoveId', 'steps', 'currentStepId', 'markers', 'currentMarkerId', 'sentences', 'sectionId', 'subjectAreaId',
+    ], this.props, nextProps) 
+      || shouldUpdate('currentIndex', this.state, nextState);
+  }
+
   render() {
     const {
       sentences,
       currentMarkerId,
+      sectionId,
+      subjectAreaId,
     } = this.props;
 
     const sentencesByMarkerId = sentences[currentMarkerId];
 
     if(!sentencesByMarkerId) return <div>loading sentences...</div>;
+
     const { currentIndex } = this.state;
-    const pageNum = Math.ceil(Object.keys(sentencesByMarkerId).length / COUNT_PER_PAGE);
+    const sentenceIds = Object.keys(sentencesByMarkerId).filter(sentenceId => {
+      const sentence = sentencesByMarkerId[sentenceId];
+      return sentence.sectionId === sectionId && sentence.subjectId === subjectAreaId;
+    });
+    const pageNum = Math.ceil(sentenceIds.length / COUNT_PER_PAGE);
 
     return (
       <Container>
         <Breadcrumb {...this.props}/>
         <SentenceGroup>
-          {Object.keys(sentencesByMarkerId).slice(currentIndex * COUNT_PER_PAGE, (currentIndex + 1) * COUNT_PER_PAGE).map(sentenceId => {
+          {sentenceIds.slice(currentIndex * COUNT_PER_PAGE, (currentIndex + 1) * COUNT_PER_PAGE).map(sentenceId => {
             const sentence = sentencesByMarkerId[sentenceId];
-            return <Sentence sentence={sentence}/>;
+            return <Sentence key={sentenceId} sentence={sentence}/>;
           })}
         </SentenceGroup>
         <PaginationContainer>

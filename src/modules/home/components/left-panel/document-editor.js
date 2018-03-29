@@ -1,6 +1,8 @@
 import React, { Component } from 'react';
 import styled from 'styled-components';
 
+import shouldUpdate from '../../../../lib/shouldUpdate';
+
 const Container = styled.div`
   position: relative;
   height: 100%;
@@ -37,6 +39,12 @@ const Placeholder = styled.div`
 `;
 
 export default class DocumentEditor extends Component {
+  shouldComponentUpdate(nextProps) {
+    return shouldUpdate([
+      'document', 'sectionId',
+    ], this.props, nextProps);
+  }
+
   render() {
     const {
       placeHolder = '',

@@ -1,6 +1,8 @@
 import React, { Component } from 'react';
 import styled, { css } from 'styled-components';
 
+import shouldUpdate from '../../../../lib/shouldUpdate';
+
 const Container = styled.div`
   display: flex;
   flex-direction: column;
@@ -29,6 +31,12 @@ const Switch = styled.div`
 `;
 
 export default class SectionSwitcher extends Component {
+  shouldComponentUpdate(nextProps) {
+    return shouldUpdate([
+      'sections', 'sectionId',
+    ], this.props, nextProps);
+  }
+
   render() {
     const {
       sections = {},

@@ -37,15 +37,11 @@ export default class PopUp extends Component {
   render() {
     return (
       <Container>
-        <Mask onClick={this.hidePopUp}/>
+        <Mask onClick={this.props.onClickMask}/>
         <Pop>
           {this.props.children}
         </Pop>
       </Container>
     );
-  }
-
-  hidePopUp = () => {
-    this.props.setPopUpActive(false);
   }
 }
