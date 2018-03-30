@@ -15,6 +15,7 @@ import {
   INPUT_DOCUMENT_TITLE, SET_DOCUMENT_BODY_BY_SECTIONID, SET_DOCUMENT_BODY,
   SET_WRITINGMODEL_ID, SET_SUBJECTAREA_ID, SET_SECTION_ID, 
   SET_CURRENT_MOVE_ID, SET_CURRENT_STEP_ID, SET_CURRENT_MARKER_ID,
+  SET_CURRENT_MDCODE_ID, SET_CURRENT_MDSUBCODE_ID, SET_CURRENT_MDMARKER_ID,
   SET_POPUP_ACTIVE,
   SET_ANALYSIS, SET_ANALYSIS_SENTENCE_ID, SET_ANALYSIS_FLAG,
   SET_GUIDE_FLAG,
@@ -154,9 +155,14 @@ const documentReducer = handleActions({
 const writingModelIdReducer = handleAction(SET_WRITINGMODEL_ID, (state, { payload }) => payload, -1);
 const subjectAreaIdReducer = handleAction(SET_SUBJECTAREA_ID, (state, { payload }) => payload, -1);
 const sectionIdReducer = handleAction(SET_SECTION_ID, (state, { payload }) => payload, -1);
+
 const currentMoveIdReducer = handleAction(SET_CURRENT_MOVE_ID, (state, { payload }) => payload, -1);
 const currentStepIdReducer = handleAction(SET_CURRENT_STEP_ID, (state, { payload }) => payload, -1);
 const currentMarkerIdReducer = handleAction(SET_CURRENT_MARKER_ID, (state, { payload }) => payload, -1);
+
+const currentMdCodeReducer = handleAction(SET_CURRENT_MDCODE_ID, (state, { payload }) => payload, -1);
+const currentMdSubCodeReducer = handleAction(SET_CURRENT_MDSUBCODE_ID, (state, { payload }) => payload, -1);
+const currentMdMarkerReducer = handleAction(SET_CURRENT_MDMARKER_ID, (state, { payload }) => payload, -1);
 
 const popUpActiveReducer = handleAction(SET_POPUP_ACTIVE, (state, { payload }) => payload, false);
 
@@ -185,6 +191,9 @@ export default combineReducers({
   currentMoveId      : currentMoveIdReducer,
   currentStepId      : currentStepIdReducer,
   currentMarkerId    : currentMarkerIdReducer,
+  currentMdCodeId    : currentMdCodeReducer,
+  currentMdSubCodeId : currentMdSubCodeReducer,
+  currentMdMarkerId  : currentMdMarkerReducer,
   popUpActive        : popUpActiveReducer,
   analysis           : analysisReducer,
   analysisSentenceId : analysisSentenceIdReducer,
