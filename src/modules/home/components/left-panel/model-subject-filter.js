@@ -86,6 +86,7 @@ export default class ModelSubjectFilter extends Component {
   clickModelItem = id => {
     this.props.setWritingModelId(id);
     this.props.setRightPanelTab(1);
+    this.props.setGuideFlag(1);
   }
   
   clickSubjectItem = id => {

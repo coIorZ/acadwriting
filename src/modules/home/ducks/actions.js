@@ -17,6 +17,7 @@ import {
   INPUT_DOCUMENT_TITLE, SET_DOCUMENT_BODY_BY_SECTIONID, SET_DOCUMENT_BODY,
   SET_WRITINGMODEL_ID, SET_SUBJECTAREA_ID, SET_SECTION_ID,
   SET_CURRENT_MOVE_ID, SET_CURRENT_STEP_ID, SET_CURRENT_MARKER_ID,
+  SET_CURRENT_MDCODE_ID, SET_CURRENT_MDSUBCODE_ID, SET_CURRENT_MDMARKER_ID,
   SET_POPUP_ACTIVE,
   SET_ANALYSIS, SET_ANALYSIS_SENTENCE_ID, SET_ANALYSIS_FLAG,
   SET_GUIDE_FLAG,
@@ -207,6 +208,10 @@ export const setCurrentMoveId = createAction(SET_CURRENT_MOVE_ID);
 export const setCurrentStepId = createAction(SET_CURRENT_STEP_ID);
 export const setCurrentMarkerId = createAction(SET_CURRENT_MARKER_ID);
 
+export const setCurrentMdCodeId = createAction(SET_CURRENT_MDCODE_ID);
+export const setCurrentMdSubCodeId = createAction(SET_CURRENT_MDSUBCODE_ID);
+export const setCurrentMdMarkerId = createAction(SET_CURRENT_MDMARKER_ID);
+
 export const startAnalysis = () => (dispatch, getState) => {
   if(!editor().text()) return;
   const { markers, moves, steps, document, sectionId } = getState();
@@ -244,6 +249,7 @@ export default {
   inputDocumentTitle, inputDocumentBody, pasteDocumentBody,
   setWritingModelId, setSubjectAreaId, setSectionId, 
   setCurrentMoveId, setCurrentStepId, setCurrentMarkerId,
+  setCurrentMdCodeId, setCurrentMdSubCodeId, setCurrentMdMarkerId,
   startAnalysis,
   clickEditor, clickStep,
   setPopUpActive,
