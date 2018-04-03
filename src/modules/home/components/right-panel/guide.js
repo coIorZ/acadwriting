@@ -11,7 +11,7 @@ export default class guide extends Component {
 
     if (guideFlag == 2) return (<Sentences {...sProps(this.props, 'sentences', 'sectionId', 'subjectAreaId', 'moves', 'currentMoveId', 'steps', 'currentStepId', 'markers', 'currentMarkerId')}/>);
     if (writingModelId == 1) return (<Rhetorical {...sProps(this.props, 'moves', 'steps', 'markers', 'sentences', 'currentMoveId', 'currentStepId', 'sectionId')}/>);
-    if (writingModelId == 3) return (<Metadiscourse {...sProps(this.props, 'mdCodes', 'mdSubCodes', 'mdMarkers')}/>);
+    if (writingModelId == 3) return (<Metadiscourse {...sProps(this.props, 'mdCodes', 'mdSubCodes', 'mdMarkers', 'currentMdCodeId', 'currentMdSubCodeId', 'setCurrentMdMarkerId')}/>);
     return null;
   }
 }

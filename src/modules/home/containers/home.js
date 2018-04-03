@@ -5,6 +5,8 @@ import styled from 'styled-components';
 import { sProps } from '../../../lib/utils';
 import LeftPanel from '../components/left-panel';
 import RightPanel from '../components/right-panel';
+import PopUp from '../../../components/pop-up';
+import Info from '../components/left-panel/info';
 
 const Container = styled.div`
   display: grid;
@@ -14,9 +16,7 @@ const Container = styled.div`
 
 class Home extends Component {
   componentDidMount() {
-    this.props.dispatch({
-      type: 'home/fetchAtInit',
-    });
+    this.props.dispatch({ type: 'home/fetchAtInit' });
   }
 
   render() {
@@ -25,13 +25,18 @@ class Home extends Component {
     return (
       <Container>
         <LeftPanel {...sProps(this.props, 'sections', 'sectionId', 'writingModels', 'writingModelId', 'subjectAreas', 'subjectAreaId', 'document')}/>
-        <RightPanel {...sProps(this.props, 'rightPanelTab', 'guideFlag', 'writingModelId', 'sentences', 'sectionId', 'subjectAreaId', 'moves', 'currentMoveId', 'steps', 'currentStepId', 'markers', 'currentMarkerId', 'mdCodes', 'mdSubCodes', 'mdMarkers', 'analysisFlag', 'analysis', 'analysisSentenceId')}/>
+        <RightPanel {...sProps(this.props, 'rightPanelTab', 'guideFlag', 'writingModelId', 'sentences', 'sectionId', 'subjectAreaId', 'moves', 'currentMoveId', 'steps', 'currentStepId', 'markers', 'currentMarkerId', 'mdCodes', 'mdSubCodes', 'mdMarkers', 'analysisFlag', 'analysis', 'analysisSentenceId', 'currentMdCodeId', 'currentMdSubCodeId', 'currentMdMarkerId')}/>
+        {active && (
+          <PopUp onClickMask={this.hidePopUp}>
+            <Info {...sProps(this.props, 'sections', 'sectionId')}/>
+          </PopUp>
+        )}
       </Container>
     );
   }
 
   hidePopUp = () => {
-    this.props.setPopUpActive(false);
+    this.props.dispatch({ type: 'home/savePopUpActive', payload: false });
   }
 }
 

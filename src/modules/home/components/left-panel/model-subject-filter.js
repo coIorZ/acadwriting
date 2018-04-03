@@ -73,6 +73,7 @@ export default class ModelSubjectFilter extends Component {
   clickModelItem = id => {
     this.props.dispatch({ type: 'home/saveWritingModelId', payload: id });
     this.props.dispatch({ type: 'home/saveRightPanelTab', payload: 1 });
+    this.props.dispatch({ type: 'home/saveGuideFlag', payload: 1 });
   }
   
   clickSubjectItem = id => {

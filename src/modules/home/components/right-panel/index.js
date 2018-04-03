@@ -21,7 +21,7 @@ export default class FunctionPanel extends Component {
     return (
       <Container>
         <Switcher {...sProps(this.props, 'rightPanelTab')}/>
-        {tab === 1 && <Guide {...sProps(this.props, 'guideFlag', 'writingModelId', 'sentences', 'sectionId', 'subjectAreaId', 'moves', 'currentMoveId', 'steps', 'currentStepId', 'markers', 'currentMarkerId', 'mdCodes', 'mdSubCodes', 'mdMarkers')}/>}
+        {tab === 1 && <Guide {...sProps(this.props, 'guideFlag', 'writingModelId', 'sentences', 'sectionId', 'subjectAreaId', 'moves', 'currentMoveId', 'steps', 'currentStepId', 'markers', 'currentMarkerId', 'mdCodes', 'mdSubCodes', 'mdMarkers', 'currentMdCodeId', 'currentMdSubCodeId', 'currentMdMarkerId')}/>}
         {tab === 2 && <Analysis {...sProps(this.props, 'analysisFlag', 'analysis', 'moves', 'steps', 'markers', 'sectionId', 'analysisSentenceId')}/>}
       </Container>
     );
