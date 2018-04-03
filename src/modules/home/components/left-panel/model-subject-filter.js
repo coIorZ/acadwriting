@@ -1,8 +1,6 @@
 import React, { Component } from 'react';
 import styled, { css } from 'styled-components';
 
-import shouldUpdate from '../../../../lib/shouldUpdate';
-
 const Container = styled.div`
   font-size: .9rem;
   padding: .5rem 0 .5rem 2rem;
@@ -51,19 +49,8 @@ const Filter = ({ label = '', items = {}, activeId = -1, onClick }) => (
 );
 
 export default class ModelSubjectFilter extends Component {
-  shouldComponentUpdate(nextProps) {
-    return shouldUpdate([
-      'writingModelId', 'writingModels', 'subjectAreas', 'subjectAreaId',
-    ], this.props, nextProps);
-  }
-
   render() {
-    const {
-      writingModels = {},
-      writingModelId = -1,
-      subjectAreas = {},
-      subjectAreaId = -1,
-    } = this.props;
+    const { writingModels, writingModelId, subjectAreas, subjectAreaId } = this.props;
 
     return (
       <Container>
@@ -84,11 +71,11 @@ export default class ModelSubjectFilter extends Component {
   }
 
   clickModelItem = id => {
-    this.props.setWritingModelId(id);
-    this.props.setRightPanelTab(1);
+    this.props.dispatch({ type: 'home/saveWritingModelId', payload: id });
+    this.props.dispatch({ type: 'home/saveRightPanelTab', payload: 1 });
   }
   
   clickSubjectItem = id => {
-    this.props.setSubjectAreaId(id);
+    this.props.dispatch({ type: 'home/saveSubjectAreaId', payload: id });
   }
 }

@@ -1,8 +1,12 @@
 import React, { Component } from 'react';
-
 import styled from 'styled-components';
 
-const Container = styled.div``;
+import { sProps } from '../../../../lib/utils';
+
+const Container = styled.div`
+  height: calc(100vh - 3rem);
+  overflow: auto;
+`;
 
 const MdCodeGroup = styled.div``;
 
@@ -41,7 +45,7 @@ class MdSubCode extends Component {
         <MdSubCodeLabel>{mdSubCode.label}</MdSubCodeLabel>
         <MdMarkerGroup>
           {Object.keys(mdSubCodes).map(mdMarkerId => (
-            <MdMarker mdMarkerId={mdMarkerId} mdMarkers={mdMarkers}/>
+            <MdMarker key={mdMarkerId} mdMarkerId={mdMarkerId} mdMarkers={mdMarkers}/>
           ))}
         </MdMarkerGroup>
       </StyledMdSubCode>
@@ -63,7 +67,7 @@ class MdCode extends Component {
         <MdCodeLabel>{mdCode.label}</MdCodeLabel>
         <MdSubCodeGroup>
           {Object.keys(mdCode.mdSubCodes).map(mdSubCodeId => (
-            <MdSubCode mdSubCodeId={mdSubCodeId} {...this.props}/>
+            <MdSubCode key={mdSubCodeId} mdSubCodeId={mdSubCodeId} {...sProps(this.props, 'mdSubCodes', 'mdMarkers')}/>
           ))}
         </MdSubCodeGroup>
       </StyledMdCode>
@@ -81,7 +85,7 @@ export default class Metadiscourse extends Component {
       <Container>
         <MdCodeGroup>
           {Object.keys(mdCodes).map(mdCodeId => (
-            <MdCode mdCodeId={mdCodeId} {...this.props}/>
+            <MdCode key={mdCodeId} mdCodeId={mdCodeId} {...sProps(this.props, 'mdCodes', 'mdSubCodes', 'mdMarkers')}/>
           ))}
         </MdCodeGroup>
       </Container>

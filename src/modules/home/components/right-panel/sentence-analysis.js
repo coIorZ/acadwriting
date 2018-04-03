@@ -1,7 +1,6 @@
 import React, { Component } from 'react';
 import styled, { css } from 'styled-components';
 
-import shouldUpdate from '../../../../lib/shouldUpdate';
 import { LinkButton } from '../../../../components/button';
 
 const Container = styled.div`
@@ -30,12 +29,6 @@ const Match = ({ matched, moves, steps, markers }) => {
 };
 
 export default class SentenceAnalysis extends Component {
-  shouldComponentUpdate(nextProps) {
-    return shouldUpdate([
-      'analysisSentenceId', 'analysis', 'sectionId', 'moves', 'steps', 'markers',
-    ], this.props, nextProps);
-  }
-
   render() {
     const {
       analysisSentenceId,
@@ -71,6 +64,6 @@ export default class SentenceAnalysis extends Component {
   }
 
   back = () => {
-    this.props.setAnalysisFlag(1);
+    this.props.dispatch({ type: 'home/saveAnalysisFlag', payload: 1 });
   }
 }

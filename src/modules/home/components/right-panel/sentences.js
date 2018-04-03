@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
 import styled, { css } from 'styled-components';
 
-import shouldUpdate from '../../../../lib/shouldUpdate';
+import { sProps } from '../../../../lib/utils';
 import Pagination from '../../../../components/pagination';
 
 const COUNT_PER_PAGE = 10;
@@ -55,12 +55,6 @@ const BreadcrumbItem = styled.div`
 `;
 
 class Breadcrumb extends Component {
-  shouldComponentUpdate(nextProps) {
-    return shouldUpdate([
-      'moves', 'currentMoveId', 'steps', 'currentStepId', 'markers', 'currentMarkerId',
-    ], this.props, nextProps);
-  }
-
   render() {
     const {
       moves, currentMoveId,
@@ -80,7 +74,7 @@ class Breadcrumb extends Component {
   }
 
   back = () => {
-    this.props.setGuideFlag(1);
+    this.props.dispatch({ type: 'home/saveGuideFlag', payload: 1 });
   }
 }
 
@@ -99,13 +93,6 @@ const Sentence = ({ sentence }) => {
 export default class Sentences extends Component {
   state = {
     currentIndex: 0,
-  }
-
-  shouldComponentUpdate(nextProps, nextState) {
-    return shouldUpdate([
-      'moves', 'currentMoveId', 'steps', 'currentStepId', 'markers', 'currentMarkerId', 'sentences', 'sectionId', 'subjectAreaId',
-    ], this.props, nextProps) 
-      || shouldUpdate('currentIndex', this.state, nextState);
   }
 
   render() {
@@ -129,7 +116,7 @@ export default class Sentences extends Component {
 
     return (
       <Container>
-        <Breadcrumb {...this.props}/>
+        <Breadcrumb {...sProps(this.props, 'moves', 'currentMoveId', 'steps', 'currentStepId', 'markers', 'currentMarkerId')}/>
         <SentenceGroup>
           {sentenceIds.slice(currentIndex * COUNT_PER_PAGE, (currentIndex + 1) * COUNT_PER_PAGE).map(sentenceId => {
             const sentence = sentencesByMarkerId[sentenceId];

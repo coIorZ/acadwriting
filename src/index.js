@@ -1,13 +1,8 @@
-import React from 'react';
-import ReactDOM from 'react-dom';
-import { Provider } from 'react-redux';
+import Kar98k from '98k';
 
-import store from './store';
-import routes from './routes';
+import home from './modules/home';
 
-ReactDOM.render(
-  <Provider store={store}>
-    {routes}
-  </Provider>,
-  document.querySelector('#app'),
-);
+const app = Kar98k();
+
+app.module(home)
+  .start('#app');

@@ -1,6 +1,7 @@
 import React, { Component } from 'react';
 import styled, { css } from 'styled-components';
 
+import { sProps } from '../../../../lib/utils';
 import Switcher from './switcher';
 import Analysis from './analysis';
 import Guide from './guide';
@@ -19,9 +20,9 @@ export default class FunctionPanel extends Component {
 
     return (
       <Container>
-        <Switcher {...this.props}/>
-        {tab === 1 && <Guide {...this.props}/>}
-        {tab === 2 && <Analysis {...this.props}/>}
+        <Switcher {...sProps(this.props, 'rightPanelTab')}/>
+        {tab === 1 && <Guide {...sProps(this.props, 'guideFlag', 'writingModelId', 'sentences', 'sectionId', 'subjectAreaId', 'moves', 'currentMoveId', 'steps', 'currentStepId', 'markers', 'currentMarkerId', 'mdCodes', 'mdSubCodes', 'mdMarkers')}/>}
+        {tab === 2 && <Analysis {...sProps(this.props, 'analysisFlag', 'analysis', 'moves', 'steps', 'markers', 'sectionId', 'analysisSentenceId')}/>}
       </Container>
     );
   }

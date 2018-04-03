@@ -1,8 +1,6 @@
 import React, { Component } from 'react';
 import styled, { css } from 'styled-components';
 
-import shouldUpdate from '../../../../lib/shouldUpdate';
-
 const Container = styled.div`
   border-bottom:  1px solid #f4f5f7;
   display:  flex;
@@ -38,10 +36,6 @@ const Switch = ({ label, onClick, active }) => (
 );
 
 export default class Switcher extends Component {
-  shouldComponentUpdate(nextProps) {
-    return shouldUpdate('rightPanelTab', this.props, nextProps);
-  }
-
   render() {
     const { rightPanelTab: tab } = this.props;
     return (
@@ -61,6 +55,6 @@ export default class Switcher extends Component {
   }
 
   showPanel = val => {
-    this.props.setRightPanelTab(val);
+    this.props.dispatch({ type: 'home/saveRightPanelTab', payload: val });
   }
 }

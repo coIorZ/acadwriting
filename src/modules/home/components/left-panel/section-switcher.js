@@ -1,8 +1,6 @@
 import React, { Component } from 'react';
 import styled, { css } from 'styled-components';
 
-import shouldUpdate from '../../../../lib/shouldUpdate';
-
 const Container = styled.div`
   display: flex;
   flex-direction: column;
@@ -31,16 +29,9 @@ const Switch = styled.div`
 `;
 
 export default class SectionSwitcher extends Component {
-  shouldComponentUpdate(nextProps) {
-    return shouldUpdate([
-      'sections', 'sectionId',
-    ], this.props, nextProps);
-  }
-
   render() {
     const {
-      sections = {},
-      sectionId,
+      sections, sectionId,
     } = this.props;
 
     return (
@@ -62,11 +53,11 @@ export default class SectionSwitcher extends Component {
     );
   }
 
-  setSection = val => {
-    this.props.setSectionId(val);
+  setSection = id => {
+    this.props.dispatch({ type: 'home/switchSection', payload: id });
   }
 
   showPopUp = () => {
-    this.props.setPopUpActive(true);
+    this.props.dispatch({ type: 'home/savePopUpActive', payload: true });
   }
 }

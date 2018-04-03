@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
 import styled, { css } from 'styled-components';
 
-import shouldUpdate from '../../../../lib/shouldUpdate';
+import { sProps } from '../../../../lib/utils';
 
 const Container = styled.div`
   height: calc(100vh - 3rem);
@@ -60,13 +60,6 @@ class Step extends Component {
     }
   }
 
-  shouldComponentUpdate(nextProps, nextState) {
-    return shouldUpdate([
-      'steps', 'markers', 'stepId',
-    ], this.props, nextProps)
-    || shouldUpdate('active', this.state, nextState);
-  }
-
   render() {
     const {
       steps = {},
@@ -84,7 +77,7 @@ class Step extends Component {
         {active && (
           <MarkerGroup>
             {Object.keys(step.markers).map(markerId => (
-              <Marker stepId={stepId} markerId={markerId} markers={markers} onClick={this.onClickMarker}/>
+              <Marker key={markerId} stepId={stepId} markerId={markerId} markers={markers} onClick={this.onClickMarker}/>
             ))}
           </MarkerGroup>
         )}
@@ -99,12 +92,12 @@ class Step extends Component {
   }
 
   onClickMarker = (stepId, markerId) => {
-    this.props.setGuideFlag(2);
-    this.props.setCurrentMarkerId(markerId);
-    this.props.setCurrentMoveId(this.props.steps[stepId].moveId);
-    this.props.setCurrentStepId(stepId);
+    this.props.dispatch({ type: 'home/saveGuideFlag', payload: 2 });
+    this.props.dispatch({ type: 'home/saveCurrentMarkerId', payload: markerId });
+    this.props.dispatch({ type: 'home/saveCurrentMoveId', payload: this.props.steps[stepId].moveId });
+    this.props.dispatch({ type: 'home/saveCurrentStepId', payload: stepId });
     if(!this.props.sentences[markerId]) {
-      this.props.fetchSentencesByMarkerId(markerId);
+      this.props.dispatch({ type: 'home/fetchSentencesByMarkerId', payload: markerId });
     }
   }
 }
@@ -120,13 +113,6 @@ class Move extends Component {
         active: true,
       }));
     }
-  }
-
-  shouldComponentUpdate(nextProps, nextState) {
-    return shouldUpdate([
-      'moves', 'steps', 'markers', 'moveId',
-    ], this.props, nextProps)
-    || shouldUpdate('active', this.state, nextState);
   }
 
   render() {
@@ -145,7 +131,7 @@ class Move extends Component {
         {active && ( 
           <StepGroup>
             {Object.keys(move.steps).map(stepId => (
-              <Step stepId={stepId} {...this.props}/>
+              <Step key={stepId} stepId={stepId} {...sProps(this.props, 'steps', 'markers', 'sentences', 'currentStepId')}/>
             ))}
           </StepGroup>
         )}
@@ -171,7 +157,7 @@ export default class Rhetorical extends Component {
       <Container>
         <MoveGroup>
           {Object.keys(moves).filter(moveId => moves[moveId].sectionId == sectionId).map(moveId => ( 
-            <Move moveId={moveId} {...this.props}/>
+            <Move key={moveId} moveId={moveId} {...sProps(this.props, 'moves', 'steps', 'markers', 'sentences', 'currentMoveId', 'currentStepId')}/>
           ))}
         </MoveGroup>
       </Container>

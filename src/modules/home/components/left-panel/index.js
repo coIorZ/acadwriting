@@ -1,6 +1,7 @@
 import React, { Component } from 'react';
 import styled from 'styled-components';
 
+import { sProps } from '../../../../lib/utils';
 import Button from '../../../../components/button';
 import ModelSubjectFilter from './model-subject-filter';
 import DocumentEditor from './document-editor';
@@ -41,14 +42,9 @@ const BtnContainer = styled.div`
 `;
 
 export default class WritingPanel extends Component {
-  componentDidMount() {
-    this.props.fetchSections();
-  }
-
   render() {
     const {
-      sections = {},
-      sectionId,
+      sections, sectionId,
     } = this.props;
 
     const section = sections[sectionId];
@@ -60,13 +56,13 @@ export default class WritingPanel extends Component {
             <img src={require('../../../../images/NTU-logo-full-colour.png')}/>
           </Logo>
         </Header>
-        <ModelSubjectFilter {...this.props}/>
-        <SectionSwitcher {...this.props}/>
+        <ModelSubjectFilter {...sProps(this.props, 'writingModels', 'writingModelId', 'subjectAreas', 'subjectAreaId')}/>
+        <SectionSwitcher {...sProps(this.props, 'sections', 'sectionId')}/>
         <DocumentWrapper>
           {section && (
             <DocumentEditor
               placeHolder={`Type or paste your ${section.text} here.`}
-              {...this.props}
+              {...sProps(this.props, 'document', 'sectionId')}
             />
           )}
         </DocumentWrapper>
@@ -77,11 +73,7 @@ export default class WritingPanel extends Component {
     );
   }
 
-  inputTitle = e => {
-    this.props.inputDocumentTitle(e.target.value);
-  }
-
   startAnalysis = () => {
-    this.props.startAnalysis();
+    this.props.dispatch({ type: 'home/startAnalysis' });
   }
 }

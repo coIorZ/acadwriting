@@ -1,8 +1,6 @@
 import React, { Component } from 'react';
 import styled, { css } from 'styled-components';
 
-import shouldUpdate from '../../../../lib/shouldUpdate';
-
 const Container = styled.div`
   height: calc(100vh - 3rem);
   overflow: auto;
@@ -109,12 +107,6 @@ class Move extends Component {
 }
 
 export default class OverviewAnalysis extends Component {
-  shouldComponentUpdate(nextProps) {
-    return shouldUpdate([
-      'moves', 'steps', 'analysis', 'sectionId',
-    ], this.props, nextProps);
-  }
-
   render() {
     const {
       moves = {},
@@ -156,6 +148,6 @@ export default class OverviewAnalysis extends Component {
   }
 
   clickStep = id => {
-    this.props.clickStep(id);
+    this.props.dispatch({ type: 'home/clickAnalysisStep', payload: id });
   }
 }

@@ -192,6 +192,16 @@ function generateCrazyWord() {
   return crazyWord.join("");           //return the array as a string separated by no characters.
 }
 
+function sProps(props, ...keys) {
+  let ret = {};
+  keys.forEach(key => {
+    ret[key] = props[key];
+  });
+  ret.dispatch = props.dispatch;
+  return ret;
+}
+
 export {
   splitToSentences,
+  sProps,
 };

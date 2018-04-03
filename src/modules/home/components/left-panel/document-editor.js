@@ -1,8 +1,6 @@
 import React, { Component } from 'react';
 import styled from 'styled-components';
 
-import shouldUpdate from '../../../../lib/shouldUpdate';
-
 const Container = styled.div`
   position: relative;
   height: 100%;
@@ -39,17 +37,9 @@ const Placeholder = styled.div`
 `;
 
 export default class DocumentEditor extends Component {
-  shouldComponentUpdate(nextProps) {
-    return shouldUpdate([
-      'document', 'sectionId',
-    ], this.props, nextProps);
-  }
-
   render() {
     const {
-      placeHolder = '',
-      document = {},
-      sectionId,
+      placeHolder = '', document, sectionId,
     } = this.props;
 
     const input = document.body[sectionId];
@@ -74,14 +64,14 @@ export default class DocumentEditor extends Component {
   }
 
   inputText = () => {
-    this.props.inputDocumentBody();
+    this.props.dispatch({ type: 'home/inputDocumentBody' });
   }
 
   pasteText = e => {
-    this.props.pasteDocumentBody(e);
+    this.props.dispatch({ type: 'home/pasteDocumentBody', payload: e });
   }
 
   clickEditor = e => {
-    this.props.clickEditor(e);
+    this.props.dispatch({ type: 'home/clickEditor', payload: e });
   }
 }
