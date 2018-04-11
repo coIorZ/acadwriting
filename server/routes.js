@@ -177,16 +177,11 @@ router.get('/mdMarkers', asyncWrap(async (req, res) => {
 
 router.get('/rsTypes', asyncWrap(async (req, res) => {
   let result = await RsTypes.findAll({
-    include: [{
-      model   : RsSteps,
-      as      : 'rsSteps',
-      include : [{
-        model   : RsMarkers,
-        as      : 'rsMarkers',
-        through : {
-          attributes: [],
-        },
-      }],
+    attributes : ['id', 'label', 'sectionId'],
+    include    : [{
+      model      : RsSteps,
+      as         : 'rsSteps',
+      attributes : ['id'],
     }],
   });
   result = result.reduce((acc, type) => {
@@ -195,19 +190,41 @@ router.get('/rsTypes', asyncWrap(async (req, res) => {
       id,
       label,
       sectionId,
-      rsSteps: rsSteps.reduce((a, step) => {
-        const { id, label, rsTypeId, rsMarkers } = step;
-        a[id] = {
-          id,
-          label,
-          rsTypeId,
-          rsMarkers: normalize()(rsMarkers),
-        };
-        return a;
-      }, {}),
+      rsSteps: normalize()(rsSteps),
     };
     return acc;
   }, {});
+  res.status(200).json(result);
+}));
+
+router.get('/rsSteps', asyncWrap(async (req, res) => {
+  let result = await RsSteps.findAll({
+    attributes : ['id', 'label', 'rsTypeId'],
+    include    : [{
+      model      : RsMarkers,
+      as         : 'rsMarkers',
+      attributes : ['id'],
+      through    : {
+        attributes: [],
+      },
+    }],
+  });
+  result = result.reduce((acc, type) => {
+    const { id, label, rsTypeId, rsMarkers } = type;
+    acc[id] = {
+      id,
+      label,
+      rsTypeId,
+      rsMarkers: normalize()(rsMarkers),
+    };
+    return acc;
+  }, {});
+  res.status(200).json(result);
+}));
+
+router.get('/rsMarkers', asyncWrap(async (req, res) => {
+  let result = await RsMarkers.findAll();
+  result = normalize()(result);
   res.status(200).json(result);
 }));
 
