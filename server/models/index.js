@@ -12,6 +12,7 @@ import MdMarkers from './md-markers';
 import RsTypes from './rs-types';
 import RsSteps from './rs-steps';
 import RsMarkers from './rs-markers';
+import RsSentences from './rs-sentences';
 
 Moves.hasMany(Steps, {
   as         : 'steps',
@@ -79,6 +80,18 @@ RsMarkers.belongsToMany(RsSteps, {
   foreignKey : 'marker_id',
 });
 
+RsSentences.belongsToMany(RsMarkers, {
+  through    : 'Research_Example',
+  as         : 'markers',
+  foreignKey : 'sentence_id',
+});
+
+RsMarkers.belongsToMany(RsSentences, {
+  through    : 'Research_Example',
+  as         : 'sentences',
+  foreignKey : 'strategy_id',
+});
+
 sequelize.sync();
 
 export {
@@ -95,4 +108,5 @@ export {
   RsTypes,
   RsSteps,
   RsMarkers,
+  RsSentences,
 };
