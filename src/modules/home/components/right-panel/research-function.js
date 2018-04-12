@@ -1,53 +1,128 @@
 import React, { Component } from 'react';
+import { connect } from '98k';
 import styled from 'styled-components';
 
-const Container = styled.div``;
+const Container = styled.div`
+  height: calc(100vh - 3rem);
+  overflow: auto;
+`;
 
-const RsTypeGroup = styled.div``;
+const RsTypeGroup = styled.div`
+  padding: 0 2rem;
+`;
 
-const StyledRsType = styled.div``;
+const StyledRsType = styled.div`
+  padding: .5rem;
+  margin: .5rem 0;
+`;
 
-const RsTypeLabel = styled.span``;
+const RsTypeLabel = styled.span`
+  cursor: pointer;
+`;
 
-const RsStepGroup = styled.div``;
+const RsStepGroup = styled.div`
+  padding-left: 2rem;
+`;
 
-const StyledRsStep = styled.div``;
+const StyledRsStep = styled.div`
+  margin: .2rem 0;
+`;
 
-const RsStepLabel = styled.div``;
+const RsStepLabel = styled.div`
+  cursor: pointer;
+`;
 
-const RsMarkerGroup = styled.div``;
+const RsMarkerGroup = styled.div`
+  padding-left: 2rem;
+`;
 
-const StyledRsMarker = styled.div``;
+const StyledRsMarker = styled.div`
+  cursor: pointer;
+`;
 
-const RsMarker = ({ rsMarkers , rsMarkerId }) => {
+const RsMarker = ({ rsMarkers, rsStepId, rsMarkerId, onClick }) => {
   return rsMarkers[rsMarkerId] ? (
-    <StyledRsMarker>{rsMarkers[rsMarkerId].label}</StyledRsMarker>
+    <StyledRsMarker onClick={onClick.bind(this, rsStepId, rsMarkerId)}>{rsMarkers[rsMarkerId].label}</StyledRsMarker>
   ) : <div>loading rsMarker...</div>;
 };
 
 class RsStep extends Component {
+  state = {
+    active: false,
+  }
+
   render() {
     const {
       rsSteps = {},
       rsStepId,
+      rsMarkers,
     } = this.props;
 
     const rsStep = rsSteps[rsStepId];
 
+    const { active } = this.state;
+
     return rsStep ? (
       <StyledRsStep>
-        <RsStepLabel>{rsStep.label}</RsStepLabel>
-        <RsMarkerGroup>
-          {Object.keys(rsStep.rsMarkers).map(rsMarkerId => (
-            <RsMarker key={rsMarkerId} rsMarkerId={rsMarkerId} {...this.props}/>
-          ))}
-        </RsMarkerGroup>
+        <RsStepLabel onClick={this.toggleStep}>{rsStep.label}</RsStepLabel>
+        {active && (
+          <RsMarkerGroup>
+            {Object.keys(rsStep.rsMarkers).map(rsMarkerId => (
+              <RsMarker key={rsMarkerId} rsMarkers={rsMarkers} rsStepId={rsStepId} rsMarkerId={rsMarkerId} onClick={this.onClickMarker}/>
+            ))}
+          </RsMarkerGroup>
+        )}
       </StyledRsStep>
     ) : <div>loading rsStep...</div>;
+  }
+
+  toggleStep = () => {
+    this.setState(prev => ({
+      active: !prev.active,
+    }));
+    const { rsSteps, rsStepId } = this.props;
+    if(!Object.keys(rsSteps[rsStepId].rsMarkers).length) {
+      this.props.dispatch({ type: 'home/saveGuideFlag', payload: 2 });
+      this.props.dispatch({ type: 'home/saveCurrentRsTypeId', payload: this.props.rsSteps[rsStepId].rsTypeId });
+      this.props.dispatch({ type: 'home/saveCurrentRsStepId', payload: rsStepId });
+      this.props.dispatch({ type: 'home/saveCurrentRsMarkerId', payload: -1 });
+      if(!this.props.rsSentences.step[rsStepId]) {
+        this.props.dispatch({ type: 'home/fetchRsSentencesByStepId', payload: rsStepId });
+      }
+    }
+  }
+
+  onClickMarker = (rsStepId, rsMarkerId) => {
+    this.props.dispatch({ type: 'home/saveGuideFlag', payload: 2 });
+    this.props.dispatch({ type: 'home/saveCurrentRsMarkerId', payload: rsMarkerId });
+    this.props.dispatch({ type: 'home/saveCurrentRsTypeId', payload: this.props.rsSteps[rsStepId].rsTypeId });
+    this.props.dispatch({ type: 'home/saveCurrentRsStepId', payload: rsStepId });
+    if(!this.props.rsSentences.marker[rsMarkerId]) {
+      this.props.dispatch({ 
+        type    : 'home/fetchRsSentencesByMarker',
+        payload : { 
+          stepId   : rsStepId, 
+          markerId : rsMarkerId,
+          marker   : this.props.rsMarkers[rsMarkerId].label, 
+        }, 
+      });
+    }
   }
 }
 
 class RsType extends Component {
+  state = {
+    active: false,
+  }
+
+  componentDidMount() {
+    if(this.props.currentRsTypeId == this.props.rsTypeId) {
+      this.setState(() => ({
+        active: true,
+      }));
+    }
+  }
+
   render() {
     const {
       rsTypes = {},
@@ -56,20 +131,30 @@ class RsType extends Component {
 
     const rsType = rsTypes[rsTypeId];
 
+    const { active } = this.state;
+
     return rsType ? (
       <StyledRsType>
-        <RsTypeLabel>{rsType.label}</RsTypeLabel>
-        <RsStepGroup>
-          {Object.keys(rsType.rsSteps).map(rsStepId => (
-            <RsStep key={rsStepId} rsStepId={rsStepId} {...this.props}/>
-          ))}
-        </RsStepGroup>
+        <RsTypeLabel onClick={this.toggleType}>{rsType.label}</RsTypeLabel>
+        {active && (
+          <RsStepGroup>
+            {Object.keys(rsType.rsSteps).map(rsStepId => (
+              <RsStep key={rsStepId} rsStepId={rsStepId} {...this.props}/>
+            ))}
+          </RsStepGroup>
+        )}
       </StyledRsType>
     ) : <div>loading rsType...</div>;
   }
+
+  toggleType = () => {
+    this.setState(prev => ({
+      active: !prev.active,
+    }));
+  }
 }
 
-export default class Rsfunc extends Component {
+class Rsfunc extends Component {
   render() {
     const {
       rsTypes = {},
@@ -86,3 +171,7 @@ export default class Rsfunc extends Component {
     );
   }
 }
+
+export default connect(({ home: { rsTypes, rsSteps, rsMarkers, currentRsTypeId, currentRsStepId, currentRsMarkerId, sectionId, rsSentences } }) => ({
+  rsTypes, rsSteps, rsMarkers, currentRsTypeId, currentRsStepId, currentRsMarkerId, sectionId, rsSentences,
+}))(Rsfunc);

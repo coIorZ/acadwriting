@@ -1,7 +1,6 @@
 import React, { Component } from 'react';
+import { connect } from '98k';
 import styled, { css } from 'styled-components';
-
-import { sProps } from '../../../../lib/utils';
 
 const Container = styled.div`
   height: calc(100vh - 3rem);
@@ -131,7 +130,7 @@ class Move extends Component {
         {active && ( 
           <StepGroup>
             {Object.keys(move.steps).map(stepId => (
-              <Step key={stepId} stepId={stepId} {...sProps(this.props, 'steps', 'markers', 'sentences', 'currentStepId')}/>
+              <Step key={stepId} stepId={stepId} {...this.props}/>
             ))}
           </StepGroup>
         )}
@@ -146,7 +145,7 @@ class Move extends Component {
   }
 }
 
-export default class Rhetorical extends Component {
+class Rhetorical extends Component {
   render() {
     const {
       moves = {},
@@ -157,10 +156,14 @@ export default class Rhetorical extends Component {
       <Container>
         <MoveGroup>
           {Object.keys(moves).filter(moveId => moves[moveId].sectionId == sectionId).map(moveId => ( 
-            <Move key={moveId} moveId={moveId} {...sProps(this.props, 'moves', 'steps', 'markers', 'sentences', 'currentMoveId', 'currentStepId')}/>
+            <Move key={moveId} moveId={moveId} {...this.props}/>
           ))}
         </MoveGroup>
       </Container>
     );
   }
 }
+
+export default connect(({ home: { moves, steps, markers, sentences, currentMoveId, currentStepId, sectionId } }) => ({
+  moves, steps, markers, sentences, currentMoveId, currentStepId, sectionId, 
+}))(Rhetorical);

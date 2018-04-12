@@ -11,29 +11,34 @@ export default {
     moves         : {},
     steps         : {},
     markers       : {},
+    sentences     : {},
     mdCodes       : {},
     mdSubCodes    : {},
     mdMarkers     : {},
-    sentences     : {},
+    mdSentences   : {},
+    rsTypes       : {},
+    rsSteps       : {},
+    rsMarkers     : {},
+    rsSentences   : { step: {}, marker: {} },
     document      : {
       title : '',
       body  : {},
     },
-    writingModelId       : -1,
-    subjectAreaId        : -1,
-    sectionId            : -1,
-    currentMoveId        : -1,
-    currentStepId        : -1,
-    currentMarkerId      : -1,
-    currentMdCodeId      : -1,
-    currentMdSubCodeId   : -1,
-    setCurrentMdMarkerId : -1,
-    popUpActive          : false,
-    analysis             : {},
-    analysisSentenceId   : -1,
-    rightPanelTab        : 1,
-    analysisFlag         : 1,
-    guideFlag            : 1,
+    writingModelId     : -1,
+    subjectAreaId      : -1,
+    sectionId          : -1,
+    currentMoveId      : -1,
+    currentStepId      : -1,
+    currentMarkerId    : -1,
+    currentMdCodeId    : -1,
+    currentMdSubCodeId : -1,
+    currentMdMarkerId  : -1,
+    popUpActive        : false,
+    analysis           : {},
+    analysisSentenceId : -1,
+    rightPanelTab      : 1,
+    analysisFlag       : 1,
+    guideFlag          : 1,
   },
   effects: {
     *fetchAtInit(action, { put, call }) {
@@ -46,12 +51,15 @@ export default {
       const { data: mdCodes } = yield call(services.fetchMdCodes);
       const { data: mdSubCodes } = yield call(services.fetchMdSubCodes);
       const { data: mdMarkers } = yield call(services.fetchMdMarkers);
+      const { data: rsTypes } = yield call(services.fetchRsTypes);
+      const { data: rsSteps } = yield call(services.fetchRsSteps);
+      const { data: rsMarkers } = yield call(services.fetchRsMarkers);
       yield put({ 
         type    : 'home/saveAtInit', 
         payload : { 
-          writingModels, subjectAreas, sections, moves, steps, markers, mdCodes, mdSubCodes, mdMarkers,
+          writingModels, subjectAreas, sections, moves, steps, markers, mdCodes, mdSubCodes, mdMarkers, rsTypes, rsSteps, rsMarkers,
           writingModelId : Number(Object.keys(writingModels)[0]),
-          subjectAreaId  : Number(Object.keys(subjectAreas)[0]),
+          subjectAreaId  : Number(Object.keys(subjectAreas)[2]),
           sectionId      : Number(Object.keys(sections)[0]),
         }, 
       });
@@ -96,6 +104,14 @@ export default {
     *fetchSentencesByMarkerId({ payload: markerId }, { call, put }) {
       const { data: sentences } = yield call(services.fetchSentencesByMarkerId, markerId);
       yield put({ type: 'home/saveSentencesByMarkerId', payload: { markerId, sentences } });
+    },
+    *fetchRsSentencesByMarker({ payload: { stepId, markerId, marker } }, { call, put }) {
+      const { data: sentences } = yield call(services.fetchRsSentencesByMarker, stepId, marker);
+      yield put({ type: 'home/saveRsSentencesByMarkerId', payload: { markerId, sentences } });
+    },
+    *fetchRsSentencesByStepId({ payload: stepId }, { call, put }) {
+      const { data: sentences } = yield call(services.fetchRsSentencesByStepId, stepId);
+      yield put({ type: 'home/saveRsSentencesByStepId', payload: { stepId, sentences } });
     },
     *clickAnalysisStep({ payload: stepId }, { select }) {
       const analysis = yield select(state => state.home.analysis);
@@ -171,6 +187,48 @@ export default {
         sentences: {
           ...state.sentences,
           [markerId]: sentences,
+        },
+      };
+    },
+    saveCurrentMdCodeId(state, { payload: currentMdCodeId }) {
+      return { ...state, currentMdCodeId };
+    },
+    saveCurrentMdSubCodeId(state, { payload: currentMdSubCodeId }) {
+      return { ...state, currentMdSubCodeId };
+    },
+    saveCurrentMdMarkerId(state, { payload: currentMdMarkerId }) {
+      return { ...state, currentMdMarkerId };
+    },
+    saveCurrentRsTypeId(state, { payload: currentRsTypeId }) {
+      return { ...state, currentRsTypeId };
+    },
+    saveCurrentRsStepId(state, { payload: currentRsStepId }) {
+      return { ...state, currentRsStepId };
+    },
+    saveCurrentRsMarkerId(state, { payload: currentRsMarkerId }) {
+      return { ...state, currentRsMarkerId };
+    },
+    saveRsSentencesByMarkerId(state, { payload: { markerId, sentences } }) {
+      return { 
+        ...state,  
+        rsSentences: {
+          ...state.rsSentences,
+          marker: {
+            ...state.rsSentences.marker,
+            [markerId]: sentences,
+          },
+        },
+      };
+    },
+    saveRsSentencesByStepId(state, { payload: { stepId, sentences } }) {
+      return { 
+        ...state,  
+        rsSentences: {
+          ...state.rsSentences,
+          step: {
+            ...state.rsSentences.step,
+            [stepId]: sentences,
+          },
         },
       };
     },

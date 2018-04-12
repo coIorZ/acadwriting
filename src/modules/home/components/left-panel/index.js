@@ -26,14 +26,6 @@ const Logo = styled.div`
   }
 `;
 
-const DocumentWrapper = styled.div`
-  margin: auto auto 0;
-  padding: 2rem 3rem .2rem;
-  max-width: 45rem;
-  width: 100%;
-  height: calc(100vh - 11rem);
-`;
-
 const BtnContainer = styled.div`
   display: flex;
   justify-content: center;
@@ -43,12 +35,6 @@ const BtnContainer = styled.div`
 
 export default class WritingPanel extends Component {
   render() {
-    const {
-      sections, sectionId,
-    } = this.props;
-
-    const section = sections[sectionId];
-
     return (
       <Container>
         <Header>
@@ -56,24 +42,13 @@ export default class WritingPanel extends Component {
             <img src={require('../../../../images/NTU-logo-full-colour.png')}/>
           </Logo>
         </Header>
-        <ModelSubjectFilter {...sProps(this.props, 'writingModels', 'writingModelId', 'subjectAreas', 'subjectAreaId')}/>
-        <SectionSwitcher {...sProps(this.props, 'sections', 'sectionId')}/>
-        <DocumentWrapper>
-          {section && (
-            <DocumentEditor
-              placeHolder={`Type or paste your ${section.text} here.`}
-              {...sProps(this.props, 'document', 'sectionId')}
-            />
-          )}
-        </DocumentWrapper>
+        <ModelSubjectFilter/>
+        <SectionSwitcher/>
+        <DocumentEditor/>
         <BtnContainer>
-          <Button onClick={this.startAnalysis}>Analyze</Button>
+          <Button onClick={this.props.onAnalysis}>Analyze</Button>
         </BtnContainer>
       </Container>
     );
-  }
-
-  startAnalysis = () => {
-    this.props.dispatch({ type: 'home/startAnalysis' });
   }
 }

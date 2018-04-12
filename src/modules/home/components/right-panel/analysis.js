@@ -1,17 +1,19 @@
 import React, { Component } from 'react';
+import { connect } from '98k';
 
-import { sProps } from '../../../../lib/utils';
 import OverviewAnalysis from './overview-analysis';
 import SentenceAnalysis from './sentence-analysis';
 
-export default class Analysis extends Component {
+class Analysis extends Component {
   render() {
-    const {
-      analysisFlag: flag,
-    } = this.props;
+    const { flag } = this.props;
 
-    if(flag === 1) return <OverviewAnalysis {...sProps(this.props, 'moves', 'steps', 'analysis', 'sectionId')}/>;
-    if(flag === 2) return <SentenceAnalysis {...sProps(this.props, 'moves', 'steps', 'markers', 'analysis', 'sectionId', 'analysisSentenceId')}/>;
+    if(flag === 1) return <OverviewAnalysis/>;
+    if(flag === 2) return <SentenceAnalysis/>;
     return null;
   }
 }
+
+export default connect(({ home: { analysisFlag } }) => ({
+  flag: analysisFlag,
+}))(Analysis);

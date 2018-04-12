@@ -1,4 +1,5 @@
 import React, { Component } from 'react';
+import { connect } from '98k';
 import styled, { css } from 'styled-components';
 
 const Container = styled.div`
@@ -28,7 +29,7 @@ const Switch = styled.div`
   `}
 `;
 
-export default class SectionSwitcher extends Component {
+class SectionSwitcher extends Component {
   render() {
     const {
       sections, sectionId,
@@ -61,3 +62,7 @@ export default class SectionSwitcher extends Component {
     this.props.dispatch({ type: 'home/savePopUpActive', payload: true });
   }
 }
+
+export default connect(({ home: { sections, sectionId } }) => ({
+  sections, sectionId,
+}))(SectionSwitcher);

@@ -1,4 +1,5 @@
 import React, { Component } from 'react';
+import { connect } from '98k';
 import styled, { css } from 'styled-components';
 
 import { LinkButton } from '../../../../components/button';
@@ -28,7 +29,7 @@ const Match = ({ matched, moves, steps, markers }) => {
   );
 };
 
-export default class SentenceAnalysis extends Component {
+class SentenceAnalysis extends Component {
   render() {
     const {
       analysisSentenceId,
@@ -67,3 +68,7 @@ export default class SentenceAnalysis extends Component {
     this.props.dispatch({ type: 'home/saveAnalysisFlag', payload: 1 });
   }
 }
+
+export default connect(({ home: { moves, steps, markers, analysis, sectionId, analysisSentenceId } }) => ({
+  moves, steps, markers, analysis, sectionId, analysisSentenceId, 
+}))(SentenceAnalysis);

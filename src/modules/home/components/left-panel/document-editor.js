@@ -1,4 +1,5 @@
 import React, { Component } from 'react';
+import { connect } from '98k';
 import styled from 'styled-components';
 
 const Container = styled.div`
@@ -36,30 +37,41 @@ const Placeholder = styled.div`
   user-select: none;
 `;
 
-export default class DocumentEditor extends Component {
-  render() {
-    const {
-      placeHolder = '', document, sectionId,
-    } = this.props;
+const DocumentWrapper = styled.div`
+  margin: auto auto 0;
+  padding: 2rem 3rem .2rem;
+  max-width: 45rem;
+  width: 100%;
+  height: calc(100vh - 11rem);
+`;
 
+class DocumentEditor extends Component {
+  render() {
+    const { document, sectionId, sections } = this.props;
+
+    const section = sections[sectionId];
     const input = document.body[sectionId];
 
     // Here <Editor> is not managed by React, refer to lib/editor.js for details
     return (
-      <Container>
-        <Editor 
-          id='editor' 
-          className='editor'
-          contentEditable={true}
-          spellCheck={false}
-          onInput={this.inputText}
-          onPaste={this.pasteText}
-          onClick={this.clickEditor}
-        >
-          <p><br/></p>
-        </Editor>
-        {(!input || input === '<p><br></p>') && <Placeholder>{placeHolder}</Placeholder>}
-      </Container>
+      <DocumentWrapper>
+        {section && (
+          <Container>
+            <Editor 
+              id='editor' 
+              className='editor'
+              contentEditable={true}
+              spellCheck={false}
+              onInput={this.inputText}
+              onPaste={this.pasteText}
+              onClick={this.clickEditor}
+            >
+              <p><br/></p>
+            </Editor>
+            {(!input || input === '<p><br></p>') && <Placeholder>Type or paste your {section.label} here.</Placeholder>}
+          </Container>
+        )}
+      </DocumentWrapper>
     );
   }
 
@@ -75,3 +87,7 @@ export default class DocumentEditor extends Component {
     this.props.dispatch({ type: 'home/clickEditor', payload: e });
   }
 }
+
+export default connect(({ home: { document, sections, sectionId } }) => ({
+  document, sections, sectionId,
+}))(DocumentEditor);

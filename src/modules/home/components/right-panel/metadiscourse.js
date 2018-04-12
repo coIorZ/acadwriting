@@ -1,7 +1,6 @@
 import React, { Component } from 'react';
+import { connect } from '98k';
 import styled from 'styled-components';
-
-import { sProps } from '../../../../lib/utils';
 
 const Container = styled.div`
   height: calc(100vh - 3rem);
@@ -77,7 +76,7 @@ class MdSubCode extends Component {
         {active && (
           <MdMarkerGroup>
             {Object.keys(mdSubCodes).map(mdMarkerId => (
-              <MdMarker key={mdMarkerId} mdMarkerId={mdMarkerId} mdMarkers={mdMarkers} onClick={this.onClickMdMarker}/>
+              <MdMarker key={mdMarkerId} mdMarkerId={mdMarkerId} mdSubCodeId={mdSubCodeId} mdMarkers={mdMarkers} onClick={this.onClickMdMarker}/>
             ))}
           </MdMarkerGroup>
         )}
@@ -144,7 +143,7 @@ class MdCode extends Component {
   }
 }
 
-export default class Metadiscourse extends Component {
+class Metadiscourse extends Component {
   render() {
     const {
       mdCodes = {},
@@ -154,10 +153,14 @@ export default class Metadiscourse extends Component {
       <Container>
         <MdCodeGroup>
           {Object.keys(mdCodes).map(mdCodeId => (
-            <MdCode key={mdCodeId} mdCodeId={mdCodeId} {...sProps(this.props, 'mdCodes', 'mdSubCodes', 'mdMarkers')}/>
+            <MdCode key={mdCodeId} mdCodeId={mdCodeId} {...this.props}/>
           ))}
         </MdCodeGroup>
       </Container>
     );
   }
 l}
+
+export default connect(({ home: { mdCodes, mdSubCodes, mdMarkers, currentMdCodeId, currentMdSubCodeId } }) => ({
+  mdCodes, mdSubCodes, mdMarkers, currentMdCodeId, currentMdSubCodeId, 
+}))(Metadiscourse);

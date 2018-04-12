@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
+import { connect } from '98k';
 import styled, { css } from 'styled-components';
 
-import { sProps } from '../../../../lib/utils';
 import Pagination from '../../../../components/pagination';
 
 const COUNT_PER_PAGE = 10;
@@ -56,29 +56,30 @@ const BreadcrumbItem = styled.div`
 
 class Breadcrumb extends Component {
   render() {
-    const {
-      moves, currentMoveId,
-      steps, currentStepId,
-      markers, currentMarkerId,
-    } = this.props;
+    const { label1, label2, label3 } = this.props;
 
     return (
       <BreadcrumbContainer>
-        <BreadcrumbItem onClick={this.back}>{moves[currentMoveId].label}</BreadcrumbItem>
+        <BreadcrumbItem onClick={this.back}>{label1}</BreadcrumbItem>
         <BreadcrumbSeparator/>
-        <BreadcrumbItem onClick={this.back}>{steps[currentStepId].label}</BreadcrumbItem>
+        <BreadcrumbItem onClick={this.back}>{label2}</BreadcrumbItem>
         <BreadcrumbSeparator/>
-        <BreadcrumbItem last>{markers[currentMarkerId].label}</BreadcrumbItem>
+        <BreadcrumbItem last>{label3}</BreadcrumbItem>
       </BreadcrumbContainer>
     );
   }
 
   back = () => {
-    this.props.dispatch({ type: 'home/saveGuideFlag', payload: 1 });
+    this.props.onBack();
   }
 }
 
 const Sentence = ({ sentence }) => {
+  if(!sentence.match) {
+    return (
+      <StyledSentence>{sentence.text}</StyledSentence>
+    );
+  }
   const length = sentence.match.length;
   const index = sentence.text.indexOf(sentence.match);
   return (
@@ -90,33 +91,53 @@ const Sentence = ({ sentence }) => {
   );
 };
 
-export default class Sentences extends Component {
+class Sentences extends Component {
   state = {
     currentIndex: 0,
   }
 
   render() {
-    const {
-      sentences,
-      currentMarkerId,
-      sectionId,
-      subjectAreaId,
+    const { 
+      writingModelId, subjectAreaId, sectionId,
+      moves, steps, markers, sentences, currentMarkerId, currentMoveId, currentStepId,
+      rsTypes, rsSteps, rsMarkers, rsSentences, currentRsTypeId, currentRsStepId, currentRsMarkerId,
+      mdCodes, mdSubCodes, mdMarkers, mdSentences, currentMdCodeId, currentMdSubCodeId, currentMdMarkerId,
     } = this.props;
 
-    const sentencesByMarkerId = sentences[currentMarkerId];
+    let sentencesByMarkerId = null;
+    let label1;
+    let label2;
+    let label3;
+    if(writingModelId == 1) {
+      sentencesByMarkerId = sentences[currentMarkerId];
+      label1 = moves[currentMoveId].label;
+      label2 = steps[currentStepId].label;
+      label3 = markers[currentMarkerId].label;
+    }
+    if(writingModelId == 2) {
+      sentencesByMarkerId = currentRsMarkerId < 0 ? rsSentences.step[currentRsTypeId] : rsSentences.marker[currentRsMarkerId];
+      label1 = rsTypes[currentRsTypeId].label;
+      label2 = rsSteps[currentRsStepId].label;
+      label3 = currentRsMarkerId < 0 ? '' : rsMarkers[currentRsMarkerId].label;
+    } else if(writingModelId == 3) {
+      sentencesByMarkerId = mdSentences[currentMdCodeId];
+      label1 = mdCodes[currentMdCodeId].label;
+      label2 = mdSubCodes[currentMdSubCodeId].label;
+      label3 = mdMarkers[currentMdMarkerId].label;
+    }
 
     if(!sentencesByMarkerId) return <div>loading sentences...</div>;
 
     const { currentIndex } = this.state;
     const sentenceIds = Object.keys(sentencesByMarkerId).filter(sentenceId => {
       const sentence = sentencesByMarkerId[sentenceId];
-      return sentence.sectionId === sectionId && sentence.subjectId === subjectAreaId;
+      return (!sentence.sectionId || (sentence.sectionId === sectionId)) && sentence.subjectId === subjectAreaId;
     });
     const pageNum = Math.ceil(sentenceIds.length / COUNT_PER_PAGE);
 
     return (
       <Container>
-        <Breadcrumb {...sProps(this.props, 'moves', 'currentMoveId', 'steps', 'currentStepId', 'markers', 'currentMarkerId')}/>
+        <Breadcrumb label1={label1} label2={label2} label3={label3} onBack={this.back}/>
         <SentenceGroup>
           {sentenceIds.slice(currentIndex * COUNT_PER_PAGE, (currentIndex + 1) * COUNT_PER_PAGE).map(sentenceId => {
             const sentence = sentencesByMarkerId[sentenceId];
@@ -130,9 +151,15 @@ export default class Sentences extends Component {
     );
   }
 
+  back = () => {
+    this.props.dispatch({ type: 'home/saveGuideFlag', payload: 1 });
+  }
+
   turnPage = index => {
     this.setState(() => ({
       currentIndex: index,
     }));
   }
 }
+
+export default connect(state => state.home)(Sentences);

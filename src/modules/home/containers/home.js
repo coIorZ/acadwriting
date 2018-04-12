@@ -20,15 +20,15 @@ class Home extends Component {
   }
 
   render() {
-    const active = this.props.popUpActive;
+    const { active, sections, sectionId } = this.props;
 
     return (
       <Container>
-        <LeftPanel {...sProps(this.props, 'sections', 'sectionId', 'writingModels', 'writingModelId', 'subjectAreas', 'subjectAreaId', 'document')}/>
+        <LeftPanel onAnalysis={this.startAnalysis}/>
         <RightPanel {...sProps(this.props, 'rightPanelTab', 'guideFlag', 'writingModelId', 'sentences', 'sectionId', 'subjectAreaId', 'moves', 'currentMoveId', 'steps', 'currentStepId', 'markers', 'currentMarkerId', 'mdCodes', 'mdSubCodes', 'mdMarkers', 'analysisFlag', 'analysis', 'analysisSentenceId', 'currentMdCodeId', 'currentMdSubCodeId', 'currentMdMarkerId', 'rsTypes', 'rsSteps', 'rsMarkers')}/>
         {active && (
           <PopUp onClickMask={this.hidePopUp}>
-            <Info {...sProps(this.props, 'sections', 'sectionId')}/>
+            <Info sections={sections} sectionId={sectionId}/>
           </PopUp>
         )}
       </Container>
@@ -38,6 +38,14 @@ class Home extends Component {
   hidePopUp = () => {
     this.props.dispatch({ type: 'home/savePopUpActive', payload: false });
   }
+
+  startAnalysis = () => {
+    this.props.dispatch({ type: 'home/startAnalysis' });
+  }
 }
 
-export default connect(state => state.home)(Home);
+export default connect(({ home: { popUpActive, sections, sectionId } }) => ({
+  active: popUpActive,
+  sections,
+  sectionId,
+}))(Home);

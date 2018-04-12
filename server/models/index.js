@@ -92,6 +92,18 @@ RsMarkers.belongsToMany(RsSentences, {
   foreignKey : 'strategy_id',
 });
 
+RsSentences.belongsToMany(RsSteps, {
+  through    : 'Research_Example',
+  as         : 'steps',
+  foreignKey : 'sentence_id',
+});
+
+RsSteps.belongsToMany(RsSentences, {
+  through    : 'Research_Example',
+  as         : 'sentences',
+  foreignKey : 'strategy_id',
+});
+
 sequelize.sync();
 
 export {

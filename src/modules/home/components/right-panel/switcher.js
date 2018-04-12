@@ -37,7 +37,7 @@ const Switch = ({ label, onClick, active }) => (
 
 export default class Switcher extends Component {
   render() {
-    const { rightPanelTab: tab } = this.props;
+    const { tab } = this.props;
     return (
       <Container>
         <Switch 
@@ -55,6 +55,6 @@ export default class Switcher extends Component {
   }
 
   showPanel = val => {
-    this.props.dispatch({ type: 'home/saveRightPanelTab', payload: val });
+    this.props.onSwitch(val);
   }
 }

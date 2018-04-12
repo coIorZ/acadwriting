@@ -10,3 +10,8 @@ export const fetchMdCodes = () => axios.get('/api/mdCodes');
 export const fetchMdSubCodes = () => axios.get('/api/mdSubCodes');
 export const fetchMdMarkers = () => axios.get('/api/mdMarkers');
 export const fetchSentencesByMarkerId = id => axios.get('/api/sentencesByMarkerId', { params: { id } });
+export const fetchRsTypes = () => axios.get('/api/rsTypes');
+export const fetchRsSteps = () => axios.get('/api/rsSteps');
+export const fetchRsMarkers = () => axios.get('/api/rsMarkers');
+export const fetchRsSentencesByMarker = (stepId, marker) => axios.get('/api/rsSentencesByMarker', { params: { stepId, marker } });
+export const fetchRsSentencesByStepId = id => axios.get('/api/rsSentencesByStepId', { params: { id } });

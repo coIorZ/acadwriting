@@ -228,22 +228,26 @@ router.get('/rsMarkers', asyncWrap(async (req, res) => {
   res.status(200).json(result);
 }));
 
-router.get('/rsSentencesByMarkerId', asyncWrap(async (req, res) => {
-  const { id } = req.query;
-  let result = await RsMarkers.findOne({
+router.get('/rsSentencesByMarker', asyncWrap(async (req, res) => {
+  const { stepId, marker } = req.query;
+  let result = await RsSentences.findAll({
     where: {
-      id, 
+      rsStepId: stepId,
+      marker,
     },
-    include: [{
-      model      : RsSentences,
-      as         : 'sentences',
-      attributes : ['id', 'subjectId', 'text'],
-      through    : {
-        attributes: [],
-      },
-    }],
   });
-  result = normalize()(result.sentences);
+  result = normalize()(result);
+  res.status(200).json(result);
+}));
+
+router.get('/rsSentencesByStepId', asyncWrap(async (req, res) => {
+  const { id } = req.query;
+  let result = await RsSentences.findAll({
+    where: {
+      rsStepId: id,
+    },
+  });
+  result = normalize()(result);
   res.status(200).json(result);
 }));
 

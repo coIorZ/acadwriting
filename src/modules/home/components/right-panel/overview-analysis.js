@@ -1,4 +1,5 @@
 import React, { Component } from 'react';
+import { connect } from '98k';
 import styled, { css } from 'styled-components';
 
 const Container = styled.div`
@@ -106,7 +107,7 @@ class Move extends Component {
   }
 }
 
-export default class OverviewAnalysis extends Component {
+class OverviewAnalysis extends Component {
   render() {
     const {
       moves = {},
@@ -151,3 +152,7 @@ export default class OverviewAnalysis extends Component {
     this.props.dispatch({ type: 'home/clickAnalysisStep', payload: id });
   }
 }
+
+export default connect(({ home: { moves, steps, analysis, sectionId } }) => ({
+  moves, steps, analysis, sectionId, 
+}))(OverviewAnalysis);

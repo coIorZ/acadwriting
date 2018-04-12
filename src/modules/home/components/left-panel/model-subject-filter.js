@@ -1,4 +1,5 @@
 import React, { Component } from 'react';
+import { connect } from '98k';
 import styled, { css } from 'styled-components';
 
 const Container = styled.div`
@@ -48,7 +49,7 @@ const Filter = ({ label = '', items = {}, activeId = -1, onClick }) => (
   </StyledFilter>
 );
 
-export default class ModelSubjectFilter extends Component {
+class ModelSubjectFilter extends Component {
   render() {
     const { writingModels, writingModelId, subjectAreas, subjectAreaId } = this.props;
 
@@ -80,3 +81,7 @@ export default class ModelSubjectFilter extends Component {
     this.props.dispatch({ type: 'home/saveSubjectAreaId', payload: id });
   }
 }
+
+export default connect(({ home: { writingModels, writingModelId, subjectAreas, subjectAreaId } }) => ({
+  writingModels, writingModelId, subjectAreas, subjectAreaId, 
+}))(ModelSubjectFilter);
