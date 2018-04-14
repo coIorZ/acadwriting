@@ -74,19 +74,20 @@ class Breadcrumb extends Component {
   }
 }
 
-const Sentence = ({ sentence }) => {
+const Sentence = ({ sentence, index }) => {
   if(!sentence.match) {
     return (
-      <StyledSentence>{sentence.text}</StyledSentence>
+      <StyledSentence>{index}. {sentence.text}</StyledSentence>
     );
   }
   const length = sentence.match.length;
-  const index = sentence.text.indexOf(sentence.match);
+  const i = sentence.text.indexOf(sentence.match);
   return (
     <StyledSentence>
-      <NotMatch>{sentence.text.substring(0, index)}</NotMatch>
+      {index}. 
+      <NotMatch>{sentence.text.substring(0, i)}</NotMatch>
       <Match>{sentence.match}</Match>
-      <NotMatch>{sentence.text.substr(index + length)}</NotMatch>
+      <NotMatch>{sentence.text.substr(i + length)}</NotMatch>
     </StyledSentence>
   );
 };
@@ -139,9 +140,9 @@ class Sentences extends Component {
       <Container>
         <Breadcrumb label1={label1} label2={label2} label3={label3} onBack={this.back}/>
         <SentenceGroup>
-          {sentenceIds.slice(currentIndex * COUNT_PER_PAGE, (currentIndex + 1) * COUNT_PER_PAGE).map(sentenceId => {
+          {sentenceIds.slice(currentIndex * COUNT_PER_PAGE, (currentIndex + 1) * COUNT_PER_PAGE).map((sentenceId, index) => {
             const sentence = sentencesByMarkerId[sentenceId];
-            return <Sentence key={sentenceId} sentence={sentence}/>;
+            return <Sentence key={sentenceId} sentence={sentence} index={currentIndex * COUNT_PER_PAGE + index + 1}/>;
           })}
         </SentenceGroup>
         <PaginationContainer>

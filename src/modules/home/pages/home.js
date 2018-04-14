@@ -2,7 +2,6 @@ import React, { Component } from 'react';
 import { connect } from '98k';
 import styled from 'styled-components';
 
-import { sProps } from '../../../lib/utils';
 import LeftPanel from '../components/left-panel';
 import RightPanel from '../components/right-panel';
 import PopUp from '../../../components/pop-up';
@@ -25,7 +24,7 @@ class Home extends Component {
     return (
       <Container>
         <LeftPanel onAnalysis={this.startAnalysis}/>
-        <RightPanel {...sProps(this.props, 'rightPanelTab', 'guideFlag', 'writingModelId', 'sentences', 'sectionId', 'subjectAreaId', 'moves', 'currentMoveId', 'steps', 'currentStepId', 'markers', 'currentMarkerId', 'mdCodes', 'mdSubCodes', 'mdMarkers', 'analysisFlag', 'analysis', 'analysisSentenceId', 'currentMdCodeId', 'currentMdSubCodeId', 'currentMdMarkerId', 'rsTypes', 'rsSteps', 'rsMarkers')}/>
+        <RightPanel/>
         {active && (
           <PopUp onClickMask={this.hidePopUp}>
             <Info sections={sections} sectionId={sectionId}/>

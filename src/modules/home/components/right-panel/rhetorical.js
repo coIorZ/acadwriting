@@ -42,7 +42,7 @@ const StyledMarker = styled.div`
 
 const Marker = ({ markers, stepId, markerId, onClick }) => {
   return markers[markerId] ? (
-    <StyledMarker onClick={onClick.bind(this, stepId, markerId)}>{markers[markerId].label}</StyledMarker>
+    <StyledMarker onClick={onClick.bind(this, stepId, markerId)}>{markers[markerId].label.replace(/&(\w*);/g, '*$1')}</StyledMarker>
   ) : <div>loading marker...</div>;
 };
 

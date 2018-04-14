@@ -1,5 +1,5 @@
 import * as services from './services';
-import Home from './containers/home';
+import Home from './pages/home';
 import editor from '../../lib/editor';
 
 export default {
