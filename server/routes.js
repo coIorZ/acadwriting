@@ -5,7 +5,7 @@ import { normalize } from './lib/utils';
 
 import { 
   Moves, Steps, Models, Subjects, ReportSections, Markers, Sentences,
-  MdCodes, MdSubCodes, MdMarkers,
+  MdCodes, MdSubCodes, MdMarkers, MdSentences,
   RsTypes, RsSteps, RsMarkers, RsSentences,
 } from './models';
 
@@ -166,6 +166,17 @@ router.get('/mdSubCodes', asyncWrap(async (req, res) => {
     };
     return acc;
   }, {});
+  res.status(200).json(result);
+}));
+
+router.get('/mdSentencesBySubCodeId', asyncWrap(async (req, res) => {
+  const { id } = req.query;
+  let result = await MdSentences.findAll({
+    where: {
+      mdSubCodeId: id,
+    },
+  });
+  result = normalize()(result);
   res.status(200).json(result);
 }));
 

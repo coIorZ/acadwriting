@@ -68,7 +68,7 @@ class MdSubCode extends Component {
 
     const mdSubCode = mdSubCodes[mdSubCodeId];
 
-    const { active } = this.state;
+    //const { active } = this.state;
 
     return mdSubCode ? (
       <StyledMdSubCode>
@@ -88,7 +88,9 @@ class MdSubCode extends Component {
     //this.setState(prev => ({
     //active: !prev.active,
     //}));
-    this.props.dispatch({ type: 'home/fetchMdSentencesBySubCodeId', payload: mdSubCodeId });
+    if(!this.props.mdSentences[mdSubCodeId]){
+      this.props.dispatch({ type: 'home/fetchMdSentencesBySubCodeId', payload: mdSubCodeId });
+    }
     this.props.dispatch({ type: 'home/saveGuideFlag', payload: 2 });
     //this.props.dispatch({ type: 'home/saveCurrentMdMarkerId', payload: mdMarkerId });
     this.props.dispatch({ type: 'home/saveCurrentMdSubCodeId', payload: mdSubCodeId });

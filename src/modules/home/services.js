@@ -12,6 +12,7 @@ export const fetchSentencesByMarkerId = id => axios.get('/api/sentencesByMarkerI
 export const fetchMdCodes = () => axios.get('/api/mdCodes');
 export const fetchMdSubCodes = () => axios.get('/api/mdSubCodes');
 export const fetchMdMarkers = () => axios.get('/api/mdMarkers');
+export const fetchMdSentencesBySubCodeId = id => axios.get('api/mdSentencesBySubCodeId', { params: { id } });
 
 export const fetchRsTypes = () => axios.get('/api/rsTypes');
 export const fetchRsSteps = () => axios.get('/api/rsSteps');
