@@ -63,7 +63,7 @@ class Move extends Component {
     const mandotorySteps = [], optionalSteps = [];
     Object.keys(move.steps).forEach(stepId => {
       const step = steps[stepId];
-      if(step.important) {
+      if (step.important) {
         mandotorySteps.push(step);
       } else {
         optionalSteps.push(step);
@@ -79,17 +79,17 @@ class Move extends Component {
         {active && (
           <StepGroup>
             {mandotorySteps.map(step => (
-              <Step 
+              <Step
                 key={step.id}
-                analysis={analysis} 
+                analysis={analysis}
                 step={step}
                 onClick={onClickStep}
               />
             ))}
             {optionalSteps.map(step => (
-              <Step 
+              <Step
                 key={step.id}
-                analysis={analysis} 
+                analysis={analysis}
                 step={step}
                 onClick={onClickStep}
               />
@@ -119,33 +119,47 @@ class OverviewAnalysis extends Component {
     const sectionAnalysis = analysis[sectionId];
 
     return !sectionAnalysis ? (
-      <div>Click ANALYZE button to start analyzing</div>
+      <div>
+        <h2
+          style={{
+            border: '1px solid#xxeff5', textAlign: 'center', color: '#999', display: 'block',
+            fontFamily: 'Baskerville, Baskerville Old,Hoefler Text,Face,Garamond, Times New Roman,serif',
+            fontWeight: '400',
+            letterSpacing: '3px',
+            textIndent: '4px',
+            fontSize: '1em',
+            padding: '2.5em 0 3em'
+          }}>Click <span style={{cursor: 'pointer'}} onClick={this.startAnalysis}>ANALYZE</span> Button To Start Analyzing</h2>
+      </div >
     ) : (
-      <Container>
-        <MoveGroup>
-          {Object.keys(moves).filter(moveId => moves[moveId].sectionId === sectionId).map(moveId => (
-            <Move 
-              key={moveId}
-              analysis={sectionAnalysis}
-              steps={steps}
-              move={moves[moveId]}
-              onClickStep={this.clickStep}
-            />
-          ))}
-        </MoveGroup>
-      </Container>
-    );
+        <Container>
+          <MoveGroup>
+            {Object.keys(moves).filter(moveId => moves[moveId].sectionId === sectionId).map(moveId => (
+              <Move
+                key={moveId}
+                analysis={sectionAnalysis}
+                steps={steps}
+                move={moves[moveId]}
+                onClickStep={this.clickStep}
+              />
+            ))}
+          </MoveGroup>
+        </Container>
+      );
   }
 
   toggleMove = id => {
     this.setState(({ activeMoveId }) => {
-      if(activeMoveId === id) return {
+      if (activeMoveId === id) return {
         activeMoveId: -1,
       };
       return {
         activeMoveId: id,
       };
     });
+  }
+  startAnalysis = () =>{
+    this.props.dispatch({ type: 'home/startAnalysis' });
   }
 
   clickStep = id => {
@@ -154,5 +168,5 @@ class OverviewAnalysis extends Component {
 }
 
 export default connect(({ home: { moves, steps, analysis, sectionId } }) => ({
-  moves, steps, analysis, sectionId, 
+  moves, steps, analysis, sectionId,
 }))(OverviewAnalysis);
