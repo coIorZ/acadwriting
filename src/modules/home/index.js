@@ -120,8 +120,9 @@ export default {
       const sentences = analysis[sectionId].steps[stepId];
       editor().highlightSentences(sentences);
     },
-    *fetchMdSentencesBySubCodeId({ payload }, { call, put }) {
-
+    *fetchMdSentencesBySubCodeId({ payload: subCodeId }, { call, put }) {
+      const { data: sentences } = yield call(services.fetchMdSentencesBySubCodeId, subCodeId);
+      yield put({ type: 'home/saveMdSentencesBySubCodeId', payload: { subCodeId, sentences } });
     },
   },
   reducers: {
@@ -233,6 +234,15 @@ export default {
             ...state.rsSentences.step,
             [stepId]: sentences,
           },
+        },
+      };
+    },
+    saveMdSentencesBySubCodeId(state, { payload: { subCodeId, sentences } }) {
+      return {
+        ...state,
+        mdSentences: {
+          ...state.mdSentences,
+          [subCodeId]: sentences,
         },
       };
     },

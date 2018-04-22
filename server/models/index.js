@@ -9,6 +9,7 @@ import Sentences from './sentences';
 import MdCodes from './md-codes';
 import MdSubCodes from './md-sub-codes';
 import MdMarkers from './md-markers';
+import MdSentences from './md-sentences';
 import RsTypes from './rs-types';
 import RsSteps from './rs-steps';
 import RsMarkers from './rs-markers';
@@ -117,6 +118,7 @@ export {
   MdCodes,
   MdSubCodes,
   MdMarkers,
+  MdSentences,
   RsTypes,
   RsSteps,
   RsMarkers,
