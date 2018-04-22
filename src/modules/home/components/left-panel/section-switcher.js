@@ -49,7 +49,7 @@ class SectionSwitcher extends Component {
             </Switch>
           );
         })}
-        <div onClick={this.showPopUp}>?</div>
+        <div onClick={this.showPopUp} style={{ marginTop: '10px', boxShadow: 'rgb(191, 242, 230) 0px 0.2rem 0.5rem', transition: 'backgroundColor 0.2s', padding: '0px 6px', color: 'rgb(255, 255, 255)', backgroundColor: 'rgb(31, 205, 163', fontSize: '24px', borderRadius: '50%', border: '4px solid rgb(31,205,163)' }}>?</div>
       </Container>
     );
   }

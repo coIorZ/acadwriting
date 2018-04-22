@@ -19,12 +19,12 @@ export default class Info extends Component {
     const section = sections[sectionId];
 
     return !section ? null : (
-      <Container>
-        <Title>{section.label}</Title>
-        <Content>{section.description.split('$$n$$').map((t, i) => (
+      <Container style={{ padding: '25px', borderRadius: '40px' }}>
+        <Title style={{ fontFamily: 'FANTASY', fontSize: '30px' }}>{section.label}</Title>
+        <Content >{section.description.split('$$n$$').map((t, i) => (
           <p key={i}>{t}</p>
         ))}</Content>
       </Container>
     );
-  } 
+  }
 }
