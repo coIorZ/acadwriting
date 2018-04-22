@@ -52,11 +52,11 @@ class MdSubCode extends Component {
   }
 
   componentDidMount() {
-    if(this.props.currentMdSubCodeId == this.props.mdSubCodeId) {
-      this.setState(() => ({
-        active: true,
-      }));
-    }
+    //if(this.props.currentMdSubCodeId == this.props.mdSubCodeId) {
+    //this.setState(() => ({
+    //active: true,
+    //}));
+    //}
   }
 
   render() {
@@ -72,8 +72,8 @@ class MdSubCode extends Component {
 
     return mdSubCode ? (
       <StyledMdSubCode>
-        <MdSubCodeLabel onClick={this.toggleMdSubCode}>{mdSubCode.label}</MdSubCodeLabel>
-        {active && (
+        <MdSubCodeLabel onClick={this.toggleMdSubCode.bind(this, mdSubCode.id)}>{mdSubCode.label}</MdSubCodeLabel>
+        {false && (
           <MdMarkerGroup>
             {Object.keys(mdSubCodes).map(mdMarkerId => (
               <MdMarker key={mdMarkerId} mdMarkerId={mdMarkerId} mdSubCodeId={mdSubCodeId} mdMarkers={mdMarkers} onClick={this.onClickMdMarker}/>
@@ -84,10 +84,15 @@ class MdSubCode extends Component {
     ) : <div>loading mdSubCode...</div>;
   }
 
-  toggleMdSubCode = () => {
-    this.setState(prev => ({
-      active: !prev.active,
-    }));
+  toggleMdSubCode = mdSubCodeId => {
+    //this.setState(prev => ({
+    //active: !prev.active,
+    //}));
+    this.props.dispatch({ type: 'home/fetchMdSentencesBySubCodeId', payload: mdSubCodeId });
+    this.props.dispatch({ type: 'home/saveGuideFlag', payload: 2 });
+    //this.props.dispatch({ type: 'home/saveCurrentMdMarkerId', payload: mdMarkerId });
+    this.props.dispatch({ type: 'home/saveCurrentMdSubCodeId', payload: mdSubCodeId });
+    this.props.dispatch({ type: 'home/saveCurrentMdCodeId', payload: this.props.mdSubCodes[mdSubCodeId].mdCodeId });
   }
 
   onClickMdMarker = (mdSubCodeId, mdMarkerId) => {

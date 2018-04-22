@@ -68,6 +68,7 @@ export default {
       const document = yield select(state => state.home.document);
       editor().html(document.body[sectionId] || '');
       yield put({ type: 'home/saveSectionId', payload: sectionId });
+      yield put({ type: 'home/saveGuideFlag', payload: 1 });
       yield put({ type: 'home/saveAnalysisFlag', payload: 1 });
     },
     *inputDocumentBody(action, { put, select }) {
@@ -118,6 +119,9 @@ export default {
       const sectionId = yield select(state => state.home.sectionId);
       const sentences = analysis[sectionId].steps[stepId];
       editor().highlightSentences(sentences);
+    },
+    *fetchMdSentencesBySubCodeId({ payload }, { call, put }) {
+
     },
   },
   reducers: {
