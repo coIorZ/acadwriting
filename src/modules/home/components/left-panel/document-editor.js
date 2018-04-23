@@ -85,6 +85,7 @@ class DocumentEditor extends Component {
 
   clickEditor = e => {
     this.props.dispatch({ type: 'home/clickEditor', payload: e });
+    this.props.dispatch({ type: 'home/saveRightPanelTab', payload: 2 });
   }
 }
 
